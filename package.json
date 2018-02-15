@@ -1,10 +1,10 @@
 {
-  "name": "rc-calendar",
+  "name": "booking-js",
   "version": "0.1.0",
-  "description": "Calendar plugin frontend application",
+  "description": "Booking plugin frontend application",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack --watch",
-    "production": "cross-env NODE_ENV=production webpack"
+    "build": "cross-env NODE_ENV=production webpack"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
