@@ -1,4 +1,4 @@
-import {FunctionalArrayCollection} from "std-lib/src/FunctionalArrayCollection";
+import {FunctionalArrayCollection} from '@rebelcode/std-lib';
 
 export default function CfSessionLength(Vue, Repeater) {
     return Vue.extend({

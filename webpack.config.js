@@ -17,7 +17,7 @@ let config = {
     },
     entry: "./src/app.js",
     output: {
-        path: __dirname + "/../dist/js",
+        path: __dirname + "/dist/js",
         filename: "app.min.js",
         libraryTarget: 'amd'
     }

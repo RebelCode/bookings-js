@@ -1,4 +1,4 @@
-import {FunctionalArrayCollection} from './../../node_modules/std-lib/src/FunctionalArrayCollection';
+import {FunctionalArrayCollection} from '@rebelcode/std-lib';
 
 export default function (state) {
     return function (container) {
