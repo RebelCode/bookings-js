@@ -1,5 +1,8 @@
 import applicationFactory from './components/Application.js';
 import CfSessionLength from "./components/SessionLength";
+import CfModal from "./components/Modal";
+import CfModalNewBooking from "./components/ModalNewBooking";
+import {FunctionalToggleable} from '@rebelcode/std-lib';
 
 export function services(dependencies, document) {
     return {
@@ -41,7 +44,14 @@ export function services(dependencies, document) {
         store: function (container) {
             return new container.vuex.Store({
                 state: {
-                    app: {},
+                    app: {
+                    },
+                    
+                    serviceAvailabilityModel: {
+                        fromDate: null
+                    },
+                    bookingModalVisible: true,
+
                     sessions: [{
                         id: 0,
                         sessionLength: 15,
@@ -57,13 +67,26 @@ export function services(dependencies, document) {
                     }],
                 },
                 mutations: {
+                    SET_AVAILABILITY_FROM_DATE (state, newDate) {
+                        state.serviceAvailabilityModel.fromDate = newDate;
+                    },
                     SET_INITIAL_STATE (state, appState) {
                         state.app = appState;
                     },
                     SET_SESSIONS (state, sessions) {
                         state.sessions = sessions;
+                    },
+                    SET_BOOKING_MODAL_VISIBILITY (state, newVisibility) {
+                        state.bookingModalVisible = newVisibility;
                     }
                 }
+            })
+        },
+        modalStateToggleable: function (container) {
+            return new FunctionalToggleable((newVisibility) => {
+                container.store.commit('SET_BOOKING_MODAL_VISIBILITY', newVisibility);
+            }, () => {
+                return container.store.state.bookingModalVisible
             })
         },
         app: applicationFactory(APP_STATE),
@@ -73,8 +96,8 @@ export function services(dependencies, document) {
         repeater: function (container) {
             return new dependencies.repeater.CfRepeater(container.vue);
         },
-        'session-length': function (container) {
-            return new CfSessionLength(container.vue, container.repeater);
+        datepicker: function () {
+            return dependencies.datepicker;
         },
         tabs: function (container) {
             return new dependencies.tabs.CfTabs(container.vue);
@@ -82,14 +105,27 @@ export function services(dependencies, document) {
         tab: function (container) {
             return new dependencies.tabs.CfTab(container.vue);
         },
+        modal: function (container) {
+            return new CfModal(container.vue);
+        },
+        'session-length': function (container) {
+            return new CfSessionLength(container.vue, container.repeater);
+        },
+        'modal-new-booking': function (container) {
+            return new CfModalNewBooking(container.vue, container.repeater, container.modal, container.datepicker);
+        },
         components: function (container) {
             return {
                 app: container.app,
                 calendar: container.calendar,
                 repeater: container.repeater,
-                'session-length': container['session-length'],
                 tabs: container.tabs,
                 tab: container.tab,
+                modal: container.modal,
+                datepicker: container.datepicker,
+
+                'session-length': container['session-length'],
+                'modal-new-booking': container['modal-new-booking'],
             }
         }
     }

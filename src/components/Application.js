@@ -3,10 +3,17 @@ import {FunctionalArrayCollection} from '@rebelcode/std-lib';
 export default function (state) {
     return function (container) {
         return {
-            inject: ['calendar', 'repeater', 'store', 'tabs', 'tab', 'session-length'],
+            inject: [
+                'calendar', 
+                'repeater',
+                'store', 
+                'tabs', 'tab', 'modal', 
+                'session-length', 'modal-new-booking', 
+                'modalStateToggleable'
+            ],
             data () {
                 return {
-                    activeTab: 1,
+                    activeTab: 0,
 
                     tabsConfig: {
                         switcherClass: 'horizontal-tabs',
@@ -28,12 +35,24 @@ export default function (state) {
 
                 this.store.commit('SET_INITIAL_STATE', state);
             },
+            methods: {
+                dayClick (date, jsEvent, view) {
+                    if(view.name !== 'month' && view.name !== 'agendaWeek') return;
+
+                    console.info(date, jsEvent, view);
+
+                    this.store.commit('SET_AVAILABILITY_FROM_DATE', date.format('DD/MM/YYYY'));
+                    this.modalStateToggleable.setState(true);
+                }
+            },
             components: {
                 calendar: 'calendar',
                 repeater: 'repeater',
                 tabs: 'tabs',
                 tab: 'tab',
+                modal: 'modal',
                 'session-length': 'session-length',
+                'modal-new-booking': 'modal-new-booking',
             }
         }
     }

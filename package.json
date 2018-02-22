@@ -8,24 +8,24 @@
     "postinstall": "node lib/post_install.js"
   },
   "devDependencies": {
+    "@rebelcode/std-lib": "^0.1.2",
+    "@rebelcode/ui-framework": "^0.1.0",
+    "@rebelcode/vc-calendar": "^0.1.0",
+    "@rebelcode/vc-paged": "^0.1.0",
+    "@rebelcode/vc-repeater": "^0.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-runtime": "^6.22.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-2": "^6.22.0",
     "cross-env": "^5.1.1",
     "vue": "^2.5.13",
-    "@rebelcode/ui-framework": "^0.1.0",
-    "@rebelcode/vc-calendar": "^0.1.0",
-    "@rebelcode/vc-repeater": "^0.1.0",
-    "@rebelcode/vc-paged": "^0.1.0",
-    "@rebelcode/std-lib": "^0.1.0",
-    "webpack": "^3.10.0",
-    "babel-preset-flow": "^6.23.0",
-    "babel-plugin-syntax-flow": "^6.18.0",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-runtime": "^6.22.0"
+    "webpack": "^3.10.0"
   },
   "author": "RebelCode"
 }
