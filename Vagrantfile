@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
 
     source /home/vagrant/.profile
     cd /var/www/project
-    npm install && npm run build
+    npm install
   SCRIPT
 
   config.vm.provision "shell", inline: $script, privileged: false
