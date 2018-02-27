@@ -1,0 +1,21 @@
+<transition name="modal-transition">
+    <div class="modal">
+        <div class="modal__body">
+            <div class="modal__header">
+                {{ title }}
+                <div class="modal__close" @click="$emit('cancel')">&times;</div>
+            </div>
+            <div class="modal__content">
+                <slot></slot>
+            </div>
+            <div class="modal__footer">
+                <input v-for="button in buttons"
+                       type="button"
+                       :class="['button', button.primary ? 'button-primary' : '']"
+                       :value="button.title"
+                       @click="$emit(button.id)"
+                />
+            </div>
+        </div>
+    </div>
+</transition>

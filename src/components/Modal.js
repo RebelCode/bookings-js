@@ -1,5 +1,7 @@
 export default function CfModal (Vue) {
     return Vue.extend({
+        template: require('./../templates/modal.html'),
+
         props: {
             active: {
                 type: Boolean
@@ -12,71 +14,16 @@ export default function CfModal (Vue) {
             }
         },
 
-        methods: {
-            _renderCloseButton (h) {
-                let vm = this;
-
-                return h('div', {
-                    class: 'modal__close',
-                    on: {
-                        click () {
-                            vm.$emit('cancel');
-                        }
-                    },
-                    domProps: {
-                        innerHTML: '&times;'
-                    },
-                })
-            },
-
-            _renderFooterButton (h, id, title, primary = false) {
-                let vm = this;
-
-                return h('input', {
-                    class: {
-                        'button': true,
-                        'button-primary': primary
-                    },
-                    attrs: {
-                        value: title,
-                        type: 'button'
-                    },
-                    on: {
-                        click () {
-                            vm.$emit(id);
-                        }
-                    }
-                })
-            },
-
-            _renderFooterActions (h) {
+        computed: {
+            buttons () {
                 return Object.keys(this.actions).map((actionKey, i) => {
-                    return this._renderFooterButton(h, actionKey, this.actions[actionKey], i === 0);
-                }).reverse();
+                    return {
+                        id: actionKey,
+                        title: this.actions[actionKey],
+                        primary: i === 0
+                    };
+                }).reverse()
             }
-        },
-
-        render (h) {
-            let modal = [];
-
-            if(this.active) {
-                modal = [h('div', {class: 'modal'}, [
-                    h('div', {class: 'modal__body'}, [
-                        h('div', {class: 'modal__header'}, [
-                            this.title,
-                            this._renderCloseButton(h)
-                        ]),
-                        h('div', {class: 'modal__content'}, this.$slots.default),
-                        h('div', {class: 'modal__footer'}, this._renderFooterActions(h))
-                    ])
-                ])]
-            }
-
-            return h('transition', {
-                props: {
-                    name: 'modal-transition'
-                }
-            }, modal)
         }
     })
 }

@@ -1,8 +1,8 @@
 import {FunctionalArrayCollection} from '@rebelcode/std-lib';
 
-export default function CfModalNewBooking (Vue, Repeater, Modal, Datepicker) {
-    return Vue.extend({
-        inject: ['store', 'modalStateToggleable'],
+export default function CfModalNewBooking (Vue, Repeater, Datepicker) {
+    return {
+        inject: ['store', 'modalStateToggleable', 'modal'],
         data () {
             return {
                 repeats: 'weekly',
@@ -57,17 +57,15 @@ export default function CfModalNewBooking (Vue, Repeater, Modal, Datepicker) {
                 this.$refs.exclusions.selectedDate = null;
             },
 
-            saveNewBooking ()
-            {
-                this.date
+            saveNewBooking () {
+                // this.store.dispatch('sdf', this.)
                 // booking saving logic
             }
         },
-        components: 
-        {
+        components: {
             Repeater,
-            Modal,
+            modal: 'modal',
             Datepicker
         }
-    })
+    }
 }

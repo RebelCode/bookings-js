@@ -112,7 +112,7 @@ export function services(dependencies, document) {
             return new CfSessionLength(container.vue, container.repeater);
         },
         'modal-new-booking': function (container) {
-            return new CfModalNewBooking(container.vue, container.repeater, container.modal, container.datepicker);
+            return new CfModalNewBooking(container.vue, container.repeater, container.datepicker);
         },
         components: function (container) {
             return {
