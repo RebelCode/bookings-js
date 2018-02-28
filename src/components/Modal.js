@@ -1,6 +1,8 @@
-export default function CfModal (Vue) {
-    return Vue.extend({
-        template: require('./../templates/modal.html'),
+export default function CfModal () {
+    return {
+        template: '#modal-template',
+
+        inject: ['dom'],
 
         props: {
             active: {
@@ -11,6 +13,14 @@ export default function CfModal (Vue) {
             },
             title: {
                 type: String
+            }
+        },
+
+        watch: {
+            active (isModalActive) {
+                this.dom
+                    .getElement('body')
+                    .classList[isModalActive ? 'add' : 'remove']('modal-opened');
             }
         },
 
@@ -25,5 +35,5 @@ export default function CfModal (Vue) {
                 }).reverse()
             }
         }
-    })
+    }
 }

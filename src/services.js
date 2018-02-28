@@ -35,6 +35,9 @@ export function services(dependencies, document) {
         document: function () {
             return document;
         },
+        dom: function (container) {
+            return new dependencies.uiFramework.Dom.Dom(container.document);
+        },
         selectorList: function () {
             return [
                 '#calendar-app',
@@ -105,8 +108,8 @@ export function services(dependencies, document) {
         tab: function (container) {
             return new dependencies.tabs.CfTab(container.vue);
         },
-        modal: function (container) {
-            return new CfModal(container.vue);
+        modal: function () {
+            return CfModal();
         },
         'session-length': function (container) {
             return new CfSessionLength(container.vue, container.repeater);
