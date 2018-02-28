@@ -1,39 +1,21 @@
-export default function CfModal () {
-    return {
+export default function CfModal (AbstractDialog) {
+    return AbstractDialog.extend({
         template: '#modal-template',
 
         inject: ['dom'],
 
-        props: {
-            active: {
-                type: Boolean
-            },
-            actions: {
-                type: Object
-            },
-            title: {
-                type: String
-            }
-        },
+        mounted () {
+            this.$on('open', () => {
+                this.dom.getElement('body')
+                    .classList
+                    .add('modal-opened');
+            });
 
-        watch: {
-            active (isModalActive) {
-                this.dom
-                    .getElement('body')
-                    .classList[isModalActive ? 'add' : 'remove']('modal-opened');
-            }
-        },
-
-        computed: {
-            buttons () {
-                return Object.keys(this.actions).map((actionKey, i) => {
-                    return {
-                        id: actionKey,
-                        title: this.actions[actionKey],
-                        primary: i === 0
-                    };
-                }).reverse()
-            }
+            this.$on('close', () => {
+                this.dom.getElement('body')
+                    .classList
+                    .remove('modal-opened');
+            });
         }
-    }
+    })
 }

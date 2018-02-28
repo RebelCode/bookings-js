@@ -9,10 +9,18 @@ export default function (state) {
                 'store', 
                 'tabs', 'tab', 'modal', 
                 'session-length', 'modal-new-booking', 
-                'modalStateToggleable'
+                'modalStateToggleable',
+                'switcher'
             ],
             data () {
                 return {
+                    switcherValue: 'two',
+                    switcherStates: {
+                        one: 'One',
+                        two: 'Two',
+                        three: 'Three',
+                    },
+
                     activeTab: 0,
 
                     tabsConfig: {
@@ -51,6 +59,7 @@ export default function (state) {
                 tabs: 'tabs',
                 tab: 'tab',
                 modal: 'modal',
+                switcher: 'switcher',
                 'session-length': 'session-length',
                 'modal-new-booking': 'modal-new-booking',
             }

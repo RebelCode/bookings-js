@@ -3,6 +3,9 @@ import CfSessionLength from "./components/SessionLength";
 import CfModal from "./components/Modal";
 import CfModalNewBooking from "./components/ModalNewBooking";
 import {FunctionalToggleable} from '@rebelcode/std-lib';
+import CfSwitcher from "./components/Switcher";
+import CfAbstractButtonsGroup from "./components/AbstractButtonsGroup";
+import CfAbstractDialog from "./components/AbstractDialog";
 
 export function services(dependencies, document) {
     return {
@@ -108,8 +111,17 @@ export function services(dependencies, document) {
         tab: function (container) {
             return new dependencies.tabs.CfTab(container.vue);
         },
-        modal: function () {
-            return CfModal();
+        modal: function (container) {
+            return CfModal(container.dialog);
+        },
+        dialog: function (container) {
+            return CfAbstractDialog(container.vue);
+        },
+        'abstract-button-group': function (container) {
+            return CfAbstractButtonsGroup(container.vue);
+        },
+        switcher: function (container) {
+            return CfSwitcher(container['abstract-button-group']);
         },
         'session-length': function (container) {
             return new CfSessionLength(container.vue, container.repeater);
@@ -126,6 +138,7 @@ export function services(dependencies, document) {
                 tab: container.tab,
                 modal: container.modal,
                 datepicker: container.datepicker,
+                switcher: container.switcher,
 
                 'session-length': container['session-length'],
                 'modal-new-booking': container['modal-new-booking'],
