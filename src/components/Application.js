@@ -1,10 +1,11 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export default function (state, Vuex) {
+export default function (state, store, Vuex) {
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
   return {
+    store,
     inject: [
       'calendar',
       'repeater',

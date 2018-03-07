@@ -15,13 +15,13 @@ export function services (dependencies, document) {
     vuex: function (container) {
       let Vue = container.vue,
         Vuex = dependencies.vuex
-
       Vue.use(Vuex)
-
       return Vuex
     },
     vue: function () {
-      return dependencies.vue
+      let Vue = dependencies.vue
+      Vue.use(dependencies.uiFramework.Core.InjectedComponents)
+      return Vue
     },
     jquery: function () {
       return dependencies.jquery
@@ -55,7 +55,7 @@ export function services (dependencies, document) {
       })
     },
     app: function (container) {
-      return applicationFactory(APP_STATE, container.vuex)
+      return applicationFactory(APP_STATE, container.store, container.vuex)
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
