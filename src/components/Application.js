@@ -9,7 +9,7 @@ export default function (state, Vuex) {
       'calendar',
       'repeater',
       'tabs', 'tab', 'modal',
-      'session-length', 'modal-new-booking',
+      'session-length', 'service-availability-editor',
       'modalStateToggleable',
       'switcher'
     ],
@@ -67,7 +67,7 @@ export default function (state, Vuex) {
       modal: 'modal',
       switcher: 'switcher',
       'session-length': 'session-length',
-      'modal-new-booking': 'modal-new-booking',
+      'service-availability-editor': 'service-availability-editor',
     }
   }
 };

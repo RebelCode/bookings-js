@@ -3,7 +3,7 @@ import applicationFactory from './components/Application'
 
 import CfSessionLength from './components/SessionLength'
 import CfModal from './components/Modal'
-import CfModalNewBooking from './components/ModalNewBooking'
+import CfServiceAvailabilityEditor from './components/ServiceAvailabilityEditor'
 import CfSwitcher from './components/Switcher'
 import CfAbstractButtonsGroup from './components/AbstractButtonsGroup'
 import CfAbstractDialog from './components/AbstractDialog'
@@ -92,10 +92,10 @@ export function services (dependencies, document) {
       return CfSwitcher(container['abstract-button-group'])
     },
     'session-length': function (container) {
-      return new CfSessionLength(container.vue, container.repeater)
+      return new CfSessionLength(container.vuex)
     },
-    'modal-new-booking': function (container) {
-      return new CfModalNewBooking(container.vue, container.vuex)
+    'service-availability-editor': function (container) {
+      return new CfServiceAvailabilityEditor(container.vue, container.vuex)
     },
     components: function (container) {
       return {
@@ -109,7 +109,7 @@ export function services (dependencies, document) {
         switcher: container.switcher,
 
         'session-length': container['session-length'],
-        'modal-new-booking': container['modal-new-booking'],
+        'service-availability-editor': container['service-availability-editor'],
       }
     }
   }

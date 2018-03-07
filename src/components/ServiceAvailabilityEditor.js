@@ -1,6 +1,6 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export default function CfModalNewBooking (Vue, Vuex) {
+export default function CfServiceAvailabilityEditor (Vue, Vuex) {
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
