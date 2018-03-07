@@ -1,68 +1,73 @@
-import {FunctionalArrayCollection} from '@rebelcode/std-lib';
+import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export default function (state) {
-    return function (container) {
-        return {
-            inject: [
-                'calendar', 
-                'repeater',
-                'store', 
-                'tabs', 'tab', 'modal', 
-                'session-length', 'modal-new-booking', 
-                'modalStateToggleable',
-                'switcher'
-            ],
-            data () {
-                return {
-                    switcherValue: 'two',
-                    switcherStates: {
-                        one: 'One',
-                        two: 'Two',
-                        three: 'Three',
-                    },
+export default function (state, Vuex) {
+  const mapState = Vuex.mapState
+  const mapMutations = Vuex.mapMutations
 
-                    activeTab: 0,
+  return {
+    inject: [
+      'calendar',
+      'repeater',
+      'tabs', 'tab', 'modal',
+      'session-length', 'modal-new-booking',
+      'modalStateToggleable',
+      'switcher'
+    ],
+    data () {
+      return {
+        switcherValue: 'two',
+        switcherStates: {
+          one: 'One',
+          two: 'Two',
+          three: 'Three',
+        },
 
-                    tabsConfig: {
-                        switcherClass: 'horizontal-tabs',
-                        switcherItemClass: 'horizontal-tabs__item',
-                        switcherActiveItemClass: '_active',
-                        tabsClass: 'tabs-content'
-                    },
-                }
-            },
-            computed: {
-                events () {
-                    return this.store.state.app.events;
-                }
-            },
-            mounted () {
-                if(!state) {
-                    throw new Error('App state not initialized');
-                }
+        activeTab: 0,
 
-                this.store.commit('SET_INITIAL_STATE', state);
-            },
-            methods: {
-                dayClick (date, jsEvent, view) {
-                    if(view.name !== 'month' && view.name !== 'agendaWeek') return;
+        tabsConfig: {
+          switcherClass: 'horizontal-tabs',
+          switcherItemClass: 'horizontal-tabs__item',
+          switcherActiveItemClass: '_active',
+          tabsClass: 'tabs-content'
+        },
+      }
+    },
+    computed: {
+      ...mapState([
+        'events'
+      ])
+    },
+    mounted () {
+      if (!state) {
+        throw new Error('App state not initialized')
+      }
 
-                    console.info(date, jsEvent, view);
+      this.setInitialState(state)
+    },
+    methods: {
+      ...mapMutations([
+        'setInitialState'
+      ]),
+      ...mapMutations('bookingOptions', [
+        'setAvailabilityFromDate'
+      ]),
 
-                    this.store.commit('SET_AVAILABILITY_FROM_DATE', date.format('DD/MM/YYYY'));
-                    this.modalStateToggleable.setState(true);
-                }
-            },
-            components: {
-                calendar: 'calendar',
-                repeater: 'repeater',
-                tabs: 'tabs',
-                tab: 'tab',
-                modal: 'modal',
-                switcher: 'switcher',
-                'session-length': 'session-length',
-                'modal-new-booking': 'modal-new-booking',
-            }
-        }
+      dayClick (date, jsEvent, view) {
+        if (view.name !== 'month' && view.name !== 'agendaWeek') return
+
+        this.setAvailabilityFromDate(date.format('DD/MM/YYYY'))
+        this.modalStateToggleable.setState(true)
+      }
+    },
+    components: {
+      calendar: 'calendar',
+      repeater: 'repeater',
+      tabs: 'tabs',
+      tab: 'tab',
+      modal: 'modal',
+      switcher: 'switcher',
+      'session-length': 'session-length',
+      'modal-new-booking': 'modal-new-booking',
     }
+  }
 };
