@@ -16,19 +16,12 @@ export function services (dependencies, document) {
       let Vue = container.vue,
         Vuex = dependencies.vuex
 
-      Vue.version = container._vue.version
-      Vue.config = container._vue.config
-      Vue.set = container._vue.set
-
       Vue.use(Vuex)
 
       return Vuex
     },
-    _vue: function () {
+    vue: function () {
       return dependencies.vue
-    },
-    vue: function (container) {
-      return container._vue.extend()
     },
     jquery: function () {
       return dependencies.jquery
@@ -92,7 +85,7 @@ export function services (dependencies, document) {
       return CfSwitcher(container['abstract-button-group'])
     },
     'session-length': function (container) {
-      return new CfSessionLength(container.vuex)
+      return new CfSessionLength(container.vue, container.vuex)
     },
     'service-availability-editor': function (container) {
       return new CfServiceAvailabilityEditor(container.vue, container.vuex)

@@ -1,10 +1,10 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export default function CfSessionLength (Vuex) {
+export default function CfSessionLength (Vue, Vuex) {
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
-  return {
+  return Vue.extend({
     inject: [
       'repeater'
     ],
@@ -63,5 +63,5 @@ export default function CfSessionLength (Vuex) {
     components: {
       repeater: 'repeater'
     }
-  }
+  })
 }
