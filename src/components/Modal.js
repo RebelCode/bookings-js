@@ -1,21 +1,34 @@
+/**
+ * Modal component. Modal's consumer responsible for
+ * providing any content to this modal, working with
+ * date inside provided content, catching button clicks, etc.
+ *
+ * This is only UI box that can be opened and closed.
+ *
+ * @param AbstractDialog
+ * @constructor
+ */
 export default function CfModal (AbstractDialog) {
-    return AbstractDialog.extend({
-        template: '#modal-template',
+  return AbstractDialog.extend({
+    template: '#modal-template',
 
-        inject: ['dom'],
+    props: {
+      /**
+       * Modal title
+       *
+       * @property {string}
+       */
+      title: {
+        type: String
+      },
 
-        mounted () {
-            this.$on('open', () => {
-                this.dom.getElement('body')
-                    .classList
-                    .add('modal-opened');
-            });
-
-            this.$on('close', () => {
-                this.dom.getElement('body')
-                    .classList
-                    .remove('modal-opened');
-            });
-        }
-    })
+      /**
+       * @inherit
+       */
+      dialogOpenedClass: {
+        type: String,
+        default: 'modal-opened'
+      }
+    }
+  })
 }
