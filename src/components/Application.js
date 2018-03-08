@@ -11,8 +11,8 @@ export default function (state, store, Vuex) {
       'repeater',
       'tabs', 'tab', 'modal',
       'session-length', 'service-availability-editor',
-      'modalStateToggleable',
-      'switcher'
+      'switcher',
+      'availability-calendar'
     ],
     data () {
       return {
@@ -34,9 +34,9 @@ export default function (state, store, Vuex) {
       }
     },
     computed: {
-      ...mapState([
-        'events'
-      ])
+      ...mapState({
+        events: state => state.app.events
+      })
     },
     mounted () {
       if (!state) {
@@ -49,16 +49,6 @@ export default function (state, store, Vuex) {
       ...mapMutations([
         'setInitialState'
       ]),
-      ...mapMutations('bookingOptions', [
-        'setAvailabilityFromDate'
-      ]),
-
-      dayClick (date, jsEvent, view) {
-        if (view.name !== 'month' && view.name !== 'agendaWeek') return
-
-        this.setAvailabilityFromDate(date.format('DD/MM/YYYY'))
-        this.modalStateToggleable.setState(true)
-      }
     },
     components: {
       calendar: 'calendar',
@@ -67,6 +57,7 @@ export default function (state, store, Vuex) {
       tab: 'tab',
       modal: 'modal',
       switcher: 'switcher',
+      'availability-calendar': 'availability-calendar',
       'session-length': 'session-length',
       'service-availability-editor': 'service-availability-editor',
     }

@@ -1,7 +1,5 @@
 const state = {
-  serviceAvailabilityModel: {
-    fromDate: null
-  },
+  serviceAvailabilityModel: {},
   sessions: [],
 }
 

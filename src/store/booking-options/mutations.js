@@ -2,8 +2,8 @@
  * Mutations for booking-options feature
  */
 const mutations = {
-  setAvailabilityFromDate (state, newDate) {
-    state.serviceAvailabilityModel.fromDate = newDate
+  setAvailabilityEditorState (state, model) {
+    state.serviceAvailabilityModel = model
   },
 
   setSessions (state, sessions) {

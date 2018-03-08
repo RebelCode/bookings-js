@@ -1,53 +1,53 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export default function CfServiceAvailabilityEditor (Vue, Vuex) {
+export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, Vuex) {
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
-  return {
-    inject: ['modalStateToggleable', 'modal', 'repeater', 'datepicker'],
+  return AbstractEntityModalEditor.extend({
+    inject: {
+      modalState: {
+        from: 'availabilityEditorStateToggleable'
+      },
+      modal: 'modal',
+      repeater: 'repeater',
+      datepicker: 'datepicker'
+    },
     data () {
       return {
-        repeats: 'weekly',
-
-        exclusionsPickerVisible: false,
-        excludedPlaceholder: null,
-        excludes: {
-          dates: []
+        model: {
+          id: null,
+          fromDate: null,
+          repeats: 'never',
+          excludes: {
+            dates: []
+          }
         },
 
+        exclusionsPickerVisible: false,
+
         excludesDatesCollection: new FunctionalArrayCollection(() => {
-          return this.excludes.dates
+          return this.model.excludes.dates
         }, (newDates) => {
-          this.excludes.dates = newDates
+          this.model.excludes.dates = newDates
         }, (date) => {
           return date.toDateString()
         })
       }
     },
     computed: {
-      ...mapState('bookingOptions', [
-        'serviceAvailabilityModel'
-      ]),
+      ...mapState('bookingOptions', {
+        entityModel: state => state.serviceAvailabilityModel
+      }),
 
-      fromDate: {
-        get () {
-          return this.serviceAvailabilityModel.fromDate
-        },
-
-        set (newDate) {
-          this.setAvailabilityFromDate(newDate)
-        }
-      },
-
-      modalState () {
-        return this.modalStateToggleable
-      }
+      ...mapState({
+        entities: state => state.app.events
+      })
     },
     methods: {
-      ...mapMutations('bookingOptions', [
-        'setAvailabilityFromDate'
-      ]),
+      ...mapMutations({
+        setNewEntities: 'setNewEvents'
+      }),
 
       _getExclusionItemTitle (date) {
         return date.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
@@ -63,8 +63,8 @@ export default function CfServiceAvailabilityEditor (Vue, Vuex) {
         this.$refs.exclusions.selectedDate = null
       },
 
-      saveNewBooking () {
-        // booking saving logic
+      saveAvailability () {
+        // save availability
       }
     },
     components: {
@@ -72,5 +72,5 @@ export default function CfServiceAvailabilityEditor (Vue, Vuex) {
       modal: 'modal',
       datepicker: 'datepicker'
     }
-  }
+  })
 }

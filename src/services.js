@@ -7,8 +7,10 @@ import CfServiceAvailabilityEditor from './components/ServiceAvailabilityEditor'
 import CfSwitcher from './components/Switcher'
 import CfAbstractButtonsGroup from './components/AbstractButtonsGroup'
 import CfAbstractDialog from './components/AbstractDialog'
+import CfAvailabilityCalendar from './components/AvailabilityCalendar'
 
 import store from './store'
+import CfAbstractEntityModalEditor from './components/AbstractEntityModalEditor'
 
 export function services (dependencies, document) {
   return {
@@ -47,7 +49,7 @@ export function services (dependencies, document) {
     store: function (container) {
       return new container.vuex.Store(store)
     },
-    modalStateToggleable: function (container) {
+    availabilityEditorStateToggleable: function (container) {
       return new FunctionalToggleable((newVisibility) => {
         container.store.commit('ui/setAvailabilityModalVisibility', newVisibility)
       }, () => {
@@ -59,6 +61,9 @@ export function services (dependencies, document) {
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
+    },
+    'availability-calendar': function (container) {
+      return CfAvailabilityCalendar(container.calendar, container.vuex)
     },
     repeater: function (container) {
       return new dependencies.repeater.CfRepeater(container.vue)
@@ -87,9 +92,14 @@ export function services (dependencies, document) {
     'session-length': function (container) {
       return new CfSessionLength(container.vue, container.vuex)
     },
-    'service-availability-editor': function (container) {
-      return new CfServiceAvailabilityEditor(container.vue, container.vuex)
+
+    'abstract-entity-modal-editor': function (container) {
+      return new CfAbstractEntityModalEditor(container.vue)
     },
+    'service-availability-editor': function (container) {
+      return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex)
+    },
+
     components: function (container) {
       return {
         app: container.app,
@@ -100,6 +110,8 @@ export function services (dependencies, document) {
         modal: container.modal,
         datepicker: container.datepicker,
         switcher: container.switcher,
+
+        'availability-calendar': container['availability-calendar'],
 
         'session-length': container['session-length'],
         'service-availability-editor': container['service-availability-editor'],
