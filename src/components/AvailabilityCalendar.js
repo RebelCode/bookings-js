@@ -32,10 +32,10 @@ export default function (FullCalendar, Vuex) {
         'setAvailabilityEditorState'
       ]),
 
-      dayClicked (date, jsEvent, view) {
+      dayClicked (date = null) {
         this.setAvailabilityEditorState({
           id: null,
-          fromDate: date.format('DD/MM/YYYY')
+          fromDate: date ? date.format('DD/MM/YYYY') : null
         })
         this.availabilityEditorStateToggleable.setState(true)
       },
@@ -44,6 +44,21 @@ export default function (FullCalendar, Vuex) {
         this.setAvailabilityEditorState(event)
         this.availabilityEditorStateToggleable.setState(true)
       }
+    },
+
+    render(h) {
+      let self = this
+      return h('div', {
+        ref: 'calendar'
+      }, [
+        h('div', {
+          class: 'button-floating',
+          on: {
+            click () {
+              self.dayClicked()
+            }
+          }}, ['+'])
+      ])
     }
   })
 }
