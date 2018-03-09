@@ -18,6 +18,12 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         model: {
           id: null,
           fromDate: null,
+
+          fromTime: null,
+          toTime: null,
+
+          isAllDay: false,
+
           repeats: 'never',
           excludes: {
             dates: []

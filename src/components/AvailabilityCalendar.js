@@ -23,7 +23,7 @@ export default function (FullCalendar, Vuex) {
     },
 
     mounted () {
-      this.$on('day-click', this.dayClicked)
+      this.$on('event-created', this.eventCreated)
       this.$on('event-selected', this.eventClicked)
     },
 
@@ -32,11 +32,38 @@ export default function (FullCalendar, Vuex) {
         'setAvailabilityEditorState'
       ]),
 
-      dayClicked (date = null) {
-        this.setAvailabilityEditorState({
-          id: null,
-          fromDate: date ? date.format('DD/MM/YYYY') : null
-        })
+      _getTimeModel (time) {
+        try {
+          return {
+            HH: time.format('HH'),
+            mm: time.format('mm'),
+          }
+        }
+        catch (e) {
+          return {HH:null, mm: null}
+        }
+      },
+
+      eventCreated (params) {
+        let event = {id: null}
+
+        if (params) {
+          let {start, end, allDay} = params;
+
+          event = Object.assign({}, event, {
+            fromDate: start.format('DD/MM/YYYY'),
+            isAllDay: allDay,
+          })
+
+          if (!allDay) {
+            event = Object.assign({}, event, {
+              fromTime: this._getTimeModel(start),
+              toTime: this._getTimeModel(end)
+            })
+          }
+        }
+
+        this.setAvailabilityEditorState(event)
         this.availabilityEditorStateToggleable.setState(true)
       },
 
@@ -55,7 +82,7 @@ export default function (FullCalendar, Vuex) {
           class: 'button-floating',
           on: {
             click () {
-              self.dayClicked()
+              self.eventCreated()
             }
           }}, ['+'])
       ])

@@ -23,6 +23,12 @@ export function services (dependencies, document) {
     vue: function () {
       let Vue = dependencies.vue
       Vue.use(dependencies.uiFramework.Core.InjectedComponents)
+
+      /*
+       * Built timepicker's restriction. It should be installed as a plugin.
+       */
+      Vue.use(dependencies.timepicker)
+
       return Vue
     },
     jquery: function () {
@@ -109,6 +115,7 @@ export function services (dependencies, document) {
         tab: container.tab,
         modal: container.modal,
         datepicker: container.datepicker,
+        timepicker: container.timepicker,
         switcher: container.switcher,
 
         'availability-calendar': container['availability-calendar'],
