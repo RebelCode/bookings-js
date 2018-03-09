@@ -3,6 +3,7 @@ import applicationFactory from './components/Application'
 
 import CfSessionLength from './components/SessionLength'
 import CfModal from './components/Modal'
+import CfAbstractEntityModalEditor from './components/AbstractEntityModalEditor'
 import CfServiceAvailabilityEditor from './components/ServiceAvailabilityEditor'
 import CfSwitcher from './components/Switcher'
 import CfAbstractButtonsGroup from './components/AbstractButtonsGroup'
@@ -10,7 +11,6 @@ import CfAbstractDialog from './components/AbstractDialog'
 import CfAvailabilityCalendar from './components/AvailabilityCalendar'
 
 import store from './store'
-import CfAbstractEntityModalEditor from './components/AbstractEntityModalEditor'
 
 export function services (dependencies, document) {
   return {
@@ -74,6 +74,9 @@ export function services (dependencies, document) {
     repeater: function (container) {
       return new dependencies.repeater.CfRepeater(container.vue)
     },
+    'selection-list': function (container) {
+      return new dependencies.selectionList.CfSelectionList(container.repeater)
+    },
     datepicker: function () {
       return dependencies.datepicker
     },
@@ -103,7 +106,7 @@ export function services (dependencies, document) {
       return new CfAbstractEntityModalEditor(container.vue)
     },
     'service-availability-editor': function (container) {
-      return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex)
+      return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
     },
 
     components: function (container) {
@@ -121,6 +124,7 @@ export function services (dependencies, document) {
         'availability-calendar': container['availability-calendar'],
 
         'session-length': container['session-length'],
+        'selection-list': container['selection-list'],
         'service-availability-editor': container['service-availability-editor'],
       }
     }
