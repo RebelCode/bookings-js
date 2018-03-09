@@ -10,6 +10,9 @@ export default function CfBoolSwitcher (Switcher) {
       danger: {
         default: false
       },
+      trueValue: {
+        default: 'yes'
+      },
       buttons: {
         type: Object,
         default () {
@@ -21,6 +24,16 @@ export default function CfBoolSwitcher (Switcher) {
       }
     },
 
+    computed: {
+      activeButton () {
+        let buttons = Object.keys(this.buttons)
+        if(buttons[1] !== this.trueValue) {
+          buttons.reverse()
+        }
+        return buttons[Number(this.value)]
+      }
+    },
+
     methods: {
       /**
        * Switch state on click.
@@ -28,7 +41,7 @@ export default function CfBoolSwitcher (Switcher) {
        * @param buttonId
        */
       buttonClicked (buttonId) {
-        this.$emit('input', !this.value)
+        this.$emit('input', buttonId === this.trueValue)
       }
     }
   })
