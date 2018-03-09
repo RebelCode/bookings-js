@@ -12,18 +12,12 @@ export default function (state, store, Vuex) {
       'tabs', 'tab', 'modal',
       'session-length', 'service-availability-editor',
       'switcher',
-      'availability-calendar'
+      'bool-switcher',
+      'availability-calendar',
     ],
     data () {
       return {
-        switcherValue: 'two',
-        switcherStates: {
-          one: 'One',
-          two: 'Two',
-          three: 'Three',
-        },
-
-        activeTab: 0,
+        activeTab: 2,
 
         tabsConfig: {
           switcherClass: 'horizontal-tabs',
@@ -31,6 +25,10 @@ export default function (state, store, Vuex) {
           switcherActiveItemClass: '_active',
           tabsClass: 'tabs-content'
         },
+
+        calendar: {
+          showDatesInCustomersTimezone: false
+        }
       }
     },
     computed: {
@@ -59,6 +57,7 @@ export default function (state, store, Vuex) {
       switcher: 'switcher',
       'availability-calendar': 'availability-calendar',
       'session-length': 'session-length',
+      'bool-switcher': 'bool-switcher',
       'service-availability-editor': 'service-availability-editor',
     }
   }

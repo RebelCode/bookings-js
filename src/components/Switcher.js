@@ -21,9 +21,18 @@ export default function CfSwitcher (AbstractButtonGroup) {
     },
 
     mounted () {
-      this.$on('button-clicked', (buttonId) => {
+      this.$on('button-clicked', this.buttonClicked)
+    },
+
+    methods: {
+      /**
+       * Some button in group is clicked.
+       *
+       * @param buttonId
+       */
+      buttonClicked (buttonId) {
         this.$emit('input', buttonId)
-      })
+      }
     }
   })
 }

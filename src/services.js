@@ -11,6 +11,7 @@ import CfAbstractDialog from './components/AbstractDialog'
 import CfAvailabilityCalendar from './components/AvailabilityCalendar'
 
 import store from './store'
+import CfBoolSwitcher from './components/BoolSwitcher'
 
 export function services (dependencies, document) {
   return {
@@ -98,6 +99,9 @@ export function services (dependencies, document) {
     switcher: function (container) {
       return CfSwitcher(container['abstract-button-group'])
     },
+    'bool-switcher': function (container) {
+      return CfBoolSwitcher(container.switcher)
+    },
     'session-length': function (container) {
       return new CfSessionLength(container.vue, container.vuex)
     },
@@ -122,6 +126,7 @@ export function services (dependencies, document) {
         switcher: container.switcher,
 
         'availability-calendar': container['availability-calendar'],
+        'bool-switcher': container['bool-switcher'],
 
         'session-length': container['session-length'],
         'selection-list': container['selection-list'],

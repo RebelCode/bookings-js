@@ -62,6 +62,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     watch: {
       /**
        * Change default values when repeats changes.
+       *
+       * @todo: fix modal opening issue (when watcher is fired on initial data)
        */
       'model.repeats': function (newValue) {
         this.model.repeatsEvery = 2

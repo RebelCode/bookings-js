@@ -110,7 +110,12 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * Model fields seeded by values from Vuex store.
        */
       seedModelFields () {
-        this.model = Object.assign({}, this.$model, this.entityModel)
+        let model = Object.assign({}, this.$model, this.entityModel)
+
+        Object.keys(model).map((key) => {
+          Vue.set(this.model, key, model[key])
+          console.info('Vue.set', key, model[key])
+        })
 
         /**
          * Set default confirmation state

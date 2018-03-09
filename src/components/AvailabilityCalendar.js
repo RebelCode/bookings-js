@@ -58,6 +58,8 @@ export default function (FullCalendar, Vuex) {
       availabilityToEvent (availability) {
         let model = Object.assign({}, availability)
 
+        console.info(model)
+
         return {
           id: model.id,
           allDay: model.allDay,
