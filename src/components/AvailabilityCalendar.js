@@ -93,6 +93,13 @@ export default function (FullCalendar, Vuex) {
         }
       },
 
+      /**
+       * Create event when user clicks on calendar day, or
+       * select some duration on calendar, or user click
+       * on floating Add button.
+       *
+       * @param params
+       */
       eventCreated (params) {
         let event = {id: null}
 
@@ -100,7 +107,7 @@ export default function (FullCalendar, Vuex) {
           let {start, end, allDay} = params;
 
           event = Object.assign({}, event, {
-            fromDate: start.format('DD/MM/YYYY'),
+            fromDate: start.format(),
             isAllDay: allDay,
           })
 
