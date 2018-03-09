@@ -7,8 +7,13 @@ export default function (FullCalendar, Vuex) {
       'availabilityEditorStateToggleable'
     ],
     props: {
+      availabilities: {
+        default () {
+          return []
+        }
+      },
       header: {
-        default() {
+        default () {
           return {
             left: 'agendaWeek,month',
             right: 'prev title next'
@@ -16,9 +21,19 @@ export default function (FullCalendar, Vuex) {
         },
       },
       defaultView: {
-        default() {
+        default () {
           return 'agendaWeek'
         },
+      }
+    },
+
+    computed: {
+      events () {
+        if(!this.availabilities.map) return []
+
+        return this.availabilities.map((item) => {
+          return this.availabilityToEvent(item)
+        })
       }
     },
 
@@ -32,12 +47,46 @@ export default function (FullCalendar, Vuex) {
         'setAvailabilityEditorState'
       ]),
 
+      /**
+       * Convert availability model to event format that understandable by
+       * calendar. This is required to not force backend to prepare data
+       * for the concrete calendar implementation.
+       *
+       * @param availability
+       * @return {{id: null, allDay: *, start: string, end: string, model: {} & any}}
+       */
+      availabilityToEvent (availability) {
+        let model = Object.assign({}, availability)
+
+        return {
+          id: model.id,
+          allDay: model.allDay,
+          start: model.fromDate + 'T' + model.fromTime,
+          end: model.fromDate + 'T' + model.toTime,
+          model
+        }
+      },
+
+      /**
+       * Prepare time for the editor.
+       *
+       * @todo: Move this stuff to the editor, please
+       *
+       * @param time
+       * @return {*}
+       * @private
+       */
       _getTimeModel (time) {
-        try {
+        if (time && time.format) {
           return {
             HH: time.format('HH'),
             mm: time.format('mm'),
           }
+        }
+
+        try {
+          time = time.split(':')
+          return {HH: time[0], mm: time[1]}
         }
         catch (e) {
           return {HH:null, mm: null}
@@ -68,7 +117,11 @@ export default function (FullCalendar, Vuex) {
       },
 
       eventClicked (event) {
-        this.setAvailabilityEditorState(event)
+        let model = Object.assign({}, event.model, {
+          fromTime: this._getTimeModel(event.model.fromTime),
+          toTime: this._getTimeModel(event.model.toTime)
+        })
+        this.setAvailabilityEditorState(model)
         this.availabilityEditorStateToggleable.setState(true)
       }
     },
