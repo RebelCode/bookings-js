@@ -55,6 +55,15 @@ export default function CfAbstractEntityModalEditor (Vue) {
        */
       modalIsVisible () {
         return this.modalState.isOn()
+      },
+
+      /**
+       * Are we in the double confirmation mode
+       *
+       * @var {boolean}
+       */
+      isDoubleConfirming () {
+        return this.removeConfirming;
       }
     },
 
