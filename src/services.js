@@ -73,7 +73,7 @@ export function services (dependencies, document) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
     },
     'availability-calendar': function (container) {
-      return CfAvailabilityCalendar(container.calendar, container.vuex)
+      return CfAvailabilityCalendar(container.calendar, container.vuex, container.moment)
     },
     repeater: function (container) {
       return new dependencies.repeater.CfRepeater(container.vue)

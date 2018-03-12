@@ -17,7 +17,7 @@ export default function (state, store, Vuex) {
     ],
     data () {
       return {
-        activeTab: 2,
+        activeTab: 0,
 
         tabsConfig: {
           switcherClass: 'horizontal-tabs',
