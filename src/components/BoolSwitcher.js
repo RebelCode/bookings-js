@@ -40,8 +40,8 @@ export default function CfBoolSwitcher (Switcher) {
        *
        * @param buttonId
        */
-      buttonClicked (buttonId) {
-        this.$emit('input', buttonId === this.trueValue)
+      switcherClicked () {
+        this.$emit('input', !this.value)
       }
     }
   })
