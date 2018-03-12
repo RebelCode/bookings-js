@@ -41,6 +41,9 @@ export function services (dependencies, document) {
     moment: function () {
       return dependencies.moment
     },
+    equal: function () {
+      return dependencies.fastDeepEqual
+    },
     document: function () {
       return document
     },

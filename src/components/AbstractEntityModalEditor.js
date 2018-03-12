@@ -22,6 +22,10 @@ export default function CfAbstractEntityModalEditor (Vue) {
      */
     $model: {},
 
+    inject: [
+      'equal'
+    ],
+
     data () {
       return {
         /**
@@ -30,6 +34,20 @@ export default function CfAbstractEntityModalEditor (Vue) {
          * @var {boolean}
          */
         removeConfirming: false,
+
+        /**
+         * Is close confirmation visible
+         *
+         * @var {boolean}
+         */
+        closeConfirming: false,
+
+        /**
+         * Model state that was opened for creating OR for editing.
+         *
+         * @var {{}}
+         */
+        mountedModel: {},
 
         /**
          * Editing entity items collection. Used to remove editing
@@ -63,8 +81,18 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * @var {boolean}
        */
       isDoubleConfirming () {
-        return this.removeConfirming;
-      }
+        return this.removeConfirming
+          || this.closeConfirming;
+      },
+
+      /**
+       * Check model is changed.
+       *
+       * @return {boolean}
+       */
+      isModelChanged () {
+        return !this.equal(this.model, this.mountedModel)
+      },
     },
 
     watch: {
@@ -122,8 +150,8 @@ export default function CfAbstractEntityModalEditor (Vue) {
         let model = Object.assign({}, this.$model, this.entityModel)
 
         Object.keys(model).map((key) => {
-          Vue.set(this.model, key, model[key])
-          console.info('Vue.set', key, model[key])
+          Vue.set(this.model, key, JSON.parse(JSON.stringify(model[key])))
+          Vue.set(this.mountedModel, key, JSON.parse(JSON.stringify(model[key])))
         })
 
         /**
@@ -132,13 +160,34 @@ export default function CfAbstractEntityModalEditor (Vue) {
          * @type {boolean}
          */
         this.removeConfirming = false
+        this.closeConfirming = false
       },
 
       /**
-       * Close modal.
+       * Show close modal confirmation if editing model
+       * was changed.
        */
       closeModal () {
+        if (this.isModelChanged) {
+          this.closeConfirming = true
+          return
+        }
+
+        this.forceCloseModal()
+      },
+
+      /**
+       * Close modal without data saving
+       */
+      forceCloseModal () {
         this.modalState.setState(false)
+      },
+
+      /**
+       * Continue editing and don't close the modal
+       */
+      continueEditing () {
+        this.closeConfirming = false
       },
 
       /**
@@ -149,7 +198,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
        */
       deleteItem () {
         this.itemsCollection.removeItem(this.model)
-        this.closeModal()
+        this.forceCloseModal()
       },
     }
   })

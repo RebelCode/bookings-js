@@ -73,7 +73,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
             this.model.repeatsOn = [ 'dow' ]
             break
           default:
-            this.model.repeatsOn = []
+            // this.model.repeatsOn = []
         }
       }
     },
