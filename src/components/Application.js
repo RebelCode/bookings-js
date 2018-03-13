@@ -26,7 +26,7 @@ export default function (state, store, Vuex) {
           tabsClass: 'tabs-content'
         },
 
-        calendar: {
+        calendarConfig: {
           showDatesInCustomersTimezone: false
         }
       }
@@ -47,6 +47,10 @@ export default function (state, store, Vuex) {
       ...mapMutations([
         'setInitialState'
       ]),
+
+      createNewBooking () {
+
+      }
     },
     components: {
       calendar: 'calendar',

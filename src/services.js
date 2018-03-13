@@ -84,6 +84,7 @@ export function services (dependencies, document) {
       })
     },
     'availability-calendar': function (container) {
+      // return {}
       return CfAvailabilityCalendar(container.calendar, container.vuex, container.moment)
     },
     repeater: function (container) {
