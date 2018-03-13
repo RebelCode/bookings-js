@@ -4,14 +4,62 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
+  const helpers = {
+    /**
+     * Create date object from string in format YYYY-MM-DD
+     *
+     * @param date
+     * @return {Date}
+     */
+    getDate (date) {
+      const parts = date.split("-");
+      return new Date(parts[0], parts[1] - 1, parts[2])
+    },
+
+    /**
+     * Make computed time model
+     *
+     * @param obj
+     * @param key
+     * @return {*}
+     */
+    makeTimeModel (key) {
+      return {
+        get () {
+          if (!this.model[key]) {
+            return {HH: null, mm: null}
+          }
+          let parts = this.model[key].split(':')
+          return {HH: parts[0], mm: parts[1]}
+        },
+
+        set (value) {
+          this.model[key] = value.HH + ':' + value.mm + ':00'
+        }
+      }
+    },
+  }
+
   return AbstractEntityModalEditor.extend({
     inject: {
       modalState: {
         from: 'availabilityEditorStateToggleable'
       },
+
+      /**
+       * Editing entity items collection. Used to remove editing
+       * items from it when user confirm deletion.
+       *
+       * @var {FunctionalArrayCollection}
+       */
+      itemsCollection: {
+        from: 'availabilitiesCollection'
+      },
+
       modal: 'modal',
       repeater: 'repeater',
       datepicker: 'datepicker',
+
       'selection-list': 'selection-list'
     },
     data () {
@@ -37,19 +85,17 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           repeatsEndsWeeks: null,
           repeatsEndsDate: null,
 
-          excludes: {
-            dates: []
-          }
+          excludesDates: []
         },
 
         exclusionsPickerVisible: false,
 
         excludesDatesCollection: new FunctionalArrayCollection(() => {
-          return this.model.excludes.dates
+          return this.model.excludesDates
         }, (newDates) => {
-          this.model.excludes.dates = newDates
+          this.model.excludesDates = newDates
         }, (date) => {
-          return date.toDateString()
+          return date
         }),
 
         repeatsOnCollection: new FunctionalArrayCollection(() => {
@@ -62,10 +108,10 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     watch: {
       /**
        * Change default values when repeats changes.
-       *
-       * @todo: fix modal opening issue (when watcher is fired on initial data)
        */
       'model.repeats': function (newValue) {
+        if (!this.seedLock) return
+
         this.model.repeatsEvery = 2
 
         switch (newValue) {
@@ -73,7 +119,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
             this.model.repeatsOn = [ 'dow' ]
             break
           default:
-            // this.model.repeatsOn = []
+            this.model.repeatsOn = []
         }
       }
     },
@@ -85,6 +131,16 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       ...mapState({
         entities: state => state.app.events
       }),
+
+      excludesDatesModels () {
+        let dates = this.model.excludesDates.map((date) => {
+          return helpers.getDate(date)
+        })
+        return { dates }
+      },
+
+      fromTimeModel: helpers.makeTimeModel('fromTime'),
+      toTimeModel: helpers.makeTimeModel('toTime'),
 
       repeatingTitle () {
         switch (this.model.repeats) {
@@ -155,21 +211,20 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       }),
 
       _getExclusionItemTitle (date) {
-        return date.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+        return helpers.getDate(date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
       },
 
       excludeDateSelected (date) {
+        date = moment(date).format('YYYY-MM-DD')
+
         if (this.excludesDatesCollection.hasItem(date)) {
           this.excludesDatesCollection.removeItem(date)
         }
         else {
           this.excludesDatesCollection.addItem(date)
         }
-        this.$refs.exclusions.selectedDate = null
-      },
 
-      saveAvailability () {
-        // save availability
+        this.$refs.exclusions.selectedDate = null
       }
     },
     components: {

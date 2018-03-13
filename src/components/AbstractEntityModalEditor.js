@@ -29,6 +29,11 @@ export default function CfAbstractEntityModalEditor (Vue) {
     data () {
       return {
         /**
+         * Lock for model watching when we seed model
+         */
+        seedLock: false,
+
+        /**
          * Is remove confirmation visible
          *
          * @var {boolean}
@@ -47,21 +52,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
          *
          * @var {{}}
          */
-        mountedModel: {},
-
-        /**
-         * Editing entity items collection. Used to remove editing
-         * items from it when user confirm deletion.
-         *
-         * @var {FunctionalArrayCollection}
-         */
-        itemsCollection: new FunctionalArrayCollection(() => {
-          return this.entities
-        }, (newAvailabilities) => {
-          this.setNewEntities(newAvailabilities)
-        }, (item) => {
-          return item.id
-        }),
+        mountedModel: {}
       }
     },
 
@@ -127,12 +118,9 @@ export default function CfAbstractEntityModalEditor (Vue) {
         throw new Error('Entity model is not provided. It should be available via this.entityModel')
       }
 
-      if (!this.entities) {
-        throw new Error('Entities list is not provided. It should be available via this.entities')
-      }
-
-      if (!this.setNewEntities) {
-        throw new Error('Method for setting new entities is not provided. It should be available via this.setNewEntities')
+      if (!this.itemsCollection) {
+        throw new Error('Entities collection is not provided. It should be available via this.itemsCollection ' +
+          'and has type of FunctionalCollection')
       }
 
       /*
@@ -147,6 +135,8 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * Model fields seeded by values from Vuex store.
        */
       seedModelFields () {
+        this.seedLock = true
+
         let model = Object.assign({}, this.$model, this.entityModel)
 
         Object.keys(model).map((key) => {
@@ -161,6 +151,8 @@ export default function CfAbstractEntityModalEditor (Vue) {
          */
         this.removeConfirming = false
         this.closeConfirming = false
+
+        this.seedLock = false
       },
 
       /**
@@ -188,6 +180,36 @@ export default function CfAbstractEntityModalEditor (Vue) {
        */
       continueEditing () {
         this.closeConfirming = false
+      },
+
+      /**
+       * Save editing item. If items is new it will update
+       * all items in store by adding new item.
+       *
+       * If item is editing it will remove and add new item to the store.
+       *
+       * @todo: review
+       */
+      saveItem () {
+        let model = Object.assign({}, this.model)
+
+        if (!model.id) {
+          let id = Math.random().toString(36).substring(7)
+          this.itemsCollection.addItem(Object.assign({}, model, { id }))
+
+          this.forceCloseModal()
+          return
+        }
+
+        /**
+         * Update model
+         */
+        if (this.itemsCollection.hasItem(model)) {
+          this.itemsCollection.removeItem(model)
+          this.itemsCollection.addItem(model)
+        }
+
+        this.forceCloseModal()
       },
 
       /**

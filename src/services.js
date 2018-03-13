@@ -1,4 +1,4 @@
-import { FunctionalToggleable } from '@rebelcode/std-lib'
+import { FunctionalToggleable, FunctionalArrayCollection } from '@rebelcode/std-lib'
 import applicationFactory from './components/Application'
 
 import CfSessionLength from './components/SessionLength'
@@ -71,6 +71,17 @@ export function services (dependencies, document) {
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
+    },
+    availabilitiesCollection (container) {
+      const store = container.store
+
+      return new FunctionalArrayCollection(() => {
+        return store.state.app.events
+      }, (newValue) => {
+        store.commit('setNewEvents', newValue)
+      }, (item) => {
+        return item.id
+      })
     },
     'availability-calendar': function (container) {
       return CfAvailabilityCalendar(container.calendar, container.vuex, container.moment)

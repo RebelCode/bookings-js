@@ -1,10 +1,13 @@
 export default function (FullCalendar, Vuex, moment) {
+  const timeFormat = 'HH:mm:ss'
+
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
   return FullCalendar.extend({
     inject: [
-      'availabilityEditorStateToggleable'
+      'availabilityEditorStateToggleable',
+      'availabilitiesCollection'
     ],
     data () {
       return {
@@ -50,15 +53,6 @@ export default function (FullCalendar, Vuex, moment) {
     computed: {
       events () {
         return this.generatedAvailabilities
-        // console.info('events computed')
-        //
-        // if(!this.availabilities.map) return []
-        //
-        // console.info('events computed started rendering')
-        //
-        // return this.availabilities.map((item) => {
-        //   return this.availabilityToEvent(item)
-        // })
       }
     },
 
@@ -88,7 +82,7 @@ export default function (FullCalendar, Vuex, moment) {
        */
       renderRepeatedAvailabilities () {
         if (!this.availabilities.map) return
-        let repeatedAvailabilities = [];
+        let repeatedAvailabilities = []
 
         for (let m = moment(this.rangeStart); m.diff(this.rangeEnd, 'days') <= 0; m.add(1, 'days')) {
           repeatedAvailabilities = repeatedAvailabilities.concat(
@@ -96,7 +90,7 @@ export default function (FullCalendar, Vuex, moment) {
           )
         }
 
-        this.generatedAvailabilities = repeatedAvailabilities;
+        this.generatedAvailabilities = repeatedAvailabilities
       },
 
       /**
@@ -119,18 +113,18 @@ export default function (FullCalendar, Vuex, moment) {
        * @param day
        * @return {*}
        */
-      availabilityFitsInDay(availability, day) {
+      availabilityFitsInDay (availability, day) {
         let fromDate = moment(availability.fromDate, 'YYYY-MM-DD')
 
-        const availabilityShouldnBeRendered = day.isBefore(fromDate)
+        const availabilityShouldntBeRendered = fromDate.isAfter(day)
           || this.availabilityEnded(availability, fromDate, day)
           || this.dayInExcluded(availability, day)
 
-        if (availabilityShouldnBeRendered) {
+        if (availabilityShouldntBeRendered) {
           return false
         }
 
-        return this.availabilityIsOnDay(availability, fromDate, day);
+        return this.availabilityIsOnDay(availability, fromDate, day)
       },
 
       /**
@@ -141,10 +135,10 @@ export default function (FullCalendar, Vuex, moment) {
        * @return {boolean}
        */
       dayInExcluded (availability, day) {
-        if (!availability.excludes || !availability.excludes.dates || !availability.excludes.dates.length)
+        if (!availability.excludesDates || !availability.excludesDates.length)
           return false
 
-        for (let excludedDate of availability.excludes.dates) {
+        for (let excludedDate of availability.excludesDates) {
           if (moment(excludedDate, 'YYYY-MM-DD').isSame(day, 'day')) {
             return true
           }
@@ -164,9 +158,12 @@ export default function (FullCalendar, Vuex, moment) {
       availabilityIsOnDay (availability, fromDate, day) {
         let diff = availability.repeats.replace('ly', '')
         const metRecurringPeriod = fromDate.diff(day, diff) % availability.repeatsEvery === 0
-        if(!metRecurringPeriod) return false
+        if (!metRecurringPeriod) return false
 
         return {
+          never () {
+            return fromDate.isSame(day, 'day')
+          },
           daily () {
             return true
           },
@@ -191,13 +188,16 @@ export default function (FullCalendar, Vuex, moment) {
        * @return {*}
        */
       availabilityEnded (availability, fromDate, day) {
+        if (availability.repeats === 'never') {
+          return false
+        }
         if (availability.repeatsEnds === 'afterWeeks') {
-          return moment(fromDate).add(availability.repeatsEndsWeeks, 'week').isBefore(day, 'day')
+          return moment(fromDate).add(availability.repeatsEndsWeeks, 'week').isBefore(day)
         }
         else if (availability.repeatsEnds === 'onDate') {
-          return moment(availability.repeatsEndsDate, 'YYYY-MM-DD').isBefore(day, 'day')
+          return moment(availability.repeatsEndsDate, 'YYYY-MM-DD').isBefore(day)
         }
-        return false;
+        return false
       },
 
       /**
@@ -210,39 +210,17 @@ export default function (FullCalendar, Vuex, moment) {
        */
       availabilityToEvent (availability, day) {
         let model = Object.assign({}, availability)
-        return {
+
+        return Object.assign({}, {
           id: model.id,
-          allDay: model.allDay,
+          model
+        }, !model.isAllDay ? {
           start: day.format('YYYY-MM-DD') + 'T' + model.fromTime,
           end: day.format('YYYY-MM-DD') + 'T' + model.toTime,
-          model
-        }
-      },
-
-      /**
-       * Prepare time for the editor.
-       *
-       * @todo: Move this stuff to the editor, please
-       *
-       * @param time
-       * @return {*}
-       * @private
-       */
-      _getTimeModel (time) {
-        if (time && time.format) {
-          return {
-            HH: time.format('HH'),
-            mm: time.format('mm'),
-          }
-        }
-
-        try {
-          time = time.split(':')
-          return {HH: time[0], mm: time[1]}
-        }
-        catch (e) {
-          return {HH:null, mm: null}
-        }
+          allDay: model.isAllDay,
+        } : {
+          start: day.format('YYYY-MM-DD'),
+        })
       },
 
       /**
@@ -256,7 +234,7 @@ export default function (FullCalendar, Vuex, moment) {
         let event = {id: null}
 
         if (params) {
-          let {start, end, allDay} = params;
+          let {start, end, allDay} = params
 
           event = Object.assign({}, event, {
             fromDate: start.format(),
@@ -265,8 +243,8 @@ export default function (FullCalendar, Vuex, moment) {
 
           if (!allDay) {
             event = Object.assign({}, event, {
-              fromTime: this._getTimeModel(start),
-              toTime: this._getTimeModel(end)
+              fromTime: start.format(timeFormat),
+              toTime: end.format(timeFormat)
             })
           }
         }
@@ -276,16 +254,14 @@ export default function (FullCalendar, Vuex, moment) {
       },
 
       eventClicked (event) {
-        let model = Object.assign({}, event.model, {
-          fromTime: this._getTimeModel(event.model.fromTime),
-          toTime: this._getTimeModel(event.model.toTime)
-        })
+        let model = Object.assign({}, event.model)
+
         this.setAvailabilityEditorState(model)
         this.availabilityEditorStateToggleable.setState(true)
       }
     },
 
-    render(h) {
+    render (h) {
       let self = this
       return h('div', {
         ref: 'calendar'
@@ -296,7 +272,8 @@ export default function (FullCalendar, Vuex, moment) {
             click () {
               self.eventCreated()
             }
-          }}, ['+'])
+          }
+        }, ['+'])
       ])
     }
   })
