@@ -128,10 +128,6 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         entityModel: state => state.serviceAvailabilityModel
       }),
 
-      ...mapState({
-        entities: state => state.app.events
-      }),
-
       excludesDatesModels () {
         let dates = this.model.excludesDates.map((date) => {
           return helpers.getDate(date)

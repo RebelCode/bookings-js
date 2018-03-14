@@ -23,6 +23,16 @@ export default function CfModal (AbstractDialog) {
       },
 
       /**
+       * Additional class modifier for modal customization.
+       *
+       * @property {string}
+       */
+      modalBodyClass: {
+        type: String,
+        default: ''
+      },
+
+      /**
        * @inherit
        */
       dialogOpenedClass: {

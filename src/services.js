@@ -5,6 +5,7 @@ import CfSessionLength from './components/SessionLength'
 import CfModal from './components/Modal'
 import CfAbstractEntityModalEditor from './components/AbstractEntityModalEditor'
 import CfServiceAvailabilityEditor from './components/ServiceAvailabilityEditor'
+import CfBookingEditor from './components/BookingEditor'
 import CfSwitcher from './components/Switcher'
 import CfAbstractButtonsGroup from './components/AbstractButtonsGroup'
 import CfAbstractDialog from './components/AbstractDialog'
@@ -64,6 +65,13 @@ export function services (dependencies, document) {
         container.store.commit('ui/setAvailabilityModalVisibility', newVisibility)
       }, () => {
         return container.store.state.ui.availabilityModalVisible
+      })
+    },
+    bookingEditorState: function (container) {
+      return new FunctionalToggleable((newVisibility) => {
+        container.store.commit('ui/setBookingModalVisibility', newVisibility)
+      }, () => {
+        return container.store.state.ui.bookingModalVisible
       })
     },
     app: function (container) {
@@ -126,6 +134,9 @@ export function services (dependencies, document) {
     },
     'service-availability-editor': function (container) {
       return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
+    },
+    'booking-editor': function (container) {
+      return new CfBookingEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
     },
 
     components: function (container) {

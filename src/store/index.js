@@ -1,9 +1,11 @@
+import bookings from './bookings'
 import bookingOptions from './booking-options'
 import ui from './ui'
 
 const state = {
   app: {
-    events: {}
+    events: [],
+    bookings: []
   },
 }
 
@@ -14,11 +16,16 @@ const mutations = {
 
   setNewEvents (state, events) {
     state.app.events = events
+  },
+
+  setNewBookings (state, bookings) {
+    state.app.bookings = bookings
   }
 }
 
 export default {
   modules: {
+    bookings,
     bookingOptions,
     ui
   },
