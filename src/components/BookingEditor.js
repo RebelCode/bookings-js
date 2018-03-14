@@ -25,16 +25,27 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
 
       modal: 'modal',
       repeater: 'repeater',
-      datepicker: 'datepicker',
 
-      'selection-list': 'selection-list'
+      datepicker: 'datepicker',
+      vueselect: 'vueselect',
     },
 
     data () {
       return {
+        selectValue: 'Root Canal Treatment',
+        selectValuePerson: 'Jean Mark Mac Gloinn',
+        isCreatingClient: false,
         model: {
           id: null,
         }
+      }
+    },
+
+    methods: {
+      onServiceSearch (term) {
+        this.servicesApi
+          .search(term)
+          .then()
       }
     },
 
@@ -45,7 +56,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
     },
 
     components: {
-      modal: 'modal'
+      modal: 'modal',
+      vueselect: 'vueselect',
     }
   })
 }

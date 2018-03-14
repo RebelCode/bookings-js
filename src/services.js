@@ -13,6 +13,7 @@ import CfAvailabilityCalendar from './components/AvailabilityCalendar'
 
 import store from './store'
 import CfBoolSwitcher from './components/BoolSwitcher'
+import CfRcSelect from './components/RcSelect'
 
 export function services (dependencies, document) {
   return {
@@ -22,6 +23,7 @@ export function services (dependencies, document) {
       Vue.use(Vuex)
       return Vuex
     },
+
     vue: function () {
       let Vue = dependencies.vue
       Vue.use(dependencies.uiFramework.Core.InjectedComponents)
@@ -33,6 +35,7 @@ export function services (dependencies, document) {
 
       return Vue
     },
+
     jquery: function () {
       return dependencies.jquery
     },
@@ -79,6 +82,9 @@ export function services (dependencies, document) {
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
+    },
+    vueselect: function (container) {
+      return CfRcSelect(container.vue.extend(dependencies.vueselect.VueSelect))
     },
     availabilitiesCollection (container) {
       const store = container.store
@@ -143,6 +149,7 @@ export function services (dependencies, document) {
       return {
         app: container.app,
         calendar: container.calendar,
+        vueselect: container.vueselect,
         repeater: container.repeater,
         tabs: container.tabs,
         tab: container.tab,
