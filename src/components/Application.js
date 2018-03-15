@@ -14,6 +14,7 @@ export default function (state, store, Vuex) {
       'switcher',
       'bool-switcher',
       'availability-calendar',
+      'bookings-calendar',
     ],
     data () {
       return {
@@ -28,12 +29,15 @@ export default function (state, store, Vuex) {
 
         calendarConfig: {
           showDatesInCustomersTimezone: false
-        }
+        },
+
+        colorScheme: 'status',
       }
     },
     computed: {
       ...mapState({
-        events: state => state.app.events
+        events: state => state.app.events,
+        bookings: state => state.app.bookings
       })
     },
     mounted () {
@@ -50,6 +54,10 @@ export default function (state, store, Vuex) {
 
       createNewBooking () {
 
+      },
+
+      updateBookings (start, end) {
+        console.info(start, end)
       }
     },
     components: {
@@ -65,6 +73,7 @@ export default function (state, store, Vuex) {
 
       'service-availability-editor': 'service-availability-editor',
       'booking-editor': 'booking-editor',
+      'bookings-calendar': 'bookings-calendar',
     }
   }
 };

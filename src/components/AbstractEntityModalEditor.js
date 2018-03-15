@@ -1,5 +1,3 @@
-import { FunctionalArrayCollection } from '@rebelcode/std-lib'
-
 /**
  * Abstraction for entities modal editor. This is needed because all
  * entities modal editors have common things under the hood:

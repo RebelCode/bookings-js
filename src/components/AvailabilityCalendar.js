@@ -116,7 +116,7 @@ export default function (FullCalendar, Vuex, moment) {
       availabilityFitsInDay (availability, day) {
         let fromDate = moment(availability.fromDate, 'YYYY-MM-DD')
 
-        const availabilityShouldntBeRendered = fromDate.isAfter(day)
+        const availabilityShouldntBeRendered = fromDate.isAfter(day, 'day')
           || this.availabilityEnded(availability, fromDate, day)
           || this.dayInExcluded(availability, day)
 

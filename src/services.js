@@ -10,6 +10,7 @@ import CfSwitcher from './components/Switcher'
 import CfAbstractButtonsGroup from './components/AbstractButtonsGroup'
 import CfAbstractDialog from './components/AbstractDialog'
 import CfAvailabilityCalendar from './components/AvailabilityCalendar'
+import CfBookingsCalendar from './components/BookingsCalendar'
 
 import store from './store'
 import CfBoolSwitcher from './components/BoolSwitcher'
@@ -100,6 +101,10 @@ export function services (dependencies, document) {
     'availability-calendar': function (container) {
       // return {}
       return CfAvailabilityCalendar(container.calendar, container.vuex, container.moment)
+    },
+    'bookings-calendar': function (container) {
+      // return {}
+      return CfBookingsCalendar(container.calendar, container.vuex, container.moment)
     },
     repeater: function (container) {
       return new dependencies.repeater.CfRepeater(container.vue)

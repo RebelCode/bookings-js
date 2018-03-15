@@ -1,5 +1,5 @@
 const state = {
   availabilityModalVisible: false,
-  bookingModalVisible: true,
+  bookingModalVisible: false,
 }
 export default state
