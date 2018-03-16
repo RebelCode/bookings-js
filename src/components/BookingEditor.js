@@ -20,7 +20,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
        * @var {FunctionalArrayCollection}
        */
       itemsCollection: {
-        from: 'availabilitiesCollection'
+        from: 'bookingsCollection'
       },
 
       modal: 'modal',
@@ -32,12 +32,52 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
 
     data () {
       return {
-        selectValue: 'Root Canal Treatment',
-        selectValuePerson: 'Jean Mark Mac Gloinn',
         isCreatingClient: false,
+
         model: {
           id: null,
+
+          client: null,
+          service: null,
+
+          start: null,
+          end: null,
+
+          status: null,
+          paymentNumber: null,
+
+          clientTime: null,
+          note: null,
+
+          newStatus: null,
+        },
+
+        actionsMap: {
+          'scheduled': ['draft', 'pending', 'cancelled'],
+          'draft': ['pending', 'scheduled'],
+          'pending': ['scheduled', 'draft', 'cancelled'],
+          'cancelled': ['pending'],
+          'completed': ['scheduled'],
         }
+      }
+    },
+
+    computed: {
+      ...mapState('bookings', {
+        entityModel: state => state.bookingModel,
+        services: state => state.services,
+      }),
+
+      /**
+       * Booking status title for displaying.
+       *
+       * @return {string}
+       */
+      statusTitle () {
+        if (!this.model.status) {
+          return
+        }
+        return this.model.status.charAt(0).toUpperCase() + this.model.status.slice(1)
       }
     },
 
@@ -46,13 +86,13 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
         this.servicesApi
           .search(term)
           .then()
-      }
-    },
+      },
 
-    computed: {
-      ...mapState('bookings', {
-        entityModel: state => state.bookingModel
-      }),
+      bookingCanBe (newStatus) {
+        if (!this.model.id) return false
+
+        return this.actionsMap[this.model.status].indexOf(newStatus) > -1
+      }
     },
 
     components: {

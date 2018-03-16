@@ -3,10 +3,19 @@ export function CfBookingsCalendarView (Vuex, moment) {
   const mapMutations = Vuex.mapMutations
 
   return {
-    inject: [
-      'bookings-calendar',
-      'switcher',
-    ],
+    inject: {
+      'bookings-calendar': 'bookings-calendar',
+      'switcher': 'switcher',
+
+      /**
+       * Modal state injected from elsewhere.
+       *
+       * @var {FunctionalToggleable}
+       */
+      modalState: {
+        from: 'bookingEditorState'
+      },
+    },
 
     data () {
       return {
@@ -47,6 +56,10 @@ export function CfBookingsCalendarView (Vuex, moment) {
     },
 
     methods: {
+      ...mapMutations('bookings', [
+        'setBookingEditorState'
+      ]),
+
       bookingPassesVisibleStatuses (booking) {
         return this.screenStatuses.indexOf(booking.status) > -1
       },
@@ -60,12 +73,27 @@ export function CfBookingsCalendarView (Vuex, moment) {
         this.$refs.calendar.fireMethod('changeView', this.calendarView, moment())
       },
 
-      createNewBooking () {
-
+      createBooking () {
+        this._openBookingEditor()
       },
 
+      editBooking (booking) {
+        this._openBookingEditor(booking)
+      },
+
+      _openBookingEditor (booking = {}) {
+        this.modalState.setState(true)
+        this.setBookingEditorState(booking)
+      },
+
+      /**
+       * Update bookings according new dates.
+       *
+       * @param start {moment} Start date
+       * @param end {moment} End date
+       */
       updateBookings (start, end) {
-        console.info(start, end)
+        // booking will be fetched from remote here
       }
     },
 

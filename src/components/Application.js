@@ -80,7 +80,6 @@ export default function (state, store, Vuex) {
 
         this.setInitialState(state)
         this.setServices(services)
-
       }
 
       this.selectedStatuses = this.screenStatuses.slice()

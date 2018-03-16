@@ -100,6 +100,17 @@ export function services (dependencies, document) {
         return item.id
       })
     },
+    bookingsCollection (container) {
+      const store = container.store
+
+      return new FunctionalArrayCollection(() => {
+        return store.state.app.bookings
+      }, (newValue) => {
+        store.commit('setNewBookings', newValue)
+      }, (item) => {
+        return item.id
+      })
+    },
     'availability-calendar': function (container) {
       // return {}
       return CfAvailabilityCalendar(container.calendar, container.vuex, container.moment)
