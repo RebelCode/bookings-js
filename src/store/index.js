@@ -5,7 +5,9 @@ import ui from './ui'
 const state = {
   app: {
     events: [],
-    bookings: []
+    bookings: [],
+
+    screenStatuses: []
   },
 }
 
@@ -20,6 +22,10 @@ const mutations = {
 
   setNewBookings (state, bookings) {
     state.app.bookings = bookings
+  },
+
+  setScreenStatuses (state, statuses) {
+    state.app.screenStatuses = statuses.slice()
   }
 }
 

@@ -10,11 +10,14 @@ export default function (state, store, Vuex) {
       'calendar',
       'repeater',
       'tabs', 'tab', 'modal',
-      'session-length', 'service-availability-editor', 'booking-editor',
+      'session-length',
+      'service-availability-editor',
+      'booking-editor',
       'switcher',
       'bool-switcher',
       'availability-calendar',
-      'bookings-calendar',
+      'bookings-calendar-view',
+      'selection-list'
     ],
     data () {
       return {
@@ -31,13 +34,36 @@ export default function (state, store, Vuex) {
           showDatesInCustomersTimezone: false
         },
 
-        colorScheme: 'status',
+        selectedStatuses: [],
+
+        statuses: [{
+          key: 'completed',
+          value: 'Completed'
+        },{
+          key: 'scheduled',
+          value: 'Scheduled'
+        }, {
+          key: 'pending',
+          value: 'Pending'
+        }, {
+          key: 'draft',
+          value: 'Draft'
+        }, {
+          key: 'cancelled',
+          value: 'Cancelled'
+        }],
+
+        statusesCollection: new FunctionalArrayCollection(() => {
+          return this.statuses
+        }, (newValue) => {}, (item) => {
+          return item.key
+        })
       }
     },
     computed: {
       ...mapState({
         events: state => state.app.events,
-        bookings: state => state.app.bookings
+        screenStatuses: state => state.app.screenStatuses,
       })
     },
     mounted () {
@@ -45,20 +71,29 @@ export default function (state, store, Vuex) {
         throw new Error('App state not initialized')
       }
 
-      this.setInitialState(state)
+      /*
+       * @todo: seed store outside of mounted!
+       */
+      if (state.services) {
+        const services = state.services.slice()
+        delete state.services
+
+        this.setInitialState(state)
+        this.setServices(services)
+
+      }
+
+      this.selectedStatuses = this.screenStatuses.slice()
     },
     methods: {
       ...mapMutations([
-        'setInitialState'
+        'setInitialState',
+        'setScreenStatuses'
       ]),
 
-      createNewBooking () {
-
-      },
-
-      updateBookings (start, end) {
-        console.info(start, end)
-      }
+      ...mapMutations('bookings', [
+        'setServices'
+      ]),
     },
     components: {
       calendar: 'calendar',
@@ -70,10 +105,12 @@ export default function (state, store, Vuex) {
       'availability-calendar': 'availability-calendar',
       'session-length': 'session-length',
       'bool-switcher': 'bool-switcher',
+      'selection-list': 'selection-list',
 
       'service-availability-editor': 'service-availability-editor',
       'booking-editor': 'booking-editor',
-      'bookings-calendar': 'bookings-calendar',
+
+      'bookings-calendar-view': 'bookings-calendar-view'
     }
   }
 };

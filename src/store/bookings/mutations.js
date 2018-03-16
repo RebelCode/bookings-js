@@ -10,6 +10,16 @@ const mutations = {
    */
   setBookingEditorState (state, model) {
     state.bookingModel = model
+  },
+
+  /**
+   * Set services to chose from and for filtering
+   *
+   * @param state
+   * @param data
+   */
+  setServices (state, data) {
+    state.services = data
   }
 }
 

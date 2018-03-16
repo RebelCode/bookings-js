@@ -15,6 +15,7 @@ import CfBookingsCalendar from './components/BookingsCalendar'
 import store from './store'
 import CfBoolSwitcher from './components/BoolSwitcher'
 import CfRcSelect from './components/RcSelect'
+import { CfBookingsCalendarView } from './components/BookingsCalendarView'
 
 export function services (dependencies, document) {
   return {
@@ -59,6 +60,7 @@ export function services (dependencies, document) {
       return [
         '#calendar-app',
         '#metabox-calendar-app',
+        '#bookings-screen-options'
       ]
     },
     store: function (container) {
@@ -106,6 +108,15 @@ export function services (dependencies, document) {
       // return {}
       return CfBookingsCalendar(container.calendar, container.vuex, container.moment)
     },
+    'bookingStatusesColors': function () {
+      return {
+        completed: '#57606f',
+        draft: '#dfe4ea',
+        pending: '#1e90ff',
+        scheduled: '#2ed573',
+        cancelled: '#eb4d4b'
+      }
+    },
     repeater: function (container) {
       return new dependencies.repeater.CfRepeater(container.vue)
     },
@@ -146,8 +157,12 @@ export function services (dependencies, document) {
     'service-availability-editor': function (container) {
       return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
     },
+
     'booking-editor': function (container) {
       return new CfBookingEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
+    },
+    'bookings-calendar-view': function (container) {
+      return new CfBookingsCalendarView(container.vuex, container.moment)
     },
 
     components: function (container) {
@@ -169,6 +184,10 @@ export function services (dependencies, document) {
         'session-length': container['session-length'],
         'selection-list': container['selection-list'],
         'service-availability-editor': container['service-availability-editor'],
+
+        'booking-editor': container['booking-editor'],
+        'bookings-calendar': container['bookings-calendar'],
+        'bookings-calendar-view': container['bookings-calendar-view'],
       }
     }
   }

@@ -13,14 +13,17 @@ export default function (FullCalendar, Vuex, moment) {
    */
   const renderEvent = function (event) {
     return `
-      <div class="rc-event-field">${event.title}</div>
-      <div class="rc-event-field">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
-      <div class="rc-event-field">${event.clientName}</div>
-      <div class="rc-event-field rc-event-field--click">Click here to see details...</div>
+      <div class="rc-event-field rc-event-field--title">${event.title}</div>
+      <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
+      <div class="rc-event-field rc-event-field--month-collapse">${event.clientName}</div>
+      <div class="rc-event-field rc-event-field--month-collapse rc-event-field--click">Click here to see details...</div>
     `
   }
 
   return FullCalendar.extend({
+    inject: [
+      'bookingStatusesColors'
+    ],
     data () {
       return {
         generatedEvents: []
@@ -37,14 +40,15 @@ export default function (FullCalendar, Vuex, moment) {
         type: String,
         default: 'status'
       },
-      // header: {
-      //   default () {
-      //     return {
-      //       left: 'agendaWeek,month',
-      //       right: 'prev title next'
-      //     }
-      //   },
-      // },
+      header: {
+        default () {
+          return {
+            left: 'prev',
+            center: 'title',
+            right: 'next'
+          }
+        },
+      },
       // defaultView: {
       //   default () {
       //     return 'agendaWeek'
@@ -56,6 +60,7 @@ export default function (FullCalendar, Vuex, moment) {
           const self = this
           return {
             // events: this.computedEvents,
+            eventLimit: true,
             viewRender (view) {
               self.$emit('period-change', view.start, view.end)
             }
@@ -107,8 +112,8 @@ export default function (FullCalendar, Vuex, moment) {
         return Object.assign({}, {
           id: model.id,
           title: model.service.title,
-          start: model.start,
-          end: model.end,
+          start: moment(model.start),
+          end: moment(model.end),
 
           clientName: model.client.name,
 
@@ -123,17 +128,18 @@ export default function (FullCalendar, Vuex, moment) {
        *
        * @param booking
        * @param colorScheme
-       * @return {{backgroundColor: string, borderColor: string, textColor: string}}
+       *
+       * @return {Object}
        */
       bookingColor (booking, colorScheme) {
-        let color = '#686de0';
+        const color = colorScheme === 'status' ?
+          this.bookingStatusesColors[booking.status] : booking.service.color
 
         const textColor = this._getBrightness(color) > .5 ? '#000' : '#fff'
 
         return {
-          backgroundColor: color,
-          borderColor: color,
-          textColor: textColor
+          color,
+          textColor
         }
       },
 
@@ -148,16 +154,28 @@ export default function (FullCalendar, Vuex, moment) {
         // strip off any leading #
         hexCode = hexCode.replace('#', '');
 
-        var c_r = parseInt(hexCode.substr(0, 2),16);
-        var c_g = parseInt(hexCode.substr(2, 2),16);
-        var c_b = parseInt(hexCode.substr(4, 2),16);
+        const c_r = parseInt(hexCode.substr(0, 2),16);
+        const c_g = parseInt(hexCode.substr(2, 2),16);
+        const c_b = parseInt(hexCode.substr(4, 2),16);
 
         return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000 / 255;
       },
 
+      /**
+       * Render event view.
+       *
+       * @param event
+       * @param element
+       * @param view
+       */
       eventRender (event, element, view) {
-        element.find('.fc-content').html(renderEvent(event))
-        console.info('EVENT RENDER', element.find('.fc-content'))
+        if (this.colorScheme === 'service') {
+          element.addClass(`rc-service-event rc-service-event--${event.model.status}`)
+        }
+
+        element.find('.fc-content')
+          .addClass(`rc-event`)
+          .html(renderEvent(event))
       },
 
       /**
@@ -166,8 +184,7 @@ export default function (FullCalendar, Vuex, moment) {
        * @param event
        */
       eventClicked (event) {
-        let model = Object.assign({}, event.model)
-        // Open booking editor here
+        this.$emit('booking-click', Object.assign({}, event.model))
       }
     }
   })

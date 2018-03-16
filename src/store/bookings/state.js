@@ -1,9 +1,14 @@
 const state = {
   /**
-   * Booking modal that will be used for passing data from
+   * Booking model that will be used for passing data from
    * calendar or list view to the modal
    */
-  bookingModel: {}
+  bookingModel: {},
+
+  /**
+   * List of all available services
+   */
+  services: [],
 }
 
 export default state
