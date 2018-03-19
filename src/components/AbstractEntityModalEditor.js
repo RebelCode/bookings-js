@@ -188,8 +188,8 @@ export default function CfAbstractEntityModalEditor (Vue) {
        *
        * @todo: review
        */
-      saveItem () {
-        let model = Object.assign({}, this.model)
+      saveItem (savingModel = null) {
+        let model = Object.assign({}, savingModel || this.model)
 
         if (!model.id) {
           let id = Math.random().toString(36).substring(7)

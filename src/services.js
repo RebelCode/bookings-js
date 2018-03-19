@@ -122,11 +122,13 @@ export function services (dependencies, document) {
     },
     'bookingStatusesColors': function () {
       return {
-        completed: '#57606f',
+        'in-cart': '#f6e58d',
         draft: '#dfe4ea',
         pending: '#1e90ff',
+        approved: '#00d2d3',
         scheduled: '#2ed573',
-        cancelled: '#eb4d4b'
+        cancelled: '#eb4d4b',
+        completed: '#57606f',
       }
     },
     repeater: function (container) {

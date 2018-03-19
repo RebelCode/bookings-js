@@ -37,6 +37,12 @@ export default function (state, store, Vuex) {
         selectedStatuses: [],
 
         statuses: [{
+          key: 'in-cart',
+          value: 'In Cart'
+        },{
+          key: 'approved',
+          value: 'Approved'
+        },{
           key: 'completed',
           value: 'Completed'
         },{

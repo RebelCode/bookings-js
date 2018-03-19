@@ -34,6 +34,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
 
     data () {
       return {
+        isCreateConfirming: true,
+
         isCreatingClient: false,
 
         model: {
@@ -46,20 +48,28 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
           end: null,
 
           status: null,
+
           paymentNumber: null,
 
           clientTimezone: null,
           note: null,
 
-          newStatus: null,
+          newStatus: '',
         },
 
+        /**
+         * Actions that can be taken with given booking. Action is transition to another status.
+         *
+         * @see: https://aventura.atlassian.net/wiki/spaces/EDDBK/pages/59751681/Status+Terms
+         */
         actionsMap: {
+          'in-cart': ['pending'],
+          'draft': ['pending'],
+          'pending': ['approved', 'cancelled'],
+          'approved': ['scheduled'],
           'scheduled': ['draft', 'pending', 'cancelled'],
-          'draft': ['pending', 'scheduled'],
-          'pending': ['scheduled', 'draft', 'cancelled'],
-          'cancelled': ['pending'],
-          'completed': ['scheduled'],
+          'cancelled': ['in-cart', 'draft', 'pending', 'approved', 'scheduled'],
+          'completed': ['in-cart', 'draft', 'pending', 'approved', 'scheduled'],
         }
       }
     },
@@ -69,6 +79,19 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
         entityModel: state => state.bookingModel,
         services: state => state.services,
       }),
+
+      /**
+       * Get available actions for current booking status.
+       * Action is transition to another status.
+       *
+       * @see https://aventura.atlassian.net/wiki/spaces/EDDBK/pages/59751681/Status+Terms
+       *
+       * @return {array}
+       */
+      availableActions () {
+        if (!this.model.id) return []
+        return this.actionsMap[this.model.status] || []
+      },
 
       /**
        * Get human readable duration of booking with minutes
@@ -105,32 +128,89 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
       /**
        * Booking status title for displaying.
        *
-       * @return {string}
+       * @return {string|null}
        */
       statusTitle () {
         if (!this.model.status) {
-          return
+          return null
         }
         return this.model.status.charAt(0).toUpperCase() + this.model.status.slice(1)
       }
     },
 
     methods: {
+      /**
+       * Save *new* booking with given status. It will show
+       * confirmation dialog with asking user to confirm saving
+       * booking with status.
+       *
+       * @param {string} newStatus Status for newly created booking.
+       */
+      saveNewBooking (newStatus) {
+        this.model.newStatus = newStatus
+        this.isCreateConfirming = true
+      },
+
+      /**
+       * Confirm booking creation and close modal.
+       */
+      confirmBookingCreation () {
+        this.isCreateConfirming = false
+        this.saveBooking()
+      },
+
+      /**
+       * Save booking.
+       */
+      saveBooking () {
+        let model = Object.assign({}, this.model)
+
+        if (model['newStatus']) {
+          model.status = model['newStatus']
+          delete model['newStatus']
+        }
+
+        /*
+         * @todo: interact with backend instead of simple insert to vuex store.
+         */
+        this.saveItem(model)
+
+        this.forceCloseModal()
+      },
+
+      /**
+       * Format time in given offset for displaying universal
+       * and client's times.
+       *
+       * @param time
+       * @param offset
+       */
       format (time, offset = 0) {
         const currentOffset = moment().utcOffset() / 60
         return moment(time).utcOffset(currentOffset + Number(offset)).format('DD/MM/YY HH:mm')
       },
 
-      onServiceSearch (term) {
-        this.servicesApi
-          .search(term)
-          .then()
+      /**
+       * Possible handler for typing in any vue-select field.
+       * Used for async getting results while typing in the field.
+       * For example, for clients search
+       *
+       * @param term
+       *
+       * @todo: implement async client/services search
+       */
+      onSearch (term) {
+        // this.servicesApi.search(term).then(...)
       },
 
+      /**
+       * Check booking can be saved with given status
+       *
+       * @param newStatus
+       * @return {boolean}
+       */
       bookingCanBe (newStatus) {
-        if (!this.model.id) return false
-
-        return this.actionsMap[this.model.status].indexOf(newStatus) > -1
+        return this.availableActions.indexOf(newStatus) > -1
       }
     },
 
