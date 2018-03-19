@@ -28,6 +28,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
 
       datepicker: 'datepicker',
       vueselect: 'vueselect',
+
+      'datetime-picker': 'datetime-picker'
     },
 
     data () {
@@ -46,7 +48,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
           status: null,
           paymentNumber: null,
 
-          clientTime: null,
+          clientTimezone: null,
           note: null,
 
           newStatus: null,
@@ -69,6 +71,38 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
       }),
 
       /**
+       * Get human readable duration of booking with minutes
+       * precision: 2 hours 30 minutes
+       *
+       * @return {string|null}
+       */
+      duration () {
+        if (!this.model.start || !this.model.end) return null
+
+        const defaultMinutesThreshold = moment.relativeTimeThreshold('m')
+        const defaultHoursThreshold = moment.relativeTimeThreshold('h')
+
+        moment.relativeTimeThreshold('m', 60)
+        moment.relativeTimeThreshold('h', 24)
+
+        const diffInSeconds = Math.abs(moment(this.model.end).diff(moment(this.model.start), 'minutes')) * 60
+
+        let result = ''
+
+        if (Math.floor(diffInSeconds / 3600)) {
+          result += moment.duration(diffInSeconds - (diffInSeconds % 3600), 'seconds').humanize()
+        }
+        if (Math.floor(diffInSeconds % 3600) && (Math.floor(diffInSeconds / 3600) <= 23)) {
+          result += ' ' + moment.duration(Math.floor(diffInSeconds % 3600), 'seconds').humanize()
+        }
+
+        moment.relativeTimeThreshold('m', defaultMinutesThreshold)
+        moment.relativeTimeThreshold('h', defaultHoursThreshold)
+
+        return result
+      },
+
+      /**
        * Booking status title for displaying.
        *
        * @return {string}
@@ -82,6 +116,11 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
     },
 
     methods: {
+      format (time, offset = 0) {
+        const currentOffset = moment().utcOffset() / 60
+        return moment(time).utcOffset(currentOffset + Number(offset)).format('DD/MM/YY HH:mm')
+      },
+
       onServiceSearch (term) {
         this.servicesApi
           .search(term)
@@ -98,6 +137,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
     components: {
       modal: 'modal',
       vueselect: 'vueselect',
+      'datetime-picker': 'datetime-picker'
     }
   })
 }

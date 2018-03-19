@@ -16,6 +16,7 @@ import store from './store'
 import CfBoolSwitcher from './components/BoolSwitcher'
 import CfRcSelect from './components/RcSelect'
 import { CfBookingsCalendarView } from './components/BookingsCalendarView'
+import { CfDatetimePicker } from './components/DatetimePicker'
 
 export function services (dependencies, document) {
   return {
@@ -137,6 +138,12 @@ export function services (dependencies, document) {
     datepicker: function () {
       return dependencies.datepicker
     },
+    _datetimePicker: function (container) {
+      return dependencies.datetimePicker.CfDatetimePicker(container.vue)
+    },
+    'datetime-picker': function (container) {
+      return CfDatetimePicker(container._datetimePicker, container.moment)
+    },
     tabs: function (container) {
       return new dependencies.tabs.CfTabs(container.vue)
     },
@@ -187,6 +194,7 @@ export function services (dependencies, document) {
         modal: container.modal,
         datepicker: container.datepicker,
         timepicker: container.timepicker,
+        'datetime-picker': container['datetime-picker'],
         switcher: container.switcher,
 
         'availability-calendar': container['availability-calendar'],
