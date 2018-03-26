@@ -7,8 +7,6 @@
  */
 export default function CfAbstractDialog (Vue) {
   return Vue.extend({
-    inject: ['dom'],
-
     props: {
       /**
        * Determines dialog visibility. This property is passed
@@ -20,38 +18,6 @@ export default function CfAbstractDialog (Vue) {
       active: {
         type: Boolean
       },
-
-      /**
-       * Class that applies to the body and used
-       * to prevent body's scroll catch, so long dialog can be scrolled
-       * without interfering with body scroll.
-       *
-       * @property {string}
-       */
-      dialogOpenedClass: {
-        type: String,
-        default: 'dialog-opened'
-      }
-    },
-
-    mounted () {
-      /*
-       * Add body "frozen" class to the body when dialog is opened.
-       */
-      this.$on('open', () => {
-        this.dom.getElement('body')
-          .classList
-          .add(this.dialogOpenedClass);
-      });
-
-      /*
-       * Remove body "frozen" class from the body when dialog is closed.
-       */
-      this.$on('close', () => {
-        this.dom.getElement('body')
-          .classList
-          .remove(this.dialogOpenedClass);
-      });
     },
 
     watch: {

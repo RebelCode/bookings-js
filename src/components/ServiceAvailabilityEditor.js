@@ -52,7 +52,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
        *
        * @var {FunctionalArrayCollection}
        */
-      itemsCollection: {
+      entitiesCollection: {
         from: 'availabilitiesCollection'
       },
 

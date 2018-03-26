@@ -10,11 +10,13 @@ export default function CfAbstractButtonsGroup (Vue) {
   return Vue.extend({
     props: {
       /**
-       * All buttons that should be rendered. This is
-       * an object where keys is button id and value is button's title.
+       * All buttons that should be rendered.
+       *
+       * In the simplest version this is object where keys is button id
+       * and value is button's title. For better configurability it can be
+       * an array with buttons objects inside.
        */
       buttons: {
-        type: Object,
         required: true
       }
     },
@@ -24,7 +26,8 @@ export default function CfAbstractButtonsGroup (Vue) {
        * Button click event handler.
        *
        * Emmit event `button-clicked` with corresponding button identifier.
-       * Button's identifier is a key in `states` property.
+       * Button's identifier defined by consumer and it can be key in object that
+       * represents buttons or button's property in array that represents buttons.
        *
        * @param buttonId
        */

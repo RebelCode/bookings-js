@@ -4,7 +4,9 @@
  *
  * - can remove entity from it's store after confirmation
  * - edit or create model based on data from store
- * - @todo: asking for confirmation when closing modal with model's data *changed*
+ *
+ * Entity - is instance of something that can be edited or created. For example,
+ * it can be instance of `Car` that described by brand name and count of wheels (probably 4).
  *
  * @param Vue
  * @return {*}
@@ -13,8 +15,8 @@
 export default function CfAbstractEntityModalEditor (Vue) {
   return Vue.extend({
     /**
-     * Empty model that will be seeded with fields
-     * on component's mount.
+     * This is copy of empty data model. It is used to restore
+     * model to default state when editor is closed by user.
      *
      * @var {{}}
      */
@@ -27,7 +29,13 @@ export default function CfAbstractEntityModalEditor (Vue) {
     data () {
       return {
         /**
-         * Lock for model watching when we seed model
+         * The seeding lock for preventing model's watching during model's fields seeding.
+         *
+         * Some business logic can be written in watchers. So in order to not
+         * trigger that logic when we are seeding initial model fields (for example when we
+         * open model for editing or creating new model) this flag can be used.
+         *
+         * @var {boolean}
          */
         seedLock: false,
 
@@ -46,11 +54,49 @@ export default function CfAbstractEntityModalEditor (Vue) {
         closeConfirming: false,
 
         /**
-         * Model state that was opened for creating OR for editing.
+         * Model's state that was opened for creating OR for editing.
+         * It used for determining model's changes when user edits the model.
          *
-         * @var {{}}
+         * @var {Object}
          */
-        mountedModel: {}
+        mountedModel: {},
+
+        /**
+         * Model's skeleton. Represents an empty model.
+         *
+         * MUST be provided by the consumer.
+         *
+         * @var {Object}
+         */
+        model: null,
+
+        /**
+         * Modal's state (is modal is visible).
+         *
+         * MUST be provided by the consumer.
+         *
+         * @var {FunctionalToggleable}
+         */
+        modalState: null,
+
+        /**
+         * Entities collection in their source of truth (in the store, for example).
+         * For example, if Car is edited, entities collection is the collection of Cars.
+         *
+         * MUST be provided by the consumer.
+         *
+         * @var {FunctionalCollection}
+         */
+        entitiesCollection: null,
+
+        /**
+         * Entity model in its source of truth (in the store, for example).
+         *
+         * MUST be provided by the consumer.
+         *
+         * @var {Object}
+         */
+        entityModel: null,
       }
     },
 
@@ -70,8 +116,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * @var {boolean}
        */
       isDoubleConfirming () {
-        return this.removeConfirming
-          || this.closeConfirming;
+        return this.removeConfirming || this.closeConfirming
       },
 
       /**
@@ -116,21 +161,27 @@ export default function CfAbstractEntityModalEditor (Vue) {
         throw new Error('Entity model is not provided. It should be available via this.entityModel')
       }
 
-      if (!this.itemsCollection) {
-        throw new Error('Entities collection is not provided. It should be available via this.itemsCollection ' +
+      if (!this.entitiesCollection) {
+        throw new Error('Entities collection is not provided. It should be available via this.entitiesCollection ' +
           'and has type of FunctionalCollection')
       }
 
       /*
-       * Store initial empty model
+       * Store initial empty model's state
        */
       this.$model = Object.assign({}, this.model)
     },
 
     methods: {
       /**
-       * Prepare model for editing. It can be new model or model for editing.
+       * Prepare model for editing. It can be new entity or entity for editing.
        * Model fields seeded by values from Vuex store.
+       *
+       * This may look complicated, but DON'T PANIC because the answer is 42!
+       *
+       * Purpose of this method is to prepare model to work with form with all
+       * necessary fields. Also here we store initial model's state to check does
+       * model changed in future.
        */
       seedModelFields () {
         this.seedLock = true
@@ -193,7 +244,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
 
         if (!model.id) {
           let id = Math.random().toString(36).substring(7)
-          this.itemsCollection.addItem(Object.assign({}, model, { id }))
+          this.entitiesCollection.addItem(Object.assign({}, model, { id }))
 
           this.forceCloseModal()
           return
@@ -202,9 +253,9 @@ export default function CfAbstractEntityModalEditor (Vue) {
         /**
          * Update model
          */
-        if (this.itemsCollection.hasItem(model)) {
-          this.itemsCollection.removeItem(model)
-          this.itemsCollection.addItem(model)
+        if (this.entitiesCollection.hasItem(model)) {
+          this.entitiesCollection.removeItem(model)
+          this.entitiesCollection.addItem(model)
         }
 
         this.forceCloseModal()
@@ -217,7 +268,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * to delete entity item.
        */
       deleteItem () {
-        this.itemsCollection.removeItem(this.model)
+        this.entitiesCollection.removeItem(this.model)
         this.forceCloseModal()
       },
     }

@@ -19,7 +19,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
        *
        * @var {FunctionalArrayCollection}
        */
-      itemsCollection: {
+      entitiesCollection: {
         from: 'bookingsCollection'
       },
 
