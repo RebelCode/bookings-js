@@ -115,7 +115,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         this.model.repeatsEvery = 2
 
         switch (newValue) {
-          case 'monthly':
+          case 'month':
             this.model.repeatsOn = [ 'dow' ]
             break
           default:
@@ -140,13 +140,13 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
       repeatingTitle () {
         switch (this.model.repeats) {
-          case 'daily':
+          case 'day':
             return 'days'
-          case 'weekly':
+          case 'week':
             return 'weeks'
-          case 'monthly':
+          case 'month':
             return 'months'
-          case 'yearly':
+          case 'year':
             return 'years'
           default:
             return 'nopes :)'
@@ -155,13 +155,13 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
       repeatingDuration () {
         switch (this.model.repeats) {
-          case 'daily':
+          case 'day':
             return 31
-          case 'weekly':
+          case 'week':
             return 51
-          case 'monthly':
+          case 'month':
             return 12
-          case 'yearly':
+          case 'year':
             return 5
           default:
             return 31
@@ -169,12 +169,12 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
 
       repeatsOn () {
-        if (this.model.repeats !== 'weekly' && this.model.repeats !== 'monthly') {
+        if (this.model.repeats !== 'week' && this.model.repeats !== 'month') {
           return []
         }
 
         let repeatsOptions = {
-          weekly: {
+          week: {
             mon: 'M',
             tue: 'T',
             wed: 'W',
@@ -183,7 +183,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
             sat: 'S',
             sun: 'S',
           },
-          monthly: {
+          month: {
             dom: 'Day of the month',
             dow: 'Day of the week',
           }

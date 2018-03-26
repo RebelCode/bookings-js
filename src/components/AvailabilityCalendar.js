@@ -1,12 +1,19 @@
-export default function (FullCalendar, Vuex, moment) {
+/**
+ * Calendar for rendering availabilities in format suitable
+ * for customer.
+ *
+ * Customer will see how exactly availabilities will be available
+ * across days.
+ *
+ * @param FullCalendar
+ * @param moment
+ * @return {*}
+ */
+export default function (FullCalendar, moment) {
   const timeFormat = 'HH:mm:ss'
-
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
 
   return FullCalendar.extend({
     inject: [
-      'availabilityEditorStateToggleable',
       'availabilitiesCollection'
     ],
     data () {
@@ -72,13 +79,14 @@ export default function (FullCalendar, Vuex, moment) {
     },
 
     methods: {
-      ...mapMutations('bookingOptions', [
-        'setAvailabilityEditorState'
-      ]),
-
       /**
-       * Render availabilities. It will transform all availabilities
-       * to event format that understandable by full calendar.
+       * Render availabilities.
+       *
+       * It will render each availability repeated
+       * according availability repeating rules.
+       *
+       * It will help customer to see exactly on which days and how
+       * sessions are available.
        */
       renderRepeatedAvailabilities () {
         if (!this.availabilities.map) return
@@ -156,32 +164,39 @@ export default function (FullCalendar, Vuex, moment) {
        * @return {*}
        */
       availabilityIsOnDay (availability, fromDate, day) {
-        let diff = availability.repeats.replace('ly', '')
+        let diff = availability.repeats
         const metRecurringPeriod = fromDate.diff(day, diff) % availability.repeatsEvery === 0
         if (!metRecurringPeriod) return false
 
-        return {
+        const repeatingRules = {
           never () {
             return fromDate.isSame(day, 'day')
           },
-          daily () {
+          day () {
             return true
           },
-          weekly () {
+          week () {
             return availability.repeatsOn.indexOf(day.format('ddd').toLowerCase()) > -1
           },
-          monthly () {
+          month () {
             let mode = availability.repeatsOn[0]
             return mode === 'dow' ? fromDate.format('ddd') === day.format('ddd')
               : fromDate.format('D') === day.format('D')
           },
-          yearly () {
+          year () {
             return fromDate.format('DD/MM') === day.format('DD/MM')
           }
-        }[availability.repeats]()
+        }
+
+        return repeatingRules[availability.repeats] ? repeatingRules[availability.repeats]() : false
       },
 
       /**
+       * Is availability repeating ended.
+       *
+       * This is determined by the ending date or by the weeks count,
+       * after which availability becomes not available.
+       *
        * @param availability
        * @param fromDate
        * @param day
@@ -228,7 +243,7 @@ export default function (FullCalendar, Vuex, moment) {
        * select some duration on calendar, or user click
        * on floating Add button.
        *
-       * @param params
+       * @param params {{start:moment, end:moment, allDay:boolean}} Params, coming from full calendar.
        */
       eventCreated (params) {
         let event = {id: null}
@@ -249,15 +264,16 @@ export default function (FullCalendar, Vuex, moment) {
           }
         }
 
-        this.setAvailabilityEditorState(event)
-        this.availabilityEditorStateToggleable.setState(true)
+        this.$emit('availability-click', event)
       },
 
+      /**
+       * Triggered when user clicks on event in calendar.
+       *
+       * @param event
+       */
       eventClicked (event) {
-        let model = Object.assign({}, event.model)
-
-        this.setAvailabilityEditorState(model)
-        this.availabilityEditorStateToggleable.setState(true)
+        this.$emit('availability-click', Object.assign({}, event.model))
       }
     },
 

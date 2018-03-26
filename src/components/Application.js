@@ -17,7 +17,8 @@ export default function (state, store, Vuex) {
       'bool-switcher',
       'availability-calendar',
       'bookings-calendar-view',
-      'selection-list'
+      'selection-list',
+      'availabilityEditorStateToggleable'
     ],
     data () {
       return {
@@ -96,9 +97,18 @@ export default function (state, store, Vuex) {
         'setScreenStatuses'
       ]),
 
+      ...mapMutations('bookingOptions', [
+        'setAvailabilityEditorState'
+      ]),
+
       ...mapMutations('bookings', [
         'setServices'
       ]),
+
+      openAvailabilityEditor (availability) {
+        this.setAvailabilityEditorState(availability)
+        this.availabilityEditorStateToggleable.setState(true)
+      }
     },
     components: {
       calendar: 'calendar',

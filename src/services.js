@@ -114,7 +114,7 @@ export function services (dependencies, document) {
     },
     'availability-calendar': function (container) {
       // return {}
-      return CfAvailabilityCalendar(container.calendar, container.vuex, container.moment)
+      return CfAvailabilityCalendar(container.calendar, container.moment)
     },
     'bookings-calendar': function (container) {
       // return {}
