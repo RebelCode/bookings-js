@@ -4,7 +4,12 @@ import ui from './ui'
 
 const state = {
   app: {
-    events: [],
+    availabilities: [],
+    sessions: [],
+    displayOptions: {
+      useCustomerTimezone: false
+    },
+
     bookings: [],
 
     screenStatuses: []
@@ -16,8 +21,16 @@ const mutations = {
     state.app = appState
   },
 
-  setNewEvents (state, events) {
-    state.app.events = events
+  setNewAvailabilities (state, availabilities) {
+    state.app.availabilities = availabilities
+  },
+
+  setSessions (state, sessions) {
+    state.app.sessions = sessions
+  },
+
+  setDisplayOptions (state, payload) {
+    state.app.displayOptions[payload.key] = payload.value
   },
 
   setNewBookings (state, bookings) {

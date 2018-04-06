@@ -53,12 +53,12 @@ export default function CfSessionLength (Vue, Vuex) {
       }
     },
     computed: {
-      ...mapState('bookingOptions', {
-        storeSessions: 'sessions'
+      ...mapState({
+        storeSessions: state => state.app.sessions
       })
     },
     methods: {
-      ...mapMutations('bookingOptions', [
+      ...mapMutations([
         'setSessions'
       ]),
 

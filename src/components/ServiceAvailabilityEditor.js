@@ -203,7 +203,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     },
     methods: {
       ...mapMutations({
-        setNewEntities: 'setNewEvents'
+        setNewEntities: 'setNewAvailabilities'
       }),
 
       _getExclusionItemTitle (date) {

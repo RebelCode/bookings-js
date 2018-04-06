@@ -1,39 +1,15 @@
-import { FunctionalArrayCollection } from '@rebelcode/std-lib'
+import { FunctionalArrayCollection } from '@rebelcode/std-lib/src/FunctionalArrayCollection'
 
-export default function (state, store, Vuex) {
+export default function (Vuex) {
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 
   return {
-    store,
     inject: [
-      'calendar',
-      'repeater',
-      'tabs', 'tab', 'modal',
-      'session-length',
-      'service-availability-editor',
-      'bookings-page',
-      'switcher',
-      'bool-switcher',
-      'availability-calendar',
       'selection-list',
-      'availabilityEditorStateToggleable'
     ],
     data () {
       return {
-        activeTab: 0,
-
-        tabsConfig: {
-          switcherClass: 'horizontal-tabs',
-          switcherItemClass: 'horizontal-tabs__item',
-          switcherActiveItemClass: '_active',
-          tabsClass: 'tabs-content'
-        },
-
-        calendarConfig: {
-          showDatesInCustomersTimezone: false
-        },
-
         selectedStatuses: [],
 
         statuses: [{

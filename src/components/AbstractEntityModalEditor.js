@@ -77,7 +77,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
          *
          * @var {FunctionalToggleable}
          */
-        modalState: null,
+        // modalState: null,
 
         /**
          * Entities collection in their source of truth (in the store, for example).
@@ -87,7 +87,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
          *
          * @var {FunctionalCollection}
          */
-        entitiesCollection: null,
+        // entitiesCollection: null,
 
         /**
          * Entity model in its source of truth (in the store, for example).
@@ -96,7 +96,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
          *
          * @var {Object}
          */
-        entityModel: null,
+        // entityModel: null,
       }
     },
 

@@ -1,7 +1,4 @@
-export function CfBookingsCalendarView (Vuex, moment) {
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
-
+export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
   return {
     inject: {
       'bookings-calendar': 'bookings-calendar',
@@ -31,6 +28,14 @@ export function CfBookingsCalendarView (Vuex, moment) {
       }
     },
 
+    props: {
+      statuses: {
+        default () {
+          return []
+        }
+      }
+    },
+
     watch: {
       calendarView (view) {
         this.$refs.calendar.fireMethod('changeView', view)
@@ -39,8 +44,7 @@ export function CfBookingsCalendarView (Vuex, moment) {
 
     computed: {
       ...mapState({
-        bookings: state => state.app.bookings,
-        screenStatuses: state => state.app.screenStatuses
+        bookings: state => state.app.bookings
       }),
 
       ...mapState('bookings', [
@@ -56,12 +60,8 @@ export function CfBookingsCalendarView (Vuex, moment) {
     },
 
     methods: {
-      ...mapMutations('bookings', [
-        'setBookingEditorState'
-      ]),
-
       bookingPassesVisibleStatuses (booking) {
-        return this.screenStatuses.indexOf(booking.status) > -1
+        return this.statuses.indexOf(booking.status) > -1
       },
 
       bookingPassesServicesFilter (booking) {
@@ -73,17 +73,8 @@ export function CfBookingsCalendarView (Vuex, moment) {
         this.$refs.calendar.fireMethod('changeView', this.calendarView, moment())
       },
 
-      createBooking () {
-        this._openBookingEditor()
-      },
-
       editBooking (booking) {
-        this._openBookingEditor(booking)
-      },
-
-      _openBookingEditor (booking = {}) {
-        this.modalState.setState(true)
-        this.setBookingEditorState(booking)
+        this.$emit('edit', booking)
       },
 
       /**

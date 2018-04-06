@@ -17,6 +17,9 @@ import CfBoolSwitcher from './components/BoolSwitcher'
 import CfRcSelect from './components/RcSelect'
 import { CfBookingsCalendarView } from './components/BookingsCalendarView'
 import { CfDatetimePicker } from './components/DatetimePicker'
+import { CfBookingsPage } from './components/BookingsPage'
+import { CfBookingsListView } from './components/BookingsListView'
+import { CfServiceBookingsApplication } from './components/ServiceBookingsApplication'
 
 export function services (dependencies, document) {
   return {
@@ -58,11 +61,7 @@ export function services (dependencies, document) {
       return new dependencies.uiFramework.Dom.Dom(container.document)
     },
     selectorList: function () {
-      return [
-        '#calendar-app',
-        '#metabox-calendar-app',
-        '#bookings-screen-options'
-      ]
+      return []
     },
     store: function (container) {
       return new container.vuex.Store(store)
@@ -82,10 +81,17 @@ export function services (dependencies, document) {
       })
     },
     app: function (container) {
-      return applicationFactory(APP_STATE, container.store, container.vuex)
+      return applicationFactory(container['APP_STATE'], container.store, container.vuex)
+    },
+    'service-bookings-application': function (container) {
+      console.info("container['APP_STATE']", container['APP_STATE'])
+      return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
+    },
+    wpListTable: function (container) {
+      return container.vue.extend(dependencies.wpListTable.ListTable)
     },
     vueselect: function (container) {
       return CfRcSelect(container.vue.extend(dependencies.vueselect.VueSelect))
@@ -94,9 +100,9 @@ export function services (dependencies, document) {
       const store = container.store
 
       return new FunctionalArrayCollection(() => {
-        return store.state.app.events
+        return store.state.app.availabilities
       }, (newValue) => {
-        store.commit('setNewEvents', newValue)
+        store.commit('setNewAvailabilities', newValue)
       }, (item) => {
         return item.id
       })
@@ -122,7 +128,7 @@ export function services (dependencies, document) {
     },
     'bookingStatusesColors': function () {
       return {
-        'in-cart': '#f6e58d',
+        'in-cart': '#f6e58d', // hide
         draft: '#dfe4ea',
         pending: '#1e90ff',
         approved: '#00d2d3',
@@ -184,6 +190,12 @@ export function services (dependencies, document) {
     'bookings-calendar-view': function (container) {
       return new CfBookingsCalendarView(container.vuex, container.moment)
     },
+    'bookings-list-view': function (container) {
+      return new CfBookingsListView(container.vuex, container.moment)
+    },
+    'bookings-page': function (container) {
+      return new CfBookingsPage(container.store, container.vuex)
+    },
 
     components: function (container) {
       return {
@@ -198,10 +210,12 @@ export function services (dependencies, document) {
         timepicker: container.timepicker,
         'datetime-picker': container['datetime-picker'],
         switcher: container.switcher,
+        wpListTable: container.wpListTable,
 
         'availability-calendar': container['availability-calendar'],
         'bool-switcher': container['bool-switcher'],
 
+        'service-bookings-application': container['service-bookings-application'],
         'session-length': container['session-length'],
         'selection-list': container['selection-list'],
         'service-availability-editor': container['service-availability-editor'],
@@ -209,6 +223,8 @@ export function services (dependencies, document) {
         'booking-editor': container['booking-editor'],
         'bookings-calendar': container['bookings-calendar'],
         'bookings-calendar-view': container['bookings-calendar-view'],
+        'bookings-list-view': container['bookings-list-view'],
+        'bookings-page': container['bookings-page'],
       }
     }
   }
