@@ -17,43 +17,15 @@ import CfBoolSwitcher from './components/BoolSwitcher'
 import CfRcSelect from './components/RcSelect'
 import { CfBookingsCalendarView } from './components/BookingsCalendarView'
 import { CfDatetimePicker } from './components/DatetimePicker'
-import { CfBookingsPage } from './components/BookingsPage'
 import { CfBookingsListView } from './components/BookingsListView'
 import { CfServiceBookingsApplication } from './components/ServiceBookingsApplication'
+import { CfBookingsApplication } from './components/BookingsApplication'
+
+import api from './api'
+import libs from './libs'
 
 export function services (dependencies, document) {
-  return {
-    vuex: function (container) {
-      let Vue = container.vue,
-        Vuex = dependencies.vuex
-      Vue.use(Vuex)
-      return Vuex
-    },
-
-    vue: function () {
-      let Vue = dependencies.vue
-      Vue.use(dependencies.uiFramework.Core.InjectedComponents)
-
-      /*
-       * Built timepicker's restriction. It should be installed as a plugin.
-       */
-      Vue.use(dependencies.timepicker)
-
-      return Vue
-    },
-
-    jquery: function () {
-      return dependencies.jquery
-    },
-    lodash: function () {
-      return dependencies.lodash
-    },
-    moment: function () {
-      return dependencies.moment
-    },
-    equal: function () {
-      return dependencies.fastDeepEqual
-    },
+  return Object.assign({
     document: function () {
       return document
     },
@@ -84,8 +56,10 @@ export function services (dependencies, document) {
       return applicationFactory(container['APP_STATE'], container.store, container.vuex)
     },
     'service-bookings-application': function (container) {
-      console.info("container['APP_STATE']", container['APP_STATE'])
       return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
+    },
+    'bookings-application': function (container) {
+      return CfBookingsApplication(container['APP_STATE'], container.store, container.vuex, container.vue)
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
@@ -193,9 +167,6 @@ export function services (dependencies, document) {
     'bookings-list-view': function (container) {
       return new CfBookingsListView(container.vuex, container.moment)
     },
-    'bookings-page': function (container) {
-      return new CfBookingsPage(container.store, container.vuex)
-    },
 
     components: function (container) {
       return {
@@ -215,6 +186,8 @@ export function services (dependencies, document) {
         'availability-calendar': container['availability-calendar'],
         'bool-switcher': container['bool-switcher'],
 
+        'bookings-application': container['bookings-application'],
+
         'service-bookings-application': container['service-bookings-application'],
         'session-length': container['session-length'],
         'selection-list': container['selection-list'],
@@ -223,9 +196,8 @@ export function services (dependencies, document) {
         'booking-editor': container['booking-editor'],
         'bookings-calendar': container['bookings-calendar'],
         'bookings-calendar-view': container['bookings-calendar-view'],
-        'bookings-list-view': container['bookings-list-view'],
-        'bookings-page': container['bookings-page'],
+        'bookings-list-view': container['bookings-list-view']
       }
     }
-  }
+  }, api(dependencies), libs(dependencies))
 }

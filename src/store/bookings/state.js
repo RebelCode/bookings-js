@@ -9,6 +9,16 @@ const state = {
    * List of all available services
    */
   services: [],
+
+  /**
+   * List of all bookings.
+   */
+  bookings: [],
+
+  /**
+   * Count of all bookings.
+   */
+  bookingsCount: 0
 }
 
 export default state

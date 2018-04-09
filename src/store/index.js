@@ -6,12 +6,12 @@ const state = {
   app: {
     availabilities: [],
     sessions: [],
+
     displayOptions: {
       useCustomerTimezone: false
     },
 
     bookings: [],
-
     screenStatuses: []
   },
 }

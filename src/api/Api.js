@@ -1,35 +1,26 @@
 export default class Api {
   /**
-   * Endpoint route
-   */
-  route
-
-  /**
    * Api constructor
    *
    * @param httpClient {Object} Http client like axios
+   * @param config
    */
-  constructor (httpClient) {
+  constructor (httpClient, config) {
     this.http = httpClient
+    this.config = config
   }
 
   /**
-   * Search for term
+   * Create FormData from params
    *
-   * @param term
+   * @param params
+   * @return {FormData}
    */
-  search (term) {
-    return this.http.get(this._buildUri('search'), { term })
-  }
-
-  /**
-   * Build URI for path
-   *
-   * @param path
-   * @return {string}
-   * @private
-   */
-  _buildUri (path) {
-    return '/' + this.route + '/' + path
+  makeFormDataParams (params) {
+    let formData = new FormData()
+    for (let key in params) {
+      formData.append(key, params[key])
+    }
+    return formData
   }
 }

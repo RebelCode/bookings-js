@@ -1,4 +1,4 @@
-export function CfBookingsListView ({ mapState, mapMutations }, moment) {
+export function CfBookingsListView ({ mapState, mapMutations, mapActions }, moment) {
   return {
     inject: {
       'list-table': {
@@ -6,8 +6,16 @@ export function CfBookingsListView ({ mapState, mapMutations }, moment) {
       },
     },
 
+    mounted () {
+      this.$nextTick(this.updateFilter)
+    },
+
     data () {
       return {
+        params: {
+          page: 1,
+        },
+
         actions: [
           {
             key: 'edit',
@@ -34,23 +42,36 @@ export function CfBookingsListView ({ mapState, mapMutations }, moment) {
           }
         },
 
-        service: 'all',
+        month: false,
+
+        service: false,
+      }
+    },
+
+    props: {
+      isLoading: {
+        type: Boolean,
+        default: false
       }
     },
 
     computed: {
-      ...mapState({
-        items: state => state.app.bookings
-      }),
-
       ...mapState('bookings', [
+        'bookings',
+        'bookingsCount',
         'services'
       ]),
+      pagesCount () {
+        if (!this.bookingsCount) {
+          return 1
+        }
+        return Math.ceil(this.bookingsCount / 10)
+      }
     },
 
     methods: {
       humanizeDate (date) {
-        return moment(date).format('ha, MMMM Do, YYYY') // 12pm, June 20th, 2017
+        return moment(date).format('ha, MMMM Do, YYYY')
       },
 
       onActionClick (action, row) {
@@ -59,7 +80,29 @@ export function CfBookingsListView ({ mapState, mapMutations }, moment) {
         }
       },
 
-      goToPage () {}
+      buildParams () {
+        let params = Object.assign({}, this.params)
+        if (this.service) {
+          params['service'] = this.service
+        }
+        if (this.month) {
+          params['month'] = this.month
+        }
+        return params
+      },
+
+      goToPage (page) {
+        this.params.page = page
+        this.updateFilter()
+      },
+
+      updateFilter () {
+        this.$emit('update-filter', this.buildParams())
+      },
+
+      _month(monthNumber) {
+        return moment(monthNumber, 'M').format('MMMM')
+      }
     },
 
     components: {
