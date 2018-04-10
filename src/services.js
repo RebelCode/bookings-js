@@ -159,7 +159,7 @@ export function services (dependencies, document) {
     },
 
     'booking-editor': function (container) {
-      return new CfBookingEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
+      return new CfBookingEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment, container.lodash.debounce)
     },
     'bookings-calendar-view': function (container) {
       return new CfBookingsCalendarView(container.vuex, container.moment)

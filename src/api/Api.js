@@ -19,7 +19,7 @@ export default class Api {
   makeFormDataParams (params) {
     let formData = new FormData()
     for (let key in params) {
-      formData.append(key, params[key])
+      formData.append(key, JSON.stringify(params[key]))
     }
     return formData
   }

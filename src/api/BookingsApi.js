@@ -11,4 +11,37 @@ export default class BookingsApi extends Api {
     const fetchConfig = this.config['fetch']
     return this.http[fetchConfig.method](fetchConfig.endpoint, this.makeFormDataParams(params))
   }
+
+  /**
+   * Create booking.
+   *
+   * @param model
+   * @return {*}
+   */
+  create (model) {
+    const createConfig = this.config['create']
+    return this.http[createConfig.method](createConfig.endpoint, this.makeFormDataParams(model))
+  }
+
+  /**
+   * Update booking.
+   *
+   * @param model
+   * @return {*}
+   */
+  update (model) {
+    const updateConfig = this.config['update']
+    return this.http[updateConfig.method](updateConfig.endpoint, this.makeFormDataParams(model))
+  }
+
+  /**
+   * Delete given model from server.
+   *
+   * @param model
+   * @return {*}
+   */
+  delete (model) {
+    const deleteConfig = this.config['delete']
+    return this.http[deleteConfig.method](deleteConfig.endpoint, this.makeFormDataParams(model))
+  }
 }

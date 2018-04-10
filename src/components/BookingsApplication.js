@@ -1,6 +1,6 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }, Vue) {
+export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }) {
   return {
     store,
     inject: {
@@ -101,7 +101,9 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
 
       ...mapMutations('bookings', [
         'setServices',
-        'setBookingEditorState'
+        'setBookingEditorState',
+        'setBookings',
+        'setBookingsCount'
       ]),
 
       ...mapMutations('ui', [
@@ -110,8 +112,14 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       ]),
 
       ...mapActions('bookings', [
-        'fetchBookings'
+        'fetchBookings',
+        'deleteBookingFromBackend'
       ]),
+
+      clearBookings () {
+        this.setBookings([])
+        this.setBookingsCount(0)
+      },
 
       setScreenStatuses (statuses) {
         this.$store.commit('setScreenStatuses', statuses)
@@ -143,9 +151,37 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         this._openBookingEditor(booking)
       },
 
+      /**
+       * Open booking for editing.
+       *
+       * @param booking
+       */
+      deleteBooking (booking, askConfirmation = true) {
+        if (askConfirmation) {
+          if (confirm('Are you sure you want to delete this booking? There is no undo option.')) {
+            this._deleteBooking(booking)
+          }
+        }
+        else {
+          this._deleteBooking(booking)
+        }
+      },
+
+      _deleteBooking(model) {
+        this.deleteBookingFromBackend({ api: this.api, model }).then(() => {
+          this._closeBookingEditor()
+          this.fetch()
+        })
+      },
+
       _openBookingEditor (booking = {}) {
         this.modalState.setState(true)
         this.setBookingEditorState(booking)
+      },
+
+      _closeBookingEditor () {
+        this.modalState.setState(false)
+        this.setBookingEditorState({})
       },
     },
     components: {

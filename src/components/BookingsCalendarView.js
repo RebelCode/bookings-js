@@ -28,6 +28,11 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
       }
     },
 
+    mounted () {
+      this.$emit('ready')
+      this.$nextTick(this.updateFilter)
+    },
+
     props: {
       statuses: {
         default () {
@@ -43,27 +48,20 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
     },
 
     computed: {
-      ...mapState({
-        bookings: state => state.app.bookings
-      }),
-
       ...mapState('bookings', [
+        'bookings',
+        'bookingsCount',
         'services'
       ]),
 
       filteredBookings () {
         return this.bookings.filter(booking => {
-          return this.bookingPassesVisibleStatuses(booking)
-            && this.bookingPassesServicesFilter(booking)
+          return this.bookingPassesServicesFilter(booking)
         })
       }
     },
 
     methods: {
-      bookingPassesVisibleStatuses (booking) {
-        return this.statuses.indexOf(booking.status) > -1
-      },
-
       bookingPassesServicesFilter (booking) {
         if (this.service === 'all') return true
         return booking.service.id === this.service
@@ -84,7 +82,10 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
        * @param end {moment} End date
        */
       updateBookings (start, end) {
-        // booking will be fetched from remote here
+        this.$emit('update-filter', {
+          start: start.format('YYYY-MM-DD'),
+          end: end.format('YYYY-MM-DD'),
+        })
       }
     },
 

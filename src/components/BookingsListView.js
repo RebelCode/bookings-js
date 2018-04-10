@@ -7,6 +7,7 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
     },
 
     mounted () {
+      this.$emit('ready')
       this.$nextTick(this.updateFilter)
     },
 
@@ -77,6 +78,9 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
       onActionClick (action, row) {
         if (action === 'edit') {
           this.$emit('edit', row)
+        }
+        if (action === 'trash') {
+          this.$emit('delete', row)
         }
       },
 

@@ -1,9 +1,8 @@
-export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment) {
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
-
+export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, mapMutations, mapActions}, moment, debounce) {
   return AbstractEntityModalEditor.extend({
     inject: {
+      'clientsApi': 'clientsApi',
+      'bookingsApi': 'bookingsApi',
       /**
        * Modal state injected from elsewhere.
        *
@@ -34,7 +33,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
 
     data () {
       return {
-        isCreateConfirming: true,
+        isCreateConfirming: false,
 
         isCreatingClient: false,
 
@@ -56,6 +55,13 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
 
           newStatus: '',
         },
+
+        newClient: {
+          name: '',
+          email: ''
+        },
+
+        foundClients: [],
 
         /**
          * Actions that can be taken with given booking. Action is transition to another status.
@@ -139,6 +145,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
     },
 
     methods: {
+      ...mapActions('bookings', [
+        'saveBookingOnBackend',
+      ]),
+
       /**
        * Save *new* booking with given status. It will show
        * confirmation dialog with asking user to confirm saving
@@ -170,12 +180,14 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
           delete model['newStatus']
         }
 
-        /*
-         * @todo: interact with backend instead of simple insert to vuex store.
-         */
-        this.saveItem(model)
+        this.saveBookingOnBackend({api: this.bookingsApi, model}).then(() => {
+          this.$emit('updated')
+          this.forceCloseModal()
+        })
+      },
 
-        this.forceCloseModal()
+      deleteBooking () {
+        this.$emit('delete', this.model)
       },
 
       /**
@@ -191,16 +203,42 @@ export default function CfBookingEditor (AbstractEntityModalEditor, Vuex, moment
       },
 
       /**
-       * Possible handler for typing in any vue-select field.
-       * Used for async getting results while typing in the field.
-       * For example, for clients search
+       * Search clients on the server.
        *
-       * @param term
-       *
-       * @todo: implement async client/services search
+       * @param {String} search      Current search text
+       * @param {Function} loading   Toggle loading class
        */
-      onSearch (term) {
-        // this.servicesApi.search(term).then(...)
+      onClientSearch (search, loading) {
+        loading(true)
+        this._searchClients(loading, search, this);
+      },
+
+      _searchClients: debounce((loading, search, vm) => {
+        vm.clientsApi.fetch({search}).then((response) => {
+          vm.foundClients = response.data
+          loading(false)
+        })
+      }, 350),
+
+      /**
+       * Show client creation form.
+       */
+      createClient () {
+        this.newClient = {
+          name: '',
+          email: ''
+        }
+        this.isCreatingClient = true
+      },
+
+      /**
+       * Store new client on the backend.
+       */
+      saveNewClient () {
+        this.clientsApi.create(this.newClient).then((response) => {
+          this.model.client = response.data
+          this.isCreatingClient = false
+        })
       },
 
       /**
