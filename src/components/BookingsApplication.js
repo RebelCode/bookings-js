@@ -1,6 +1,6 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }) {
+export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }, Vue) {
   return {
     store,
     inject: {
@@ -64,7 +64,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
           return this.statuses
         }, (newValue) => {}, (item) => {
           return item.key
-        })
+        }),
       }
     },
     computed: {
@@ -156,7 +156,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
        *
        * @param booking
        */
-      deleteBooking (booking, askConfirmation = true) {
+      deleteBooking (booking, askConfirmation = false) {
         if (askConfirmation) {
           if (confirm('Are you sure you want to delete this booking? There is no undo option.')) {
             this._deleteBooking(booking)
@@ -168,7 +168,10 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       },
 
       _deleteBooking(model) {
+        Vue.set(model, 'isDeleting', true)
         this.deleteBookingFromBackend({ api: this.api, model }).then(() => {
+          Vue.set(model, 'isDeleting', false)
+
           this._closeBookingEditor()
           this.fetch()
         })

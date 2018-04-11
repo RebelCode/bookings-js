@@ -38,6 +38,10 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
         default () {
           return []
         }
+      },
+      isLoading: {
+        type: Boolean,
+        default: false
       }
     },
 

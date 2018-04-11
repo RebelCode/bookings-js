@@ -80,7 +80,7 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
           this.$emit('edit', row)
         }
         if (action === 'trash') {
-          this.$emit('delete', row)
+          this.$emit('delete', row, true)
         }
       },
 

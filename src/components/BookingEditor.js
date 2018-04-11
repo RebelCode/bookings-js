@@ -36,6 +36,9 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         isCreateConfirming: false,
 
         isCreatingClient: false,
+        isSavingClient: false,
+
+        isDeleting: false,
 
         model: {
           id: null,
@@ -186,8 +189,14 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         })
       },
 
+      confirmBookingDeletion () {
+        this.isDeleting = false
+        this.removeConfirming = true
+      },
+
       deleteBooking () {
-        this.$emit('delete', this.model)
+        this.isDeleting = true
+        this.$emit('delete', Object.assign({}, this.model))
       },
 
       /**
@@ -235,8 +244,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Store new client on the backend.
        */
       saveNewClient () {
+        this.isSavingClient = true
         this.clientsApi.create(this.newClient).then((response) => {
           this.model.client = response.data
+          this.isSavingClient = false
           this.isCreatingClient = false
         })
       },
