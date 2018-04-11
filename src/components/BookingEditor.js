@@ -35,6 +35,9 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       return {
         isCreateConfirming: false,
 
+        isBookingSaving: false,
+
+        isClientsLoading: false,
         isCreatingClient: false,
         isSavingClient: false,
 
@@ -168,8 +171,9 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Confirm booking creation and close modal.
        */
       confirmBookingCreation () {
-        this.isCreateConfirming = false
-        this.saveBooking()
+        this.saveBooking().then(() => {
+          this.isCreateConfirming = false
+        })
       },
 
       /**
@@ -183,9 +187,12 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           delete model['newStatus']
         }
 
-        this.saveBookingOnBackend({api: this.bookingsApi, model}).then(() => {
+        this.isBookingSaving = true
+
+        return this.saveBookingOnBackend({api: this.bookingsApi, model}).then(() => {
           this.$emit('updated')
           this.forceCloseModal()
+          this.isBookingSaving = false
         })
       },
 
@@ -218,6 +225,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * @param {Function} loading   Toggle loading class
        */
       onClientSearch (search, loading) {
+        this.isClientsLoading = true
         loading(true)
         this._searchClients(loading, search, this);
       },
@@ -225,6 +233,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       _searchClients: debounce((loading, search, vm) => {
         vm.clientsApi.fetch({search}).then((response) => {
           vm.foundClients = response.data
+          vm.isClientsLoading = false
           loading(false)
         })
       }, 350),

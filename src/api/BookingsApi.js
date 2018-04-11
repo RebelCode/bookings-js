@@ -9,7 +9,7 @@ export default class BookingsApi extends Api {
    */
   fetch (params) {
     const fetchConfig = this.config['fetch']
-    return this.http[fetchConfig.method](fetchConfig.endpoint, this.makeFormDataParams(params))
+    return this.http[fetchConfig.method](fetchConfig.endpoint, this.prepareParams(params))
   }
 
   /**
@@ -20,7 +20,7 @@ export default class BookingsApi extends Api {
    */
   create (model) {
     const createConfig = this.config['create']
-    return this.http[createConfig.method](createConfig.endpoint, this.makeFormDataParams(model))
+    return this.http[createConfig.method](createConfig.endpoint, this.prepareParams(model))
   }
 
   /**
@@ -31,7 +31,7 @@ export default class BookingsApi extends Api {
    */
   update (model) {
     const updateConfig = this.config['update']
-    return this.http[updateConfig.method](updateConfig.endpoint, this.makeFormDataParams(model))
+    return this.http[updateConfig.method](updateConfig.endpoint, this.prepareParams(model))
   }
 
   /**
@@ -42,6 +42,6 @@ export default class BookingsApi extends Api {
    */
   delete (model) {
     const deleteConfig = this.config['delete']
-    return this.http[deleteConfig.method](deleteConfig.endpoint, this.makeFormDataParams(model))
+    return this.http[deleteConfig.method](deleteConfig.endpoint, this.prepareParams(model))
   }
 }

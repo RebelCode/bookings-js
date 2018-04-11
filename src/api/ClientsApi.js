@@ -9,7 +9,7 @@ export default class ClientsApi extends Api {
    */
   fetch (params) {
     const fetchConfig = this.config['fetch']
-    return this.http[fetchConfig.method](fetchConfig.endpoint, this.makeFormDataParams(params))
+    return this.http[fetchConfig.method](fetchConfig.endpoint, this.prepareParams(params))
   }
 
   /**
@@ -20,6 +20,6 @@ export default class ClientsApi extends Api {
    */
   create (model) {
     const createConfig = this.config['create']
-    return this.http[createConfig.method](createConfig.endpoint, this.makeFormDataParams(model))
+    return this.http[createConfig.method](createConfig.endpoint, this.prepareParams(model))
   }
 }

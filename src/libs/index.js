@@ -9,12 +9,10 @@ export default function (dependencies) {
     vue: function () {
       let Vue = dependencies.vue
       Vue.use(dependencies.uiFramework.Core.InjectedComponents)
-
       /*
        * Built timepicker's restriction. It should be installed as a plugin.
        */
       Vue.use(dependencies.timepicker)
-
       return Vue
     },
     jquery: function () {
@@ -30,9 +28,7 @@ export default function (dependencies) {
       return dependencies.fastDeepEqual
     },
     httpClient: function () {
-      let axios = dependencies.axios
-      axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-      return axios
+      return dependencies.axios
     }
   }
 }

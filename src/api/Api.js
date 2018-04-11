@@ -11,16 +11,12 @@ export default class Api {
   }
 
   /**
-   * Create FormData from params
+   * Prepare params before submit
    *
    * @param params
    * @return {FormData}
    */
-  makeFormDataParams (params) {
-    let formData = new FormData()
-    for (let key in params) {
-      formData.append(key, JSON.stringify(params[key]))
-    }
-    return formData
+  prepareParams (params) {
+    return params
   }
 }
