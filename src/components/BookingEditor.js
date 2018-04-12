@@ -56,7 +56,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           paymentNumber: null,
 
-          clientTimezone: null,
+          clientTimezone: 0,
           note: null,
 
           newStatus: '',

@@ -19,6 +19,13 @@ export function CfDatetimePicker (DatetimePicker, moment) {
       dateFormat: {
         type: String,
         default: 'dd/MM/yyyy'
+      },
+
+      /**
+       * Date before all days is disabled
+       */
+      disabledBefore: {
+        default: false
       }
     },
     computed: {
@@ -70,6 +77,19 @@ export function CfDatetimePicker (DatetimePicker, moment) {
           this.$emit('input', value.format(this.dataFormat))
         }
       },
+
+      /**
+       * Disabled dates config.
+       */
+      disabled () {
+        if (!this.disabledBefore) {
+          return {}
+        }
+
+        return {
+          to: moment(this.disabledBefore).toDate()
+        }
+      }
     },
     mounted () {
       this.$refs.timepicker.$el.querySelector('input').onclick = (e) => {
