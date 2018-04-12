@@ -3,6 +3,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
     inject: {
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
+
+      'humanizeDuration': 'humanizeDuration',
       /**
        * Modal state injected from elsewhere.
        *
@@ -107,34 +109,27 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
       /**
        * Get human readable duration of booking with minutes
-       * precision: 2 hours 30 minutes
+       * precision:
+       *
+       * 4 weeks, 4 days, 7 hours and 55 minutes.
        *
        * @return {string|null}
        */
       duration () {
         if (!this.model.start || !this.model.end) return null
 
-        const defaultMinutesThreshold = moment.relativeTimeThreshold('m')
-        const defaultHoursThreshold = moment.relativeTimeThreshold('h')
+        const diffInMilliseconds = Math.abs(moment(this.model.end).diff(moment(this.model.start), 'minutes')) * 60 * 1000
 
-        moment.relativeTimeThreshold('m', 60)
-        moment.relativeTimeThreshold('h', 24)
-
-        const diffInSeconds = Math.abs(moment(this.model.end).diff(moment(this.model.start), 'minutes')) * 60
-
-        let result = ''
-
-        if (Math.floor(diffInSeconds / 3600)) {
-          result += moment.duration(diffInSeconds - (diffInSeconds % 3600), 'seconds').humanize()
-        }
-        if (Math.floor(diffInSeconds % 3600) && (Math.floor(diffInSeconds / 3600) <= 23)) {
-          result += ' ' + moment.duration(Math.floor(diffInSeconds % 3600), 'seconds').humanize()
+        if (!diffInMilliseconds) {
+          return null
         }
 
-        moment.relativeTimeThreshold('m', defaultMinutesThreshold)
-        moment.relativeTimeThreshold('h', defaultHoursThreshold)
-
-        return result
+        return this.humanizeDuration(diffInMilliseconds, {
+          conjunction: ' and ',
+          serialComma: false,
+          units: ['w', 'd', 'h', 'm'],
+          round: true
+        })
       },
 
       /**

@@ -24,6 +24,9 @@ export default function (dependencies) {
     moment: function () {
       return dependencies.moment
     },
+    humanizeDuration: function () {
+      return dependencies.humanizeDuration
+    },
     equal: function () {
       return dependencies.fastDeepEqual
     },
