@@ -17,6 +17,8 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
     ],
     data () {
       return {
+        enableBookings: true,
+
         activeTab: 0,
 
         tabsConfig: {
