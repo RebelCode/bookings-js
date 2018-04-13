@@ -83,7 +83,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
        * Disabled dates config.
        */
       disabledDates () {
-        if (!this.disabledBefore) {
+        if (!this.disabledBefore || !this.$refs.datepicker) {
           return {}
         }
 

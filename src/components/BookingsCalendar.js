@@ -1,22 +1,23 @@
-export default function (FullCalendar, Vuex, moment) {
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
-
+export default function (FullCalendar, { mapState, mapMutations }, moment) {
   /**
    * Render function for event parts
    *
-   * @todo: move this stuff to templates from backend
+   * @todo: move this stuff to templates from backend || vue
    * @todo: this is temp solution
    *
    * @param event
    * @return {string}
    */
   const renderEvent = function (event) {
+    const title = event.title || 'New booking'
+    const clientName = event.clientName || ''
+    const action = event.title ? 'Click for more details' : 'Release to create booking'
+
     return `
-      <div class="rc-event-field rc-event-field--title">${event.title}</div>
+      <div class="rc-event-field rc-event-field--title">${title}</div>
       <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
-      <div class="rc-event-field rc-event-field--month-collapse">${event.clientName}</div>
-      <div class="rc-event-field rc-event-field--month-collapse rc-event-field--click">Click for more details</div>
+      <div class="rc-event-field rc-event-field--month-collapse">${clientName}</div>
+      <div class="rc-event-field rc-event-field--month-collapse rc-event-field--click">${action}</div>
     `
   }
 
@@ -76,6 +77,7 @@ export default function (FullCalendar, Vuex, moment) {
     },
 
     mounted () {
+      this.$on('event-created', this.eventCreated)
       this.$on('event-selected', this.eventClicked)
       this.$on('event-render', this.eventRender)
     },
@@ -84,6 +86,27 @@ export default function (FullCalendar, Vuex, moment) {
       ...mapMutations('bookingOptions', [
         'setAvailabilityEditorState'
       ]),
+
+      /**
+       * Event is created using calendar
+       *
+       * @param params
+       */
+      eventCreated (params) {
+        /*
+         * Don't create booking when `end` date is past.
+         *
+         * @todo: don't show blue box on creating.
+         */
+        if (moment().isAfter(params.end)) {
+          return
+        }
+
+        this.$emit('booking-create', {
+          start: params.start.format('YYYY-MM-DD HH:mm:ss'),
+          end: params.end.format('YYYY-MM-DD HH:mm:ss')
+        })
+      },
 
       /**
        * Transform bookings to events format that is understandable

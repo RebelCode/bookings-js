@@ -75,6 +75,10 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
         this.$refs.calendar.fireMethod('changeView', this.calendarView, moment())
       },
 
+      createBooking (bookingParams) {
+        this.$emit('create', bookingParams)
+      },
+
       editBooking (booking) {
         this.$emit('edit', booking)
       },

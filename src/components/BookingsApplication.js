@@ -138,8 +138,8 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         })
       },
 
-      createBooking () {
-        this._openBookingEditor()
+      createBooking (bookingParams = {}) {
+        this._openBookingEditor(bookingParams)
       },
 
       /**
