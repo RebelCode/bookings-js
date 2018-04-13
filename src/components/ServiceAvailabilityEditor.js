@@ -59,6 +59,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       modal: 'modal',
       repeater: 'repeater',
       datepicker: 'datepicker',
+      'time-picker': 'time-picker',
 
       'selection-list': 'selection-list'
     },
@@ -227,6 +228,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       repeater: 'repeater',
       modal: 'modal',
       datepicker: 'datepicker',
+      'time-picker': 'time-picker',
       'selection-list': 'selection-list'
     }
   })

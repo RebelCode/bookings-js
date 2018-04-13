@@ -17,6 +17,7 @@ import { CfDatetimePicker } from './DatetimePicker'
 import { CfBookingsListView } from './BookingsListView'
 import { CfServiceBookingsApplication } from './ServiceBookingsApplication'
 import { CfBookingsApplication } from './BookingsApplication'
+import { CfVueTimepicker } from './VueTimepicker'
 
 /*
  * Exports instances to main container config.
@@ -63,6 +64,9 @@ export default function (dependencies) {
     },
     'datetime-picker': function (container) {
       return CfDatetimePicker(container._datetimePicker, container.moment)
+    },
+    'time-picker': function (container) {
+      return CfVueTimepicker(container.vue.options.components['vue-timepicker'])
     },
     tabs: function (container) {
       return new dependencies.tabs.CfTabs(container.vue)

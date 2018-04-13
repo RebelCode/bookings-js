@@ -2,7 +2,8 @@ export function CfDatetimePicker (DatetimePicker, moment) {
   return DatetimePicker.extend({
     template: '#datepicker-template',
     inject: [
-      'datepicker'
+      'datepicker',
+      'time-picker'
     ],
     props: {
       /**
@@ -81,13 +82,30 @@ export function CfDatetimePicker (DatetimePicker, moment) {
       /**
        * Disabled dates config.
        */
-      disabled () {
+      disabledDates () {
         if (!this.disabledBefore) {
           return {}
         }
 
         return {
           to: moment(this.disabledBefore).toDate()
+        }
+      },
+
+      disabledTime () {
+        if (!this.disabledBefore || !this.value) {
+          return
+        }
+        let onDateWhenShouldDisable = this.dateValue === moment(this.disabledBefore).format('YYYY-MM-DD')
+        if (!onDateWhenShouldDisable) {
+          return
+        }
+
+        const datetime = moment(this.disabledBefore)
+
+        return {
+          HH: datetime.format('HH'),
+          mm: datetime.format('mm')
         }
       }
     },
@@ -109,7 +127,8 @@ export function CfDatetimePicker (DatetimePicker, moment) {
       }
     },
     components: {
-      datepicker: 'datepicker'
+      datepicker: 'datepicker',
+      'time-picker': 'time-picker'
     }
   })
 }
