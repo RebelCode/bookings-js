@@ -228,6 +228,7 @@ export default function (FullCalendar, moment) {
 
         return Object.assign({}, {
           id: model.id,
+          editable: false, // disable dragging and resizing
           model
         }, !model.isAllDay ? {
           start: day.format('YYYY-MM-DD') + 'T' + model.fromTime,

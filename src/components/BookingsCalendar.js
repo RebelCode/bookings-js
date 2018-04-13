@@ -111,6 +111,7 @@ export default function (FullCalendar, Vuex, moment) {
 
         return Object.assign({}, {
           id: model.id,
+          editable: false, // disable dragging and resizing
           title: model.service.title,
           start: moment(model.start),
           end: moment(model.end),
