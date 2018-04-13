@@ -87,8 +87,23 @@ export function CfDatetimePicker (DatetimePicker, moment) {
           return {}
         }
 
+        /**
+         * @var {Date} pageDate
+         */
+        const pageDate = this.$refs.datepicker.pageDate
+        /**
+         * @var {moment} selectedDate
+         */
+        const selectedDate = moment(this.disabledBefore)
+        selectedDate.set({
+          hour: pageDate.getHours(),
+          minute: pageDate.getMinutes(),
+          second: pageDate.getSeconds(),
+        })
+        selectedDate.subtract(1, 'seconds')
+
         return {
-          to: moment(this.disabledBefore).toDate()
+          to: selectedDate.toDate()
         }
       },
 
