@@ -6,10 +6,27 @@ export default function CfSessionLength (Vue, Vuex) {
 
   return Vue.extend({
     inject: [
-      'repeater'
+      'repeater',
+      'humanizeDuration'
     ],
     data () {
       return {
+        timeUnits: [{
+          title: 'mins',
+          seconds: 60,
+        },{
+          title: 'hours',
+          seconds: 60 * 60,
+        }, {
+          title: 'days',
+          seconds: 60 * 60 * 24,
+        }, {
+          title: 'weeks',
+          seconds: 60 * 60 * 24 * 7,
+        }],
+
+        sessionTimeUnit: 60,
+
         /**
          * Default session model. Used as form data
          * for the new session form.
@@ -62,6 +79,13 @@ export default function CfSessionLength (Vue, Vuex) {
         'setSessions'
       ]),
 
+      humanize (seconds) {
+        return this.humanizeDuration(seconds * 1000, {
+          units: ['w', 'd', 'h', 'm'],
+          round: true
+        })
+      },
+
       /**
        * Add new session to the session's list
        * and when session added clear session default, so user
@@ -70,9 +94,13 @@ export default function CfSessionLength (Vue, Vuex) {
       addNewSession () {
         if (!this.validate()) return;
 
-        this.sessions.addItem(Object.assign({
-          id: this.sessions.getItems().length
-        }, this.sessionDefault))
+        const sessionLength = this.sessionTimeUnit * this.sessionDefault.sessionLength
+
+        this.sessions.addItem({
+          id: this.sessions.getItems().length,
+          sessionLength,
+          price: this.sessionDefault.price
+        })
 
         this.sessionDefault = {
           sessionLength: null,
