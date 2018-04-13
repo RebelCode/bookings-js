@@ -16,7 +16,7 @@ export default function (FullCalendar, Vuex, moment) {
       <div class="rc-event-field rc-event-field--title">${event.title}</div>
       <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
       <div class="rc-event-field rc-event-field--month-collapse">${event.clientName}</div>
-      <div class="rc-event-field rc-event-field--month-collapse rc-event-field--click">Click here to see details...</div>
+      <div class="rc-event-field rc-event-field--month-collapse rc-event-field--click">Click for more details</div>
     `
   }
 
