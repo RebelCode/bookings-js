@@ -1,9 +1,6 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 
-export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, Vuex, moment) {
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
-
+export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, { mapState, mapMutations }, moment) {
   const helpers = {
     /**
      * Create date object from string in format YYYY-MM-DD
@@ -134,6 +131,30 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           return helpers.getDate(date)
         })
         return { dates }
+      },
+
+      /**
+       * Current day is used for disabling dates in start at datepicker up to this date.
+       *
+       * @return {Date}
+       */
+      currentDay () {
+        let today = moment()
+        today.set({
+          hour: 0,
+          minute: 0,
+          second: 0,
+        })
+        return today.toDate()
+      },
+
+      /**
+       * When availability starts, used for disabling dates in ends on datepicker up to start date.
+       *
+       * @return {Date}
+       */
+      availabilityStart () {
+        return moment(this.model.fromDate).toDate()
       },
 
       fromTimeModel: helpers.makeTimeModel('fromTime'),
