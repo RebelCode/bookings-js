@@ -232,6 +232,15 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         return helpers.getDate(date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
       },
 
+      /**
+       * Is entity can be updated or deleted.
+       *
+       * @return {bool}
+       */
+      entityCanBeModified () {
+        return this.model.fromDate && moment(this.model.fromDate).isSameOrAfter(moment(), 'day')
+      },
+
       excludeDateSelected (date) {
         date = moment(date).format('YYYY-MM-DD')
 

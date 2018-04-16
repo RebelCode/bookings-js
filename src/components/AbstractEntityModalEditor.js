@@ -209,6 +209,11 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * was changed.
        */
       closeModal () {
+        if (this.entityCanBeModified && !this.entityCanBeModified()) {
+          this.forceCloseModal()
+          return
+        }
+
         if (this.isModelChanged) {
           this.closeConfirming = true
           return
