@@ -30,7 +30,8 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         tabsConfig: {
           switcherItemClass: 'fc-button fc-state-default tab-item',
           switcherActiveItemClass: 'fc-state-active',
-          switcherClass: 'fc-button-group'
+          switcherClass: 'fc-button-group',
+          tabsClass: 'tabs-content--no-paddings'
         },
         
         selectedStatuses: [],

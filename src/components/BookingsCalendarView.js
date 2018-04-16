@@ -1,6 +1,7 @@
 export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
   return {
     inject: {
+      'bookings-filter': 'bookings-filter',
       'bookings-calendar': 'bookings-calendar',
       'switcher': 'switcher',
 
@@ -25,6 +26,12 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
         service: 'all', // OR service id
         calendarView: 'agendaWeek', // 'month', 'agendaDay'
         colorScheme: 'status', // OR 'service'
+
+        params: {
+          start: null,
+          end: null
+        },
+        searchString: null
       }
     },
 
@@ -90,16 +97,37 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
        * @param end {moment} End date
        */
       updateBookings (start, end) {
-        this.$emit('update-filter', {
-          start: start.format('YYYY-MM-DD'),
-          end: end.format('YYYY-MM-DD'),
-        })
+        this.params.start = start.format('YYYY-MM-DD')
+        this.params.end = end.format('YYYY-MM-DD')
+
+        this.updateFilter()
+      },
+
+      /**
+       * Update bookings filter
+       */
+      updateFilter () {
+        this.$emit('update-filter', this.buildParams())
+      },
+
+      /**
+       * Build parameters for request
+       *
+       * @return {object}
+       */
+      buildParams () {
+        let params = Object.assign({}, this.params)
+        if (this.searchString) {
+          params['search'] = this.searchString
+        }
+        return params
       }
     },
 
     components: {
       'bookings-calendar' : 'bookings-calendar',
       'switcher' : 'switcher',
+      'bookings-filter': 'bookings-filter',
     }
   }
 }

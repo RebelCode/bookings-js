@@ -1,6 +1,7 @@
 export function CfBookingsListView ({ mapState, mapMutations, mapActions }, moment) {
   return {
     inject: {
+      'bookings-filter': 'bookings-filter',
       'list-table': {
         from: 'wpListTable'
       },
@@ -16,6 +17,8 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
         params: {
           page: 1,
         },
+
+        searchString: null,
 
         actions: [
           {
@@ -92,6 +95,9 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
         if (this.month) {
           params['month'] = this.month
         }
+        if (this.searchString) {
+          params['search'] = this.searchString
+        }
         return params
       },
 
@@ -110,6 +116,7 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
     },
 
     components: {
+      'bookings-filter': 'bookings-filter',
       'list-table' : 'list-table',
     }
   }

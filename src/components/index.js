@@ -18,6 +18,7 @@ import { CfBookingsListView } from './BookingsListView'
 import { CfServiceBookingsApplication } from './ServiceBookingsApplication'
 import { CfBookingsApplication } from './BookingsApplication'
 import { CfVueTimepicker } from './VueTimepicker'
+import { CfBookingsFilter } from './BookingsFilter'
 
 /*
  * Exports instances to main container config.
@@ -108,6 +109,9 @@ export default function (dependencies) {
     },
     'bookings-list-view': function (container) {
       return new CfBookingsListView(container.vuex, container.moment)
+    },
+    'bookings-filter': function (container) {
+      return new CfBookingsFilter(container.vuex)
     },
   }
 }
