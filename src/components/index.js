@@ -19,6 +19,7 @@ import { CfServiceBookingsApplication } from './ServiceBookingsApplication'
 import { CfBookingsApplication } from './BookingsApplication'
 import { CfVueTimepicker } from './VueTimepicker'
 import { CfBookingsFilter } from './BookingsFilter'
+import { CfAbstractBookingsView } from './AbstractBookingsView'
 
 /*
  * Exports instances to main container config.
@@ -104,11 +105,14 @@ export default function (dependencies) {
     'booking-editor': function (container) {
       return new CfBookingEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment, container.lodash.debounce)
     },
+    'abstract-bookings-view': function (container) {
+      return new CfAbstractBookingsView(container.vue, container.vuex)
+    },
     'bookings-calendar-view': function (container) {
-      return new CfBookingsCalendarView(container.vuex, container.moment)
+      return new CfBookingsCalendarView(container['abstract-bookings-view'], container.vuex, container.moment)
     },
     'bookings-list-view': function (container) {
-      return new CfBookingsListView(container.vuex, container.moment)
+      return new CfBookingsListView(container['abstract-bookings-view'], container.vuex, container.moment)
     },
     'bookings-filter': function (container) {
       return new CfBookingsFilter(container.vuex)

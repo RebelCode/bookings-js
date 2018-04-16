@@ -33,6 +33,18 @@ const mutations = {
   },
 
   /**
+   * Set statuses data from backend response.
+   *
+   * This data holds statuses title and count of records with given status.
+   *
+   * @param state
+   * @param statuses
+   */
+  setBookingsStatuses (state, statuses) {
+    state.statuses = statuses
+  },
+
+  /**
    * Set bookings count
    *
    * @param state
@@ -40,6 +52,17 @@ const mutations = {
    */
   setBookingsCount (state, count) {
     state.bookingsCount = count
+  },
+
+  /**
+   * Update bookings filter
+   * 
+   * @param state
+   * @param key
+   * @param value
+   */
+  setBookingsFilter (state, { key, value }) {
+    state.filter[key] = value
   }
 }
 

@@ -2,6 +2,7 @@ export default {
   fetchBookings ({ commit }, { api, params }) {
     return api.fetch(params).then((response) => {
       commit('setBookings', response.data.items)
+      commit('setBookingsStatuses', response.data.statuses)
       commit('setBookingsCount', response.data.count)
     })
   },

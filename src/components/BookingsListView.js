@@ -1,15 +1,9 @@
-export function CfBookingsListView ({ mapState, mapMutations, mapActions }, moment) {
-  return {
+export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutations, mapActions }, moment) {
+  return AbstractBookingsView.extend({
     inject: {
-      'bookings-filter': 'bookings-filter',
       'list-table': {
         from: 'wpListTable'
       },
-    },
-
-    mounted () {
-      this.$emit('ready')
-      this.$nextTick(this.updateFilter)
     },
 
     data () {
@@ -17,8 +11,7 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
         params: {
           page: 1,
         },
-
-        searchString: null,
+        month: false,
 
         actions: [
           {
@@ -45,32 +38,16 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
             label: 'Booking status'
           }
         },
-
-        month: false,
-
-        service: false,
-      }
-    },
-
-    props: {
-      isLoading: {
-        type: Boolean,
-        default: false
       }
     },
 
     computed: {
-      ...mapState('bookings', [
-        'bookings',
-        'bookingsCount',
-        'services'
-      ]),
       pagesCount () {
         if (!this.bookingsCount) {
           return 1
         }
         return Math.ceil(this.bookingsCount / 10)
-      }
+      },
     },
 
     methods: {
@@ -95,9 +72,6 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
         if (this.month) {
           params['month'] = this.month
         }
-        if (this.searchString) {
-          params['search'] = this.searchString
-        }
         return params
       },
 
@@ -106,18 +80,13 @@ export function CfBookingsListView ({ mapState, mapMutations, mapActions }, mome
         this.updateFilter()
       },
 
-      updateFilter () {
-        this.$emit('update-filter', this.buildParams())
-      },
-
       _month(monthNumber) {
         return moment(monthNumber, 'M').format('MMMM')
       }
     },
 
     components: {
-      'bookings-filter': 'bookings-filter',
       'list-table' : 'list-table',
     }
-  }
+  })
 }

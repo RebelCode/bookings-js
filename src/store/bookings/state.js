@@ -16,9 +16,23 @@ const state = {
   bookings: [],
 
   /**
+   * Statuses for bookings.
+   */
+  statuses: [],
+
+  /**
    * Count of all bookings.
    */
-  bookingsCount: 0
+  bookingsCount: 0,
+
+  /**
+   * Bookings filter that remain the same when user change view
+   */
+  filter: {
+    status: 'all',
+    search: null,
+    service: null,
+  },
 }
 
 export default state

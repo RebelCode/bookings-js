@@ -1,3 +1,5 @@
+import { FunctionalCollection } from '@rebelcode/std-lib/src/FunctionalCollection'
+
 /**
  * Component for filtering by status and client.
  *
@@ -8,15 +10,31 @@
  *
  * @constructor
  */
-export function CfBookingsFilter ({ mapState }) {
+export function CfBookingsFilter ({ mapState, mapMutations }) {
   return {
     template: "#bookings-filter-template",
+    inject: [
+      'selection-list'
+    ],
     props: {
-      searchString: {}
+      searchString: {},
+      status: {}
+    },
+    data () {
+      return {
+        items: new FunctionalCollection(() => {
+          return this.statuses
+        }, (statuses) => {
+          this.setBookingsStatuses(statuses)
+        }, (status) => {
+          return status.id
+        })
+      }
     },
     computed: {
       ...mapState('bookings', [
-        'bookingsCount'
+        'bookingsCount',
+        'statuses'
       ]),
 
       /**
@@ -36,9 +54,28 @@ export function CfBookingsFilter ({ mapState }) {
         set (value) {
           this.$emit('update:searchString', value)
         }
-      }
+      },
+
+      /**
+       * Status model for selection list.
+       *
+       * @property {array}
+       */
+      statusModel: {
+        get () {
+          return [this.status]
+        },
+        set (value) {
+          this.$emit('update:status', value[0])
+          this.submit()
+        }
+      },
     },
     methods: {
+      ...mapMutations('bookings', [
+        'setBookingsStatuses'
+      ]),
+
       /**
        * Fire submit event, so listener can request new
        * data according filter values.
@@ -46,6 +83,9 @@ export function CfBookingsFilter ({ mapState }) {
       submit () {
         this.$emit('submit')
       }
+    },
+    components: {
+      'selection-list': 'selection-list'
     }
   }
 }

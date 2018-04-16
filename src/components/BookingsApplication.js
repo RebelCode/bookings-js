@@ -132,7 +132,13 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
           this.setBookingsViewFilter(Object.assign({}, params))
         }
         params = Object.assign({}, this.viewFilter)
-        params['statuses'] = this.screenStatuses
+
+        /*
+         * Screen statuses to load
+         */
+        params['screenStatuses'] = this.screenStatuses
+        params['status'] = params['status'] || 'all'
+
         this.setBookingsIsLoading(true)
         this.fetchBookings({ api: this.api, params }).then(() => {
           this.setBookingsIsLoading(false)

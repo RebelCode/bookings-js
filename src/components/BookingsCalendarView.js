@@ -1,7 +1,6 @@
-export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
-  return {
+export function CfBookingsCalendarView (AbstractBookingsView, { mapState, mapMutations }, moment) {
+  return AbstractBookingsView.extend({
     inject: {
-      'bookings-filter': 'bookings-filter',
       'bookings-calendar': 'bookings-calendar',
       'switcher': 'switcher',
 
@@ -23,7 +22,6 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
           'month': 'Month',
         },
 
-        service: 'all', // OR service id
         calendarView: 'agendaWeek', // 'month', 'agendaDay'
         colorScheme: 'status', // OR 'service'
 
@@ -31,13 +29,7 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
           start: null,
           end: null
         },
-        searchString: null
       }
-    },
-
-    mounted () {
-      this.$emit('ready')
-      this.$nextTick(this.updateFilter)
     },
 
     props: {
@@ -58,26 +50,7 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
       }
     },
 
-    computed: {
-      ...mapState('bookings', [
-        'bookings',
-        'bookingsCount',
-        'services'
-      ]),
-
-      filteredBookings () {
-        return this.bookings.filter(booking => {
-          return this.bookingPassesServicesFilter(booking)
-        })
-      }
-    },
-
     methods: {
-      bookingPassesServicesFilter (booking) {
-        if (this.service === 'all') return true
-        return booking.service.id === this.service
-      },
-
       goToToday () {
         this.$refs.calendar.fireMethod('changeView', this.calendarView, moment())
       },
@@ -104,30 +77,18 @@ export function CfBookingsCalendarView ({ mapState, mapMutations }, moment) {
       },
 
       /**
-       * Update bookings filter
-       */
-      updateFilter () {
-        this.$emit('update-filter', this.buildParams())
-      },
-
-      /**
        * Build parameters for request
        *
        * @return {object}
        */
       buildParams () {
-        let params = Object.assign({}, this.params)
-        if (this.searchString) {
-          params['search'] = this.searchString
-        }
-        return params
+        return Object.assign({}, this.params)
       }
     },
 
     components: {
       'bookings-calendar' : 'bookings-calendar',
       'switcher' : 'switcher',
-      'bookings-filter': 'bookings-filter',
     }
-  }
+  })
 }
