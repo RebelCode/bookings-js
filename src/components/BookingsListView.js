@@ -26,16 +26,16 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
 
         columns: {
           'date': {
-            label: 'Booking Date',
+            label: 'Booking date and time',
           },
           'client': {
-            label: 'Client name'
+            label: 'Client Name'
           },
           'service': {
             label: 'Service'
           },
           'status': {
-            label: 'Booking status'
+            label: 'Booking Status'
           }
         },
       }
@@ -52,7 +52,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
 
     methods: {
       humanizeDate (date) {
-        return moment(date).format('ha, MMMM Do, YYYY')
+        return moment(date).format('ha, dddd, Do MMMM YYYY')
       },
 
       onActionClick (action, row) {
