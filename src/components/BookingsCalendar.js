@@ -64,6 +64,9 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
             eventLimit: true,
             viewRender (view) {
               self.$emit('period-change', view.start, view.end)
+            },
+            selectAllow (selectInfo) {
+              return selectInfo.start.isSameOrAfter(moment(), 'day')
             }
           }
         },
@@ -93,6 +96,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
        * @param params
        */
       eventCreated (params) {
+        this.fireMethod('unselect')
         /*
          * Don't create booking when `end` date is past.
          *

@@ -32,7 +32,7 @@ export default function (FullCalendar, moment) {
       header: {
         default () {
           return {
-            left: 'agendaWeek,month',
+            left: 'agendaWeek,month today',
             right: 'prev title next'
           }
         },
@@ -51,6 +51,9 @@ export default function (FullCalendar, moment) {
               self.rangeStart = view.start
               self.rangeEnd = view.end
               self.renderRepeatedAvailabilities()
+            },
+            selectAllow (selectInfo) {
+              return selectInfo.start.isSameOrAfter(moment(), 'day')
             }
           }
         },
@@ -247,6 +250,8 @@ export default function (FullCalendar, moment) {
        * @param params {{start:moment, end:moment, allDay:boolean}} Params, coming from full calendar.
        */
       eventCreated (params) {
+        this.fireMethod('unselect')
+
         let event = {id: null}
 
         if (params) {
