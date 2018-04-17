@@ -182,6 +182,11 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
        * @param view
        */
       eventRender (event, element, view) {
+        let endDate = event.end || event.start
+        if (endDate.isBefore(moment(), 'day')) {
+          element[0].classList.add('fc-event--past')
+        }
+
         if (this.colorScheme === 'service') {
           element.addClass(`rc-service-event rc-service-event--${event.model.status}`)
         }
