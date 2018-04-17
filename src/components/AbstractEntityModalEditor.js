@@ -201,7 +201,9 @@ export default function CfAbstractEntityModalEditor (Vue) {
         this.removeConfirming = false
         this.closeConfirming = false
 
-        this.seedLock = false
+        this.$nextTick(() => {
+          this.seedLock = false
+        })
       },
 
       /**

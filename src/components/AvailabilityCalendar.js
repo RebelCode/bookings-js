@@ -14,7 +14,8 @@ export default function (FullCalendar, moment) {
 
   return FullCalendar.extend({
     inject: [
-      'availabilitiesCollection'
+      'availabilitiesCollection',
+      'momentHelpers'
     ],
     data () {
       return {
@@ -79,9 +80,16 @@ export default function (FullCalendar, moment) {
     mounted () {
       this.$on('event-created', this.eventCreated)
       this.$on('event-selected', this.eventClicked)
+      this.$on('event-render', this.eventRender)
     },
 
     methods: {
+      eventRender (event, el) {
+        let endDate = event.end || event.start
+        if (endDate.isBefore(moment(), 'day')) {
+          el[0].classList.add('fc-event--past')
+        }
+      },
       /**
        * Render availabilities.
        *
@@ -171,6 +179,8 @@ export default function (FullCalendar, moment) {
         const metRecurringPeriod = fromDate.diff(day, diff) % availability.repeatsEvery === 0
         if (!metRecurringPeriod) return false
 
+        const vm = this
+
         const repeatingRules = {
           never () {
             return fromDate.isSame(day, 'day')
@@ -183,8 +193,7 @@ export default function (FullCalendar, moment) {
           },
           month () {
             let mode = availability.repeatsOn[0]
-            return mode === 'dow' ? fromDate.format('ddd') === day.format('ddd')
-              : fromDate.format('D') === day.format('D')
+            return mode === 'dow' ? vm.momentHelpers.weekdayOfMonthIsSame(fromDate, day) : fromDate.format('D') === day.format('D')
           },
           year () {
             return fromDate.format('DD/MM') === day.format('DD/MM')

@@ -39,6 +39,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
   return AbstractEntityModalEditor.extend({
     inject: {
+      'momentHelpers': 'momentHelpers',
+
       modalState: {
         from: 'availabilityEditorStateToggleable'
       },
@@ -108,13 +110,13 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
        * Change default values when repeats changes.
        */
       'model.repeats': function (newValue) {
-        if (!this.seedLock) return
+        if (this.seedLock) return
 
         this.model.repeatsEvery = 2
 
         switch (newValue) {
           case 'month':
-            this.model.repeatsOn = [ 'dow' ]
+            this.model.repeatsOn = [ 'dom' ]
             break
           default:
             this.model.repeatsOn = []
@@ -195,6 +197,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           return []
         }
 
+        let start = moment(this.model.fromDate)
+
         let repeatsOptions = {
           week: {
             mon: 'M',
@@ -206,8 +210,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
             sun: 'S',
           },
           month: {
-            dom: 'Day of the month',
-            dow: 'Day of the week',
+            dom: start ? 'Montly on day ' + start.format('D') : '',
+            dow: start ? 'Montly on the ' + this.momentHelpers.weekdayInMonthNumber(start) + ' ' + start.format('dddd') : '',
           }
         }
 
@@ -238,7 +242,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
        * @return {bool}
        */
       entityCanBeModified () {
-        return this.model.fromDate && moment(this.model.fromDate).isSameOrAfter(moment(), 'day')
+        return true
       },
 
       excludeDateSelected (date) {

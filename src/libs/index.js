@@ -1,3 +1,5 @@
+import { momentHelpers } from './moment-helpers'
+
 export default function (dependencies) {
   return {
     vuex: function (container) {
@@ -20,6 +22,9 @@ export default function (dependencies) {
     },
     lodash: function () {
       return dependencies.lodash
+    },
+    momentHelpers: function (container) {
+      return momentHelpers(container.moment)
     },
     moment: function () {
       return dependencies.moment
