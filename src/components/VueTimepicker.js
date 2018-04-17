@@ -9,6 +9,15 @@ export function CfVueTimepicker(VueTimepicker) {
         type: Object
       }
     },
+    watch: {
+      showDropdown (value) {
+        if (value) {
+          this.$nextTick(() => {
+            this._scrollToSelected()
+          })
+        }
+      }
+    },
     computed: {
       disabledValues () {
         const def = { hour: [], minute: [], second: [], apm: [] }
@@ -34,6 +43,29 @@ export function CfVueTimepicker(VueTimepicker) {
         }
 
         return { hour, minute, second: [], apm: [] }
+      }
+    },
+    methods: {
+      /**
+       * Scroll time pickers to selected values.
+       *
+       * @private
+       */
+      _scrollToSelected () {
+        const scrollLists = [
+          'hours', 'minutes', 'seconds', 'apms'
+        ]
+        for (let listClass of scrollLists) {
+          const el = this.$el.querySelector(`.select-list .${listClass}`)
+          if (!el) {
+            continue
+          }
+          const activeNode = el.querySelector('.active')
+          if (!activeNode) {
+            continue
+          }
+          el.scrollTop = activeNode.offsetTop - 130 / 2 + 15
+        }
       }
     }
   })
