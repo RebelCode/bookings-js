@@ -22,9 +22,12 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
   }
 
   return FullCalendar.extend({
-    inject: [
-      'bookingStatusesColors'
-    ],
+    inject: {
+      'bookingStatusesColors': 'bookingStatusesColors',
+      'helpers': {
+        from: 'bookingHelpers'
+      },
+    },
     data () {
       return {
         generatedEvents: []
@@ -163,30 +166,12 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         const color = colorScheme === 'status' ?
           this.bookingStatusesColors[booking.status] : booking.service.color
 
-        const textColor = this._getBrightness(color) > .5 ? '#000' : '#fff'
+        const textColor = this.helpers.getBrightness(color) > .5 ? '#000' : '#fff'
 
         return {
           color,
           textColor
         }
-      },
-
-      /**
-       * Get color brightness to determine text color over event
-       *
-       * @param hexCode
-       * @return {number}
-       * @private
-       */
-      _getBrightness(hexCode) {
-        // strip off any leading #
-        hexCode = hexCode.replace('#', '');
-
-        const c_r = parseInt(hexCode.substr(0, 2),16);
-        const c_g = parseInt(hexCode.substr(2, 2),16);
-        const c_b = parseInt(hexCode.substr(4, 2),16);
-
-        return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000 / 255;
       },
 
       /**

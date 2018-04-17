@@ -4,6 +4,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
 
+      'helpers': {
+        from: 'bookingHelpers'
+      },
+
       'humanizeDuration': 'humanizeDuration',
       /**
        * Modal state injected from elsewhere.
@@ -105,6 +109,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       availableActions () {
         if (!this.model.id) return []
         return this.actionsMap[this.model.status] || []
+      },
+
+      statusStyle () {
+        return this.helpers.statusStyle(this.model.status)
       },
 
       /**

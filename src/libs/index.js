@@ -1,4 +1,5 @@
 import { momentHelpers } from './moment-helpers'
+import { bookingHelpers } from './booking-helpers'
 
 export default function (dependencies) {
   return {
@@ -25,6 +26,9 @@ export default function (dependencies) {
     },
     momentHelpers: function (container) {
       return momentHelpers(container.moment)
+    },
+    bookingHelpers: function (container) {
+      return bookingHelpers(container.bookingStatusesColors)
     },
     moment: function () {
       return dependencies.moment
