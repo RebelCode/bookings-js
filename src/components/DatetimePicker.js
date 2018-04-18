@@ -72,7 +72,8 @@ export function CfDatetimePicker (DatetimePicker, moment) {
           value.set({
             year: newValue.getFullYear(),
             month: newValue.getMonth(),
-            date: newValue.getUTCDate()
+            date: newValue.getUTCDate(),
+            second: 0
           })
 
           this.$emit('input', value.format(this.dataFormat))

@@ -23,7 +23,8 @@ export default function CfAbstractEntityModalEditor (Vue) {
     $model: {},
 
     inject: [
-      'equal'
+      'equal',
+      '$validator'
     ],
 
     data () {

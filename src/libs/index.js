@@ -16,6 +16,9 @@ export default function (dependencies) {
        * Built timepicker's restriction. It should be installed as a plugin.
        */
       Vue.use(dependencies.timepicker)
+      Vue.use(dependencies.validate, {
+        events: ''
+      })
       return Vue
     },
     jquery: function () {

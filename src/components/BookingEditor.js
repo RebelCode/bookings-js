@@ -174,8 +174,14 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Confirm booking creation and close modal.
        */
       confirmBookingCreation () {
-        this.saveBooking().then(() => {
-          this.isCreateConfirming = false
+        this.$validator.validateAll().then((result) => {
+          if (!result) {
+            this.isCreateConfirming = false
+            return;
+          }
+          this.saveBooking().then(() => {
+            this.isCreateConfirming = false
+          })
         })
       },
 
