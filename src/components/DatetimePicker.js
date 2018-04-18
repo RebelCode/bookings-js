@@ -97,11 +97,10 @@ export function CfDatetimePicker (DatetimePicker, moment) {
          */
         const selectedDate = moment(this.disabledBefore)
         selectedDate.set({
-          hour: pageDate.getHours(),
-          minute: pageDate.getMinutes(),
-          second: pageDate.getSeconds(),
+          hour: 0,
+          minute: 0,
+          second: 0,
         })
-        selectedDate.subtract(1, 'seconds')
 
         return {
           to: selectedDate.toDate()

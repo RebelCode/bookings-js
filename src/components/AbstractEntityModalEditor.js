@@ -23,8 +23,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
     $model: {},
 
     inject: [
-      'equal',
-      '$validator'
+      'equal'
     ],
 
     data () {
@@ -53,6 +52,13 @@ export default function CfAbstractEntityModalEditor (Vue) {
          * @var {boolean}
          */
         closeConfirming: false,
+
+        /**
+         * Is cancel confirmation visible
+         *
+         * @var {boolean}
+         */
+        cancelConfirming: false,
 
         /**
          * Model's state that was opened for creating OR for editing.
@@ -117,7 +123,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * @var {boolean}
        */
       isDoubleConfirming () {
-        return this.removeConfirming || this.closeConfirming
+        return this.removeConfirming || this.closeConfirming || this.cancelConfirming
       },
 
       /**
@@ -201,6 +207,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
          */
         this.removeConfirming = false
         this.closeConfirming = false
+        this.cancelConfirming = false
 
         this.$nextTick(() => {
           this.seedLock = false
@@ -211,18 +218,25 @@ export default function CfAbstractEntityModalEditor (Vue) {
        * Show close modal confirmation if editing model
        * was changed.
        */
-      closeModal () {
+      closeModal (field = 'closeConfirming') {
         if (this.entityCanBeModified && !this.entityCanBeModified()) {
           this.forceCloseModal()
           return
         }
 
         if (this.isModelChanged) {
-          this.closeConfirming = true
+          this[field] = true
           return
         }
 
         this.forceCloseModal()
+      },
+
+      /**
+       * Close modal from footer.
+       */
+      cancelModal () {
+        this.closeModal('cancelConfirming')
       },
 
       /**
