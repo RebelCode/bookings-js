@@ -30,6 +30,10 @@ export default function (FullCalendar, moment) {
           return []
         }
       },
+      overlappingAvailabilities: {
+        type: Boolean,
+        default: false,
+      },
       header: {
         default () {
           return {
@@ -74,6 +78,22 @@ export default function (FullCalendar, moment) {
           if (!this.rangeStart) return
           this.renderRepeatedAvailabilities()
         }
+      },
+      generatedAvailabilities (value) {
+        let overlapping = {}
+        for (let availability of value) {
+          if (!overlapping[availability.start]) {
+            overlapping[availability.start] = 0
+          }
+          if (availability.model.isAllDay) {
+            overlapping[availability.start]++
+          }
+          if (overlapping[availability.start] > 1) {
+            this.$emit('update:overlappingAvailabilities', true)
+            return
+          }
+        }
+        this.$emit('update:overlappingAvailabilities', false)
       }
     },
 
@@ -90,6 +110,7 @@ export default function (FullCalendar, moment) {
           el[0].classList.add('fc-event--past')
         }
       },
+
       /**
        * Render availabilities.
        *

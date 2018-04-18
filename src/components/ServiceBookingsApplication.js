@@ -18,6 +18,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
     data () {
       return {
         enableBookings: true,
+        overlappingAvailabilities: false,
 
         activeTab: 0,
 
