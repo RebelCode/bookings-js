@@ -135,7 +135,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         return this.humanizeDuration(diffInMilliseconds, {
           conjunction: ' and ',
           serialComma: false,
-          units: ['w', 'd', 'h', 'm'],
+          units: ['y', 'w', 'd', 'h', 'm'],
           round: true
         })
       },
@@ -157,6 +157,23 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       ...mapActions('bookings', [
         'saveBookingOnBackend',
       ]),
+
+      /**
+       * Close all confirmation dialogs.
+       */
+      closeAllConfirmation () {
+        /**
+         * Set default confirmation state
+         *
+         * @type {boolean}
+         */
+        this.removeConfirming = false
+        this.closeConfirming = false
+        this.cancelConfirming = false
+
+        this.isCreateConfirming = false
+        this.isCreatingClient = false
+      },
 
       /**
        * Save *new* booking with given status. It will show
@@ -223,8 +240,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * @param offset
        */
       format (time, offset = 0) {
-        const currentOffset = moment().utcOffset() / 60
-        return moment(time).utcOffset(currentOffset + Number(offset)).format('DD/MM/YY HH:mm')
+        return moment(time).utcOffset(Number(offset)).format('DD/MM/YY HH:mm')
       },
 
       /**

@@ -200,6 +200,17 @@ export default function CfAbstractEntityModalEditor (Vue) {
           Vue.set(this.mountedModel, key, JSON.parse(JSON.stringify(model[key])))
         })
 
+        this.closeAllConfirmation()
+
+        this.$nextTick(() => {
+          this.seedLock = false
+        })
+      },
+
+      /**
+       * Close all confirmation dialogs.
+       */
+      closeAllConfirmation () {
         /**
          * Set default confirmation state
          *
@@ -208,10 +219,6 @@ export default function CfAbstractEntityModalEditor (Vue) {
         this.removeConfirming = false
         this.closeConfirming = false
         this.cancelConfirming = false
-
-        this.$nextTick(() => {
-          this.seedLock = false
-        })
       },
 
       /**

@@ -38,7 +38,7 @@ export default function (FullCalendar, moment) {
         default () {
           return {
             left: 'agendaWeek,month today',
-            right: 'prev title next'
+            right: 'title prev,next'
           }
         },
       },

@@ -44,6 +44,9 @@ export default function (dependencies) {
     },
     httpClient: function () {
       return dependencies.axios
+    },
+    pluralize: function () {
+      return dependencies.pluralize
     }
   }
 }

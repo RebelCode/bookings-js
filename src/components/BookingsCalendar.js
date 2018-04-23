@@ -166,7 +166,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         const color = colorScheme === 'status' ?
           this.bookingStatusesColors[booking.status] : booking.service.color
 
-        const textColor = this.helpers.getBrightness(color) > .5 ? '#000' : '#fff'
+        const textColor = '#000'
 
         return {
           color,

@@ -76,6 +76,16 @@ export function CfDatetimePicker (DatetimePicker, moment) {
             second: 0
           })
 
+          if (!this.value) {
+            const isToday = value.isSame(moment(), 'day')
+            const hour = isToday ? value.hour : 0
+            const minute = isToday ? value.minute : 0
+            value.set({
+              hour,
+              minute
+            })
+          }
+
           this.$emit('input', value.format(this.dataFormat))
         }
       },

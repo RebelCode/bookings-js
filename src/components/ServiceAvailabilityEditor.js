@@ -40,6 +40,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
   return AbstractEntityModalEditor.extend({
     inject: {
       'momentHelpers': 'momentHelpers',
+      'pluralize': 'pluralize',
 
       modalState: {
         from: 'availabilityEditorStateToggleable'
@@ -91,7 +92,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         exclusionsPickerVisible: false,
 
         excludesDatesCollection: new FunctionalArrayCollection(() => {
-          return this.model.excludesDates
+          return this.model.excludesDates.sort()
         }, (newDates) => {
           this.model.excludesDates = newDates
         }, (date) => {
@@ -112,7 +113,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       'model.repeats': function (newValue) {
         if (this.seedLock) return
 
-        this.model.repeatsEvery = 2
+        this.model.repeatsEvery = 1
 
         switch (newValue) {
           case 'month':
@@ -163,18 +164,11 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       toTimeModel: helpers.makeTimeModel('toTime'),
 
       repeatingTitle () {
-        switch (this.model.repeats) {
-          case 'day':
-            return 'days'
-          case 'week':
-            return 'weeks'
-          case 'month':
-            return 'months'
-          case 'year':
-            return 'years'
-          default:
-            return 'nopes :)'
-        }
+        return this.pluralize(this.model.repeats, Number(this.model.repeatsEvery))
+      },
+
+      repeatsEndsWeeksTitle () {
+        return this.pluralize('week', Number(this.model.repeatsEndsWeeks))
       },
 
       repeatingDuration () {
