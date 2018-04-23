@@ -275,15 +275,41 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
+       * Start value is changed
+       */
+      startChanged () {
+        if (this.model.end) {
+          this.$validator.validateAll({
+            end: this.model.end
+          })
+        }
+        this.errors.remove('start')
+      },
+
+      /**
+       * Close client creation form.
+       */
+      cancelClientCreation () {
+        this.errors.clear('client-editor')
+        this.isCreatingClient = false
+      },
+
+      /**
        * Store new client on the backend.
        */
       saveNewClient () {
-        this.isSavingClient = true
-        this.clientsApi.create(this.newClient).then((response) => {
-          this.model.client = response.data
-          this.isSavingClient = false
-          this.isCreatingClient = false
+        this.$validator.validateAll('client-editor').then((result) => {
+          if (!result) {
+            return
+          }
+          this.isSavingClient = true
+          this.clientsApi.create(this.newClient).then((response) => {
+            this.model.client = response.data
+            this.isSavingClient = false
+            this.isCreatingClient = false
+          })
         })
+
       },
 
       /**

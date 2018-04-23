@@ -66,7 +66,15 @@ export function CfVueTimepicker(VueTimepicker) {
           }
           el.scrollTop = activeNode.offsetTop - 130 / 2 + 15
         }
-      }
+      },
+
+      /**
+       * Toggle timepicker dropdown
+       */
+      toggleDropdown () {
+        this.showDropdown = !this.showDropdown
+        this.$emit(this.showDropdown ? 'opened' : 'closed')
+      },
     }
   })
 }

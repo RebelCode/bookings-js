@@ -143,6 +143,9 @@ export function CfDatetimePicker (DatetimePicker, moment) {
       openDatepicker () {
         this.$refs.datepicker.$refs.dateInput.click()
       },
+      closeDatepicker () {
+        this.$refs.datepicker.close(true)
+      },
       datepickerOpened () {
         this.$refs.datepicker.$refs.dateInput.select()
       },
