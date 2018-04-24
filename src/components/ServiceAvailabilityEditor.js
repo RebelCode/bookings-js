@@ -46,6 +46,10 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         from: 'availabilityEditorStateToggleable'
       },
 
+      '_': {
+        from: 'translate'
+      },
+
       /**
        * Editing entity items collection. Used to remove editing
        * items from it when user confirm deletion.
@@ -164,11 +168,11 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       toTimeModel: helpers.makeTimeModel('toTime'),
 
       repeatingTitle () {
-        return this.pluralize(this.model.repeats, Number(this.model.repeatsEvery))
+        return this.pluralize(this._(this.model.repeats), Number(this.model.repeatsEvery))
       },
 
       repeatsEndsWeeksTitle () {
-        return this.pluralize('week', Number(this.model.repeatsEndsWeeks))
+        return this.pluralize(this._('week'), Number(this.model.repeatsEndsWeeks))
       },
 
       repeatingDuration () {
@@ -195,17 +199,17 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
         let repeatsOptions = {
           week: {
-            mon: 'M',
-            tue: 'T',
-            wed: 'W',
-            thu: 'T',
-            fri: 'F',
-            sat: 'S',
-            sun: 'S',
+            mon: this._('M'),
+            tue: this._('T'),
+            wed: this._('W'),
+            thu: this._('T'),
+            fri: this._('F'),
+            sat: 'S', // @todo: FIX IN ALPHA
+            sun: 'S', // @todo: FIX IN ALPHA
           },
           month: {
-            dom: start ? 'Montly on day ' + start.format('D') : '',
-            dow: start ? 'Montly on the ' + this.momentHelpers.weekdayInMonthNumber(start) + ' ' + start.format('dddd') : '',
+            dom: start ? this._('Monthly on day %s', [start.format('D')]) : '',
+            dow: start ? this._('Monthly on the %s %s', [this.momentHelpers.weekdayInMonthNumber(start), start.format('dddd')]) : '',
           }
         }
 

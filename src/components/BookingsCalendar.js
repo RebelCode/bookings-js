@@ -8,10 +8,10 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
    * @param event
    * @return {string}
    */
-  const renderEvent = function (event) {
-    const title = event.title || 'New booking'
+  const renderEvent = function (event, _) {
+    const title = event.title || _('New booking')
     const clientName = event.clientName || ''
-    const action = event.title ? 'Click for more details' : 'Release to create booking'
+    const action = event.title ? _('Click for more details') : _('Release to create booking')
 
     return `
       <div class="rc-event-field rc-event-field--title">${title}</div>
@@ -26,6 +26,9 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       'bookingStatusesColors': 'bookingStatusesColors',
       'helpers': {
         from: 'bookingHelpers'
+      },
+      '_': {
+        from: 'translate'
       },
     },
     data () {
@@ -53,11 +56,6 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           }
         },
       },
-      // defaultView: {
-      //   default () {
-      //     return 'agendaWeek'
-      //   },
-      // },
       config: {
         type: Object,
         default () {
@@ -193,7 +191,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
 
         element.find('.fc-content')
           .addClass(`rc-event`)
-          .html(renderEvent(event))
+          .html(renderEvent(event, this._))
       },
 
       /**

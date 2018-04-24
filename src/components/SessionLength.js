@@ -5,23 +5,26 @@ export default function CfSessionLength (Vue, Vuex) {
   const mapMutations = Vuex.mapMutations
 
   return Vue.extend({
-    inject: [
-      'repeater',
-      'humanizeDuration'
-    ],
+    inject: {
+      '_': {
+        from: 'translate'
+      },
+      'repeater': 'repeater',
+      'humanizeDuration': 'humanizeDuration'
+    },
     data () {
       return {
         timeUnits: [{
-          title: 'mins',
+          title: this._('mins'),
           seconds: 60,
         },{
-          title: 'hours',
+          title: this._('hours'),
           seconds: 60 * 60,
         }, {
-          title: 'days',
+          title: this._('days'),
           seconds: 60 * 60 * 24,
         }, {
-          title: 'weeks',
+          title: this._('weeks'),
           seconds: 60 * 60 * 24 * 7,
         }],
 

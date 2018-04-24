@@ -6,6 +6,12 @@ export default function CfBoolSwitcher (Switcher) {
   return Switcher.extend({
     template: '#bool-switcher-template',
 
+    inject: {
+      '_': {
+        from: 'translate'
+      }
+    },
+
     props: {
       danger: {
         default: false
@@ -17,8 +23,8 @@ export default function CfBoolSwitcher (Switcher) {
         type: Object,
         default () {
           return {
-            yes: 'Yes',
-            no: 'No'
+            yes: this._('Yes'),
+            no: this._('No')
           }
         }
       }

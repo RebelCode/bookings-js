@@ -4,6 +4,9 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
       'list-table': {
         from: 'wpListTable'
       },
+      '_': {
+        from: 'translate'
+      },
     },
 
     data () {
@@ -16,26 +19,26 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
         actions: [
           {
             key: 'edit',
-            label: 'Edit / View Booking'
+            label: this._('Edit / View Booking')
           },
           {
             key: 'trash',
-            label: 'Delete Permanently'
+            label: this._('Delete Permanently')
           }
         ],
 
         columns: {
           'date': {
-            label: 'Booking date and time',
+            label: this._('Booking date and time'),
           },
           'client': {
-            label: 'Client Name'
+            label: this._('Client Name')
           },
           'service': {
-            label: 'Service'
+            label: this._('Service')
           },
           'status': {
-            label: 'Booking Status'
+            label: this._('Booking Status')
           }
         },
       }

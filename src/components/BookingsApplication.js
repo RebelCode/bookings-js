@@ -11,6 +11,10 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       'tabs': 'tabs',
       'tab': 'tab',
 
+      '_': {
+        from: 'translate'
+      },
+
       'api': {
         from: 'bookingsApi'
       },
@@ -39,25 +43,25 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         statuses: [
           {
             key: 'in-cart',
-            value: 'In Cart'
+            value: this._('In Cart')
           }, {
             key: 'approved',
-            value: 'Approved'
+            value: this._('Approved')
           }, {
             key: 'completed',
-            value: 'Completed'
+            value: this._('Completed')
           }, {
             key: 'scheduled',
-            value: 'Scheduled'
+            value: this._('Scheduled')
           }, {
             key: 'pending',
-            value: 'Pending'
+            value: this._('Pending')
           }, {
             key: 'draft',
-            value: 'Draft'
+            value: this._('Draft')
           }, {
             key: 'cancelled',
-            value: 'Cancelled'
+            value: this._('Cancelled')
           }
         ],
 
@@ -165,7 +169,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
        */
       deleteBooking (booking, askConfirmation = false) {
         if (askConfirmation) {
-          if (confirm('Are you sure you want to delete this booking? There is no undo option.')) {
+          if (confirm(this._('Are you sure you want to delete this booking? There is no undo option.'))) {
             this._deleteBooking(booking)
           }
         }

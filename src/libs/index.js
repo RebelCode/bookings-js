@@ -47,6 +47,16 @@ export default function (dependencies) {
     },
     pluralize: function () {
       return dependencies.pluralize
+    },
+    translator: function () {
+      return new dependencies.uiFramework.I18n.FormatTranslator(
+        dependencies.textFormatter.vsprintf
+      )
+    },
+    translate: function (container) {
+      return function (format, params) {
+        return container.translator.translate(format, params)
+      }
     }
   }
 }
