@@ -86,8 +86,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           repeatsEvery: 2,
           repeatsOn: [],
 
-          repeatsEnds: 'afterWeeks',
-          repeatsEndsWeeks: null,
+          repeatsEnds: 'afterPeriod',
+          repeatsEndsPeriod: null,
           repeatsEndsDate: null,
 
           excludesDates: []
@@ -171,8 +171,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         return this.pluralize(this._(this.model.repeats), Number(this.model.repeatsEvery))
       },
 
-      repeatsEndsWeeksTitle () {
-        return this.pluralize(this._('week'), Number(this.model.repeatsEndsWeeks))
+      repeatsEndsTitle () {
+        return this.pluralize(this._(this.model.repeats), Number(this.model.repeatsEndsPeriod))
       },
 
       repeatingDuration () {

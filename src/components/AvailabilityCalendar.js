@@ -239,8 +239,8 @@ export default function (FullCalendar, moment) {
         if (availability.repeats === 'never') {
           return false
         }
-        if (availability.repeatsEnds === 'afterWeeks') {
-          return moment(fromDate).add(availability.repeatsEndsWeeks, 'week').isBefore(day)
+        if (availability.repeatsEnds === 'afterPeriod') {
+          return moment(fromDate).add(availability.repeatsEndsPeriod, availability.repeats).isBefore(day)
         }
         else if (availability.repeatsEnds === 'onDate') {
           return moment(availability.repeatsEndsDate, 'YYYY-MM-DD').isBefore(day)
