@@ -13,9 +13,12 @@ import { FunctionalCollection } from '@rebelcode/std-lib/src/FunctionalCollectio
 export function CfBookingsFilter ({ mapState, mapMutations }) {
   return {
     template: "#bookings-filter-template",
-    inject: [
-      'selection-list'
-    ],
+    inject: {
+      'selection-list': 'selection-list',
+      '_': {
+        from: 'translate'
+      },
+    },
     props: {
       searchString: {},
       status: {}
@@ -23,7 +26,15 @@ export function CfBookingsFilter ({ mapState, mapMutations }) {
     data () {
       return {
         items: new FunctionalCollection(() => {
-          return this.statuses
+          let resultStatuses = {}
+          Object.keys(this.statuses).map(key => {
+            resultStatuses[key] = {
+              id: key,
+              title: this.appStatuses[key] || this._('All'),
+              count: this.statuses[key]
+            }
+          })
+          return resultStatuses
         }, (statuses) => {
           this.setBookingsStatuses(statuses)
         }, (status) => {
@@ -32,6 +43,9 @@ export function CfBookingsFilter ({ mapState, mapMutations }) {
       }
     },
     computed: {
+      ...mapState({
+        appStatuses: state => state.app.statuses
+      }),
       ...mapState('bookings', [
         'bookingsCount',
         'statuses'

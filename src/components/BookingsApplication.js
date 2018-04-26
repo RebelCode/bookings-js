@@ -40,31 +40,6 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         
         selectedStatuses: [],
 
-        statuses: [
-          {
-            key: 'in-cart',
-            value: this._('In Cart')
-          }, {
-            key: 'approved',
-            value: this._('Approved')
-          }, {
-            key: 'completed',
-            value: this._('Completed')
-          }, {
-            key: 'scheduled',
-            value: this._('Scheduled')
-          }, {
-            key: 'pending',
-            value: this._('Pending')
-          }, {
-            key: 'draft',
-            value: this._('Draft')
-          }, {
-            key: 'cancelled',
-            value: this._('Cancelled')
-          }
-        ],
-
         statusesCollection: new FunctionalArrayCollection(() => {
           return this.statuses
         }, (newValue) => {}, (item) => {
@@ -74,6 +49,15 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
     },
     computed: {
       ...mapState({
+        statuses (state) {
+          return Object.keys(state.app.statuses).map(key => {
+            return {
+              key,
+              value: state.app.statuses[key]
+            }
+          })
+        },
+
         screenStatuses: state => state.app.screenStatuses,
       }),
       ...mapState('ui', {

@@ -1,5 +1,3 @@
-import applicationFactory from './Application'
-
 import CfSessionLength from './SessionLength'
 import CfModal from './Modal'
 import CfAbstractEntityModalEditor from './AbstractEntityModalEditor'
@@ -26,9 +24,6 @@ import { CfAbstractBookingsView } from './AbstractBookingsView'
  */
 export default function (dependencies) {
   return {
-    app: function (container) {
-      return applicationFactory(container['APP_STATE'], container.store, container.vuex)
-    },
     'service-bookings-application': function (container) {
       return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
     },
@@ -45,11 +40,9 @@ export default function (dependencies) {
       return CfRcSelect(container.vue.extend(dependencies.vueselect.VueSelect))
     },
     'availability-calendar': function (container) {
-      // return {}
       return CfAvailabilityCalendar(container.calendar, container.moment)
     },
     'bookings-calendar': function (container) {
-      // return {}
       return CfBookingsCalendar(container.calendar, container.vuex, container.moment)
     },
     repeater: function (container) {

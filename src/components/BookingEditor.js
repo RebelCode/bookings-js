@@ -208,8 +208,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       saveBooking () {
         let model = Object.assign({}, this.model)
 
+        model['resource'] = '0'
+
         if (model['newStatus']) {
-          model.status = model['newStatus']
+          model['transition'] = model['newStatus']
           delete model['newStatus']
         }
 
@@ -257,7 +259,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
       _searchClients: debounce((loading, search, vm) => {
         vm.clientsApi.fetch({search}).then((response) => {
-          vm.foundClients = response.data
+          vm.foundClients = response.data.items
           vm.isClientsLoading = false
           loading(false)
         })
