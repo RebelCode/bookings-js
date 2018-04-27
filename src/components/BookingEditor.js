@@ -208,7 +208,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       saveBooking () {
         let model = Object.assign({}, this.model)
 
-        model['resource'] = '0'
+        if (model['service']) {
+          model['service'] = model['service'].id
+          model['resource'] = model['service']
+        }
 
         if (model['newStatus']) {
           model['transition'] = model['newStatus']

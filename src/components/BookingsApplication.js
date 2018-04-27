@@ -124,8 +124,10 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         /*
          * Screen statuses to load
          */
-        params['screenStatuses'] = this.screenStatuses
         params['status'] = params['status'] || 'all'
+        if (params['status'] === 'all') {
+          params['status'] = this.screenStatuses.join(',')
+        }
 
         this.setBookingsIsLoading(true)
         this.fetchBookings({ api: this.api, params }).then(() => {

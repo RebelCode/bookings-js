@@ -27,12 +27,21 @@ export function CfBookingsFilter ({ mapState, mapMutations }) {
       return {
         items: new FunctionalCollection(() => {
           let resultStatuses = {}
-          Object.keys(this.statuses).map(key => {
+          let selectedStatuses = 'all'
+          resultStatuses[selectedStatuses] = {
+            id: selectedStatuses,
+            title: this._('All'),
+            count: 0
+          }
+          Object.keys(this.statuses).filter(key => {
+            return !!this.appStatuses[key] && this.screenStatuses.indexOf(key) !== -1
+          }).map(key => {
             resultStatuses[key] = {
               id: key,
-              title: this.appStatuses[key] || this._('All'),
+              title: this.appStatuses[key],
               count: this.statuses[key]
             }
+            resultStatuses[selectedStatuses].count += Number(this.statuses[key])
           })
           return resultStatuses
         }, (statuses) => {
@@ -44,7 +53,8 @@ export function CfBookingsFilter ({ mapState, mapMutations }) {
     },
     computed: {
       ...mapState({
-        appStatuses: state => state.app.statuses
+        appStatuses: state => state.app.statuses,
+        screenStatuses: state => state.app.screenStatuses
       }),
       ...mapState('bookings', [
         'bookingsCount',
