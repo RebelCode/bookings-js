@@ -13,6 +13,8 @@ const state = {
 
     bookings: [],
 
+    statusesEndpoint: '',
+
     statuses: {},
     screenStatuses: []
   },

@@ -11,6 +11,8 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       'tabs': 'tabs',
       'tab': 'tab',
 
+      'httpClient': 'httpClient',
+
       '_': {
         from: 'translate'
       },
@@ -40,6 +42,8 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         
         selectedStatuses: [],
 
+        isStatusesSaving: false,
+
         statusesCollection: new FunctionalArrayCollection(() => {
           return this.statuses
         }, (newValue) => {}, (item) => {
@@ -59,6 +63,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         },
 
         screenStatuses: state => state.app.screenStatuses,
+        statusesEndpoint: state => state.app.statusesEndpoint,
       }),
       ...mapState('ui', {
         isLoading: state => state.bookings.isLoading,
@@ -111,8 +116,15 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       },
 
       setScreenStatuses (statuses) {
-        this.$store.commit('setScreenStatuses', statuses)
-        this.fetch()
+        this.isStatusesSaving = true
+        this.httpClient.post(this.statusesEndpoint, { statuses })
+          .then(() => {
+            this.$store.commit('setScreenStatuses', statuses)
+            this.fetch()
+          })
+          .finally(() => {
+            this.isStatusesSaving = false
+          })
       },
 
       fetch (params = false) {
