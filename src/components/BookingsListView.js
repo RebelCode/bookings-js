@@ -1,6 +1,7 @@
 export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutations, mapActions }, moment) {
   return AbstractBookingsView.extend({
     inject: {
+      'isMobile': 'isMobile',
       'list-table': {
         from: 'wpListTable'
       },
@@ -29,7 +30,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
 
         columns: {
           'date': {
-            label: this._('Booking date and time'),
+            label: this._(this.isMobile () ? 'Booking details' : 'Booking date and time'),
           },
           'client': {
             label: this._('Client Name')

@@ -1,5 +1,6 @@
 import { momentHelpers } from './moment-helpers'
 import { bookingHelpers } from './booking-helpers'
+import { isMobile } from './is-mobile'
 
 export default function (dependencies) {
   return {
@@ -57,6 +58,9 @@ export default function (dependencies) {
       return function (format, params) {
         return container.translator.translate(format, params)
       }
+    },
+    isMobile: function () {
+      return isMobile
     }
   }
 }
