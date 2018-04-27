@@ -36,6 +36,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
     },
     computed: {
       ...mapState({
+        sessions: state => state.app.sessions,
         availabilities: state => state.app.availabilities
       }),
 
@@ -50,6 +51,16 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
             value
           })
         }
+      },
+
+      bookingOptionsFormData () {
+        return JSON.stringify({
+          availabilities: this.availabilities,
+          sessions: this.sessions,
+          displayOptions: {
+            useCustomerTimezone: this.useCustomerTimezone
+          },
+        })
       }
     },
     mounted () {

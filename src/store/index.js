@@ -34,7 +34,9 @@ const mutations = {
   },
 
   setDisplayOptions (state, payload) {
-    state.app.displayOptions[payload.key] = payload.value
+    let updatedOption = {}
+    updatedOption[payload.key] = payload.value
+    state.app.displayOptions = Object.assign({}, state.app.displayOptions, updatedOption)
   },
 
   setNewBookings (state, bookings) {
