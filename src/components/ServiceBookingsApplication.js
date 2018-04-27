@@ -56,7 +56,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       bookingOptionsFormData () {
         return JSON.stringify({
           availabilities: this.availabilities,
-          sessions: this.sessions,
+          sessionLengths: this.sessions,
           displayOptions: {
             useCustomerTimezone: this.useCustomerTimezone
           },

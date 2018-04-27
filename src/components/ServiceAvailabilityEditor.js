@@ -31,7 +31,9 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         },
 
         set (value) {
-          this.model[key] = value.HH + ':' + value.mm + ':00'
+          if (value.HH && value.mm) {
+            this.model[key] = value.HH + ':' + value.mm + ':00'
+          }
         }
       }
     },
