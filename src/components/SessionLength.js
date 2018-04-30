@@ -74,7 +74,9 @@ export default function CfSessionLength (Vue, Vuex) {
     },
     computed: {
       ...mapState({
-        storeSessions: state => state.app.sessions
+        storeSessions: state => state.app.sessions.sort((a, b) => {
+          return a.sessionLength - b.sessionLength
+        })
       })
     },
     methods: {
