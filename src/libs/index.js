@@ -18,7 +18,14 @@ export default function (dependencies) {
        */
       Vue.use(dependencies.timepicker)
       Vue.use(dependencies.validate, {
-        events: ''
+        events: '',
+        dictionary: {
+          en: {
+            messages: {
+              after: (field, [target, inclusion]) => `The ${field} time must be after${inclusion ? ' or equal to' : ''} the ${target} time.`,
+            }
+          }
+        }
       })
       return Vue
     },

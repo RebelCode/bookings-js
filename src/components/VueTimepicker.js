@@ -55,8 +55,13 @@ export function CfVueTimepicker(VueTimepicker) {
         const scrollLists = [
           'hours', 'minutes', 'seconds', 'apms'
         ]
+        const scrollHolder = this.$el.querySelector(`.select-list`)
+        if (!scrollHolder) {
+          return
+        }
+        const holderHeight = scrollHolder.getBoundingClientRect().height
         for (let listClass of scrollLists) {
-          const el = this.$el.querySelector(`.select-list .${listClass}`)
+          const el = scrollHolder.querySelector(`.${listClass}`)
           if (!el) {
             continue
           }
@@ -64,7 +69,7 @@ export function CfVueTimepicker(VueTimepicker) {
           if (!activeNode) {
             continue
           }
-          el.scrollTop = activeNode.offsetTop - 130 / 2 + 15
+          el.scrollTop = activeNode.offsetTop - holderHeight / 2 + 15
         }
       },
 
