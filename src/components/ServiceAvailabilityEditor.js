@@ -11,32 +11,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     getDate (date) {
       const parts = date.split("-");
       return new Date(parts[0], parts[1] - 1, parts[2])
-    },
-
-    /**
-     * Make computed time model
-     *
-     * @param obj
-     * @param key
-     * @return {*}
-     */
-    makeTimeModel (key) {
-      return {
-        get () {
-          if (!this.model[key]) {
-            return {HH: null, mm: null}
-          }
-          let parts = this.model[key].split(':')
-          return {HH: parts[0], mm: parts[1]}
-        },
-
-        set (value) {
-          if (value.HH && value.mm) {
-            this.model[key] = value.HH + ':' + value.mm + ':00'
-          }
-        }
-      }
-    },
+    }
   }
 
   return AbstractEntityModalEditor.extend({
@@ -65,6 +40,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       modal: 'modal',
       repeater: 'repeater',
       datepicker: 'datepicker',
+      'datetime-picker': 'datetime-picker',
       'time-picker': 'time-picker',
 
       'selection-list': 'selection-list'
@@ -74,23 +50,20 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         model: {
           id: null,
 
-          /**
-           * @var {string|null}
-           */
-          fromDate: null,
-
-          fromTime: null,
-          toTime: null,
+          start: null,
+          end: null,
 
           isAllDay: false,
 
-          repeats: 'never',
-          repeatsEvery: 2,
-          repeatsOn: [],
+          repeat: false,
+          repeatPeriod: 1,
+          repeatUnit: 'days', // | "weeks" | "months" | "years"
+          repeatUntil: 'period', // | "date"
+          repeatUntilPeriod: 4,
+          repeatUntilDate: null,
 
-          repeatsEnds: 'afterPeriod',
-          repeatsEndsPeriod: null,
-          repeatsEndsDate: null,
+          repeatWeeklyOn: [],
+          repeatMonthlyOn: [], // "day_of_week" | "date_of_month"
 
           excludesDates: []
         },
@@ -116,19 +89,35 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       /**
        * Change default values when repeats changes.
        */
-      'model.repeats': function (newValue) {
+      'model.repeatUnit': function (newValue) {
         if (this.seedLock) return
 
-        this.model.repeatsEvery = 1
+        this.model.repeatPeriod = 1
 
         switch (newValue) {
-          case 'month':
-            this.model.repeatsOn = [ 'dom' ]
+          case 'months':
+            this.model.repeatWeeklyOn = []
+            this.model.repeatMonthlyOn = [ 'day_of_month' ]
             break
           default:
-            this.model.repeatsOn = []
+            this.model.repeatWeeklyOn = []
+            this.model.repeatMonthlyOn = []
         }
-      }
+      },
+
+      /**
+       * Preserve at least one selected day when selected weeks repeating.
+       */
+      'model.repeatWeeklyOn': {
+        deep: true,
+        handler: function (newValue) {
+          if (this.seedLock || !this.model.start || !this.isSameDay() || newValue.length) return
+
+          this.model.repeatWeeklyOn = [
+            moment(this.model.start).format('dddd').toLowerCase()
+          ]
+        }
+      },
     },
     computed: {
       ...mapState('bookingOptions', {
@@ -163,29 +152,26 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
        * @return {Date}
        */
       availabilityStart () {
-        return moment(this.model.fromDate).toDate()
+        return moment(this.model.start).toDate()
       },
-
-      fromTimeModel: helpers.makeTimeModel('fromTime'),
-      toTimeModel: helpers.makeTimeModel('toTime'),
 
       repeatingTitle () {
-        return this.pluralize(this._(this.model.repeats), Number(this.model.repeatsEvery))
+        return this.pluralize(this._(this.model.repeatUnit), Number(this.model.repeatPeriod))
       },
 
-      repeatsEndsTitle () {
-        return this.pluralize(this._(this.model.repeats), Number(this.model.repeatsEndsPeriod))
+      repeatsUntilPeriodTitle () {
+        return this.pluralize(this._(this.model.repeatUnit), Number(this.model.repeatUntilPeriod))
       },
 
       repeatingDuration () {
-        switch (this.model.repeats) {
-          case 'day':
+        switch (this.model.repeatUnit) {
+          case 'days':
             return 31
-          case 'week':
-            return 51
-          case 'month':
+          case 'weeks':
+            return 52
+          case 'months':
             return 12
-          case 'year':
+          case 'years':
             return 5
           default:
             return 31
@@ -193,25 +179,25 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
 
       repeatsOn () {
-        if (this.model.repeats !== 'week' && this.model.repeats !== 'month') {
+        if (this.model.repeatUnit !== 'weeks' && this.model.repeatUnit !== 'months') {
           return []
         }
 
-        let start = moment(this.model.fromDate)
+        let start = moment(this.model.start)
 
         let repeatsOptions = {
-          week: {
-            mon: this._('M'),
-            tue: this._('T'),
-            wed: this._('W'),
-            thu: this._('T'),
-            fri: this._('F'),
-            sat: 'S', // @todo: FIX IN ALPHA
-            sun: 'S', // @todo: FIX IN ALPHA
+          weeks: {
+            monday: this._('M'),
+            tuesday: this._('T'),
+            wednesday: this._('W'),
+            thursday: this._('T'),
+            friday: this._('F'),
+            saturday: 'S', // @todo: FIX IN ALPHA
+            sunday: 'S', // @todo: FIX IN ALPHA
           },
-          month: {
-            dom: start ? this._('Monthly on day %s', [start.format('D')]) : '',
-            dow: start ? this._('Monthly on the %s %s', [this.momentHelpers.weekdayInMonthNumber(start), start.format('dddd')]) : '',
+          months: {
+            day_of_month: start ? this._('Monthly on day %s', [start.format('D')]) : '',
+            day_of_week: start ? this._('Monthly on the %s %s', [this.momentHelpers.weekdayInMonthNumber(start), start.format('dddd')]) : '',
           }
         }
 
@@ -224,7 +210,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           })
         }
 
-        return makeKeyValueArray(repeatsOptions[this.model.repeats])
+        return makeKeyValueArray(repeatsOptions[this.model.repeatUnit])
       }
     },
     methods: {
@@ -234,6 +220,18 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
       _getExclusionItemTitle (date) {
         return helpers.getDate(date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+      },
+
+      /**
+       * Check that availability start is on the same day.
+       *
+       * @return {boolean}
+       */
+      isSameDay () {
+        if (!this.model.start || !this.model.end) {
+          return false
+        }
+        return moment(this.model.start).isSame(this.model.end, 'day')
       },
 
       /**
@@ -262,6 +260,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       repeater: 'repeater',
       modal: 'modal',
       datepicker: 'datepicker',
+      'datetime-picker': 'datetime-picker',
       'time-picker': 'time-picker',
       'selection-list': 'selection-list'
     }

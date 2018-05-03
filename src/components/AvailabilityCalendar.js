@@ -10,7 +10,7 @@
  * @return {*}
  */
 export default function (FullCalendar, moment) {
-  const timeFormat = 'HH:mm:ss'
+  const datetimeFormat = 'YYYY-MM-DD HH:mm:ss'
 
   return FullCalendar.extend({
     inject: [
@@ -154,7 +154,13 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       availabilityFitsInDay (availability, day) {
-        let fromDate = moment(availability.fromDate, 'YYYY-MM-DD')
+        let fromDate = moment(availability.start, 'YYYY-MM-DD HH:mm:ss')
+        fromDate.set({
+          hour: 0,
+          minute: 0,
+        })
+
+        console.info('fits in day', fromDate.format('YYYY-MM-DD HH:mm:ss'), day.format('YYYY-MM-DD HH:mm:ss'))
 
         const availabilityShouldntBeRendered = fromDate.isAfter(day, 'day')
           || this.availabilityEnded(availability, fromDate, day)
@@ -196,32 +202,33 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       availabilityIsOnDay (availability, fromDate, day) {
-        let diff = availability.repeats
-        const metRecurringPeriod = fromDate.diff(day, diff) % availability.repeatsEvery === 0
+        let diff = availability.repeatUnit
+        const metRecurringPeriod = fromDate.diff(day, diff) % availability.repeatPeriod === 0
         if (!metRecurringPeriod) return false
+
+        if (!availability.repeat) {
+          return fromDate.isSame(day, 'day')
+        }
 
         const vm = this
 
         const repeatingRules = {
-          never () {
-            return fromDate.isSame(day, 'day')
-          },
-          day () {
+          days () {
             return true
           },
-          week () {
-            return availability.repeatsOn.indexOf(day.format('ddd').toLowerCase()) > -1
+          weeks () {
+            return availability.repeatWeeklyOn.indexOf(day.format('dddd').toLowerCase()) > -1
           },
-          month () {
-            let mode = availability.repeatsOn[0]
-            return mode === 'dow' ? vm.momentHelpers.weekdayOfMonthIsSame(fromDate, day) : fromDate.format('D') === day.format('D')
+          months () {
+            let mode = availability.repeatMonthlyOn[0]
+            return mode === 'day_of_week' ? vm.momentHelpers.weekdayOfMonthIsSame(fromDate, day) : fromDate.format('D') === day.format('D')
           },
-          year () {
+          years () {
             return fromDate.format('DD/MM') === day.format('DD/MM')
           }
         }
 
-        return repeatingRules[availability.repeats] ? repeatingRules[availability.repeats]() : false
+        return repeatingRules[availability.repeatUnit] ? repeatingRules[availability.repeatUnit]() : false
       },
 
       /**
@@ -236,14 +243,14 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       availabilityEnded (availability, fromDate, day) {
-        if (availability.repeats === 'never') {
+        if (!availability.repeat) {
           return false
         }
-        if (availability.repeatsEnds === 'afterPeriod') {
-          return moment(fromDate).add(availability.repeatsEndsPeriod, availability.repeats).isBefore(day)
+        if (availability.repeatUntil === 'period') {
+          return moment(fromDate).add(availability.repeatUntilPeriod, availability.repeatUnit).isBefore(day)
         }
-        else if (availability.repeatsEnds === 'onDate') {
-          return moment(availability.repeatsEndsDate, 'YYYY-MM-DD').isBefore(day)
+        else if (availability.repeatUntil === 'date') {
+          return moment(availability.repeatUntilDate, 'YYYY-MM-DD').isBefore(day)
         }
         return false
       },
@@ -259,16 +266,19 @@ export default function (FullCalendar, moment) {
       availabilityToEvent (availability, day) {
         let model = Object.assign({}, availability)
 
+        let availabilityDuration = moment(availability.end).diff(moment(availability.start), 'seconds'),
+          availabilityStartTime = moment(availability.start).format('HH:mm:ss')
+
+        let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
+          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
+
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
-          model
-        }, !model.isAllDay ? {
-          start: day.format('YYYY-MM-DD') + 'T' + model.fromTime,
-          end: day.format('YYYY-MM-DD') + 'T' + model.toTime,
+          start: eventStart,
+          end: eventEnd,
           allDay: model.isAllDay,
-        } : {
-          start: day.format('YYYY-MM-DD'),
+          model
         })
       },
 
@@ -288,16 +298,10 @@ export default function (FullCalendar, moment) {
           let {start, end, allDay} = params
 
           event = Object.assign({}, event, {
-            fromDate: start.format(),
+            start: start.format(datetimeFormat),
+            end: end.format(datetimeFormat),
             isAllDay: allDay,
           })
-
-          if (!allDay) {
-            event = Object.assign({}, event, {
-              fromTime: start.format(timeFormat),
-              toTime: end.format(timeFormat)
-            })
-          }
         }
 
         this.$emit('availability-click', event)

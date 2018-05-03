@@ -7,6 +7,14 @@ export function CfVueTimepicker(VueTimepicker) {
        */
       disabledTo: {
         type: Object
+      },
+
+      /**
+       * Is time field is disabled
+       */
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
     watch: {
@@ -16,6 +24,14 @@ export function CfVueTimepicker(VueTimepicker) {
             this._scrollToSelected()
           })
         }
+      },
+      disabled (value) {
+        if (!value) {
+          return
+        }
+        this.hour = ''
+        this.minute = ''
+        this.amp = ''
       }
     },
     computed: {

@@ -27,6 +27,14 @@ export function CfDatetimePicker (DatetimePicker, moment) {
        */
       disabledBefore: {
         default: false
+      },
+
+      /**
+       * Is time part of input is disabled.
+       */
+      timeDisabled: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -35,7 +43,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
        */
       timeValue: {
         get () {
-          if (!this.value) return null
+          if (!this.value || this.timeDisabled) return null
 
           const datetime = moment(this.value)
           return {
@@ -150,6 +158,9 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         this.$refs.datepicker.$refs.dateInput.select()
       },
       dateSelected () {
+        if (this.timeDisabled) {
+          return
+        }
         this.$refs.timepicker.toggleDropdown()
         this.$refs.timepicker.$el.querySelector('input').select()
       }
