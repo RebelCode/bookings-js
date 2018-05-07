@@ -21,7 +21,8 @@ export default function (FullCalendar, moment) {
       return {
         rangeStart: null,
         rangeEnd: null,
-        generatedAvailabilities: []
+        generatedAvailabilities: [],
+        availabilitiesDurationsCache: {}
       }
     },
     props: {
@@ -172,7 +173,7 @@ export default function (FullCalendar, moment) {
           if (!startDay) {
             return false
           }
-          return this.availabilityToEvent(availability, startDay, 'wheat')
+          return this.availabilityToEvent(availability, startDay, /*'wheat'*/)
         }).filter(availability => {
           return availability !== false
         })
@@ -229,7 +230,7 @@ export default function (FullCalendar, moment) {
             day
           )
         }).map((item) => {
-          return this.availabilityToEvent(item, moment(day).subtract(this.getAvailabilityDuration(item), 'seconds'), 'red')
+          return this.availabilityToEvent(item, moment(day).subtract(this.getAvailabilityDuration(item), 'seconds'), /*'red'*/)
         }))
       },
 
@@ -245,6 +246,7 @@ export default function (FullCalendar, moment) {
         fromDate.set({
           hour: 0,
           minute: 0,
+          second: 0
         })
 
         const availabilityShouldntBeRendered = fromDate.isAfter(day, 'day')
@@ -310,19 +312,38 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       getAvailabilityDuration (availability) {
-        if (!availability._duration) {
-          availability._duration = Math.abs(moment(availability.start).diff(moment(availability.end), 'seconds'))
-        }
-        return availability._duration
+        return this.getCachedAvailabilityDuration(availability, 'seconds', item => {
+          return Math.abs(moment(item.start).diff(moment(item.end), 'seconds'))
+        })
       },
 
+      /**
+       * Availability duration in days
+       *
+       * @param availability
+       * @return {number}
+       */
       getAvailabilityDaysDuration (availability) {
-        if (!availability._daysDuration) {
-          let start = moment(availability.start).startOf('day')
-          let end = moment(availability.end).endOf('day').add(1, 'second')
-          availability._daysDuration = Math.abs(start.diff(end, 'days'))
+        return this.getCachedAvailabilityDuration(availability, 'days', item => {
+          let start = moment(item.start).startOf('day')
+          let end = moment(item.end).endOf('day').add(1, 'second')
+          return Math.abs(start.diff(end, 'days'))
+        })
+      },
+
+      /**
+       * Cache and get availability duration value
+       *
+       * @param availability
+       * @param cb
+       * @return {*}
+       */
+      getCachedAvailabilityDuration (availability, key, cb) {
+        let durationKey = availability.id + key + availability.start + availability.end
+        if (!this.availabilitiesDurationsCache[durationKey]) {
+          this.availabilitiesDurationsCache[durationKey] = cb(availability)
         }
-        return availability._daysDuration
+        return this.availabilitiesDurationsCache[durationKey]
       },
 
       /**
@@ -354,19 +375,14 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       checkingDateIsOnDay (availability, checkingDate, day, log = false) {
-        let logString = ''
-
-        let diff = availability.repeatUnit
-        const metRecurringPeriod = checkingDate.diff(day, diff) % availability.repeatPeriod === 0
-        if (!metRecurringPeriod) {
-          return false
-        }
-        if (log) {
-          console.info('metRecurringPeriod TRUE; checkingDate: ' + checkingDate.format('YYYY-MM-DD HH:mm:ss'), '; currentDay: ' + day.format('YYYY-MM-DD HH:mm:ss'), checkingDate.diff(day, diff), diff)
-        }
-
         if (!availability.repeat) {
           return checkingDate.isSame(day, 'day')
+        }
+
+        const unitDiff = availability.repeatUnit
+        const repeatUnitDiff = Math.abs(checkingDate.diff(day, unitDiff))
+        if (repeatUnitDiff % availability.repeatPeriod !== 0) {
+          return false
         }
 
         const vm = this
@@ -375,6 +391,10 @@ export default function (FullCalendar, moment) {
             return true
           },
           weeks () {
+            if (!vm.isAvailabilityOnTheSameDay(availability)) {
+              const render = moment(availability.start).add(repeatUnitDiff, unitDiff).isSame(day, 'day')
+              return render
+            }
             return availability.repeatWeeklyOn.indexOf(day.format('dddd').toLowerCase()) > -1
           },
           months () {
@@ -387,6 +407,10 @@ export default function (FullCalendar, moment) {
         }
 
         return repeatingRules[availability.repeatUnit] ? repeatingRules[availability.repeatUnit]() : false
+      },
+
+      isAvailabilityOnTheSameDay (availability) {
+        return moment(availability.start).isSame(moment(availability.end), 'day')
       },
 
       /**
@@ -407,9 +431,13 @@ export default function (FullCalendar, moment) {
         fromDate.set({
           hour: 0,
           minute: 0,
+          second: 0
         })
         if (availability.repeatUntil === 'period') {
-          return moment(fromDate).add(availability.repeatUntilPeriod, availability.repeatUnit).isBefore(day)
+          return moment(fromDate)
+            .startOf(availability.repeatUnit)
+            .add(availability.repeatUntilPeriod, availability.repeatUnit)
+            .isBefore(day, availability.repeatUntilPeriod)
         }
         else if (availability.repeatUntil === 'date') {
           return moment(availability.repeatUntilDate, 'YYYY-MM-DD').isBefore(day)
