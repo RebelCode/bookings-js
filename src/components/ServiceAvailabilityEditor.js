@@ -87,6 +87,16 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     },
     watch: {
       /**
+       * Set end time when user it is empty and user set start time
+       *
+       * @param newValue
+       */
+      'model.start': function (newValue) {
+        if (!this.model.end) {
+          this.model.end = newValue
+        }
+      },
+      /**
        * Change default values when repeats changes.
        */
       'model.repeatUnit': function (newValue) {
@@ -123,6 +133,16 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       ...mapState('bookingOptions', {
         entityModel: state => state.serviceAvailabilityModel
       }),
+
+      /**
+       * Minimal possible repeating period
+       */
+      minimalRepeatPeriod () {
+        if (!this.model.start || !this.model.end) {
+          return 1
+        }
+        return moment(this.model.end).diff(moment(this.model.start), this.model.repeatUnit) + 1
+      },
 
       excludesDatesModels () {
         let dates = this.model.excludesDates.map((date) => {
@@ -220,6 +240,21 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
       _getExclusionItemTitle (date) {
         return helpers.getDate(date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+      },
+
+      normalizeRepeatPeriod () {
+        if (!this.model.start || !this.model.end) {
+          return
+        }
+
+        if (this.model.repeatPeriod < this.minimalRepeatPeriod) {
+          this.model.repeatPeriod = this.minimalRepeatPeriod
+          return
+        }
+
+        if (this.model.repeatPeriod > this.repeatingDuration) {
+          this.model.repeatPeriod = this.repeatingDuration
+        }
       },
 
       /**
