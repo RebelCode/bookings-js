@@ -129,21 +129,108 @@ export default function (FullCalendar, moment) {
             this.getAvailabilitiesForDay(moment(m))
           )
         }
+        repeatedAvailabilities = repeatedAvailabilities.concat(
+          this.getOutOfViewAvailabilities(repeatedAvailabilities)
+        )
 
         this.generatedAvailabilities = repeatedAvailabilities
       },
 
       /**
-       * Get availabilities in form of events for the given day.
+       * Get all availabilities that is out of current view.
+       *
+       * For example, we have week view (7 days) and availability with 9 days duration (viewDays + 2).
+       *
+       * There is possible case when availability can start before view and end out of view. This method
+       * is finding this availabilities.
+       *
+       * @return {Array}
+       */
+      getOutOfViewAvailabilities (repeatedAvailabilities) {
+        const currentViewLength = Math.abs(this.rangeStart.diff(this.rangeEnd, 'day'))
+
+        const longAvailabilities = this.availabilities.filter(availability => {
+          /*
+           * Filter 1: Select ONLY long availabilities
+           */
+          let availabilityDurationInDays = this.getAvailabilityDaysDuration(availability)
+          return availabilityDurationInDays - currentViewLength >= 2
+        }).filter(availability => {
+          /*
+           * Filter 2: Select only availabilities that is NOT rendered for now
+           */
+          for (let availabilityEvent of repeatedAvailabilities) {
+            if (availability.id === availabilityEvent.id) {
+              return false
+            }
+          }
+          return true
+        })
+
+        return longAvailabilities.map(availability => {
+          const startDay = this.findOutOfRangeAvailabilityStartDay(availability, currentViewLength)
+          if (!startDay) {
+            return false
+          }
+          return this.availabilityToEvent(availability, startDay, 'wheat')
+        }).filter(availability => {
+          return availability !== false
+        })
+      },
+
+      /**
+       * Check that availability start is somewhere out of the range
+       *
+       * @param availability
+       * @param currentViewLength
+       * @return {boolean}
+       */
+      findOutOfRangeAvailabilityStartDay (availability, currentViewLength) {
+        const daysToCheck = this.getAvailabilityDaysDuration(availability) - currentViewLength - 1
+        for (let i = 1; i <= daysToCheck; i++) {
+          const checkingDay = moment(this.rangeStart).subtract(i, 'days')
+          let startIsOnDay = this.checkingDateIsOnDay(
+            availability,
+            moment(availability.start).startOf('day'),
+            checkingDay,
+            true
+          )
+
+          if (!startIsOnDay) {
+            continue
+          }
+
+          const startIsNotExcluded = !this.dayInExcluded(availability, checkingDay)
+            && checkingDay.isSameOrAfter(moment(availability.start), 'day')
+            && !this.availabilityEnded(availability, checkingDay)
+
+          if (startIsNotExcluded) {
+            return checkingDay
+          }
+        }
+        return false
+      },
+
+      /**
+       * Get availabilities that start OR finish on given day.
        *
        * @param day
        */
       getAvailabilitiesForDay (day) {
-        return this.availabilities.filter((item) => {
-          return this.availabilityFitsInDay(item, day)
+        let startAvailabilities = this.availabilities.filter((item) => {
+          return this.availabilityStartFitsInDay(item, day)
         }).map((item) => {
           return this.availabilityToEvent(item, day)
         })
+
+        return startAvailabilities.concat(this.availabilities.filter((item) => {
+          return this.availabilityEndFitsInDay(
+            item,
+            day
+          )
+        }).map((item) => {
+          return this.availabilityToEvent(item, moment(day).subtract(this.getAvailabilityDuration(item), 'seconds'), 'red')
+        }))
       },
 
       /**
@@ -153,24 +240,89 @@ export default function (FullCalendar, moment) {
        * @param day
        * @return {*}
        */
-      availabilityFitsInDay (availability, day) {
-        let fromDate = moment(availability.start, 'YYYY-MM-DD HH:mm:ss')
+      availabilityStartFitsInDay (availability, day) {
+        let fromDate = moment(availability.start)
         fromDate.set({
           hour: 0,
           minute: 0,
         })
 
-        console.info('fits in day', fromDate.format('YYYY-MM-DD HH:mm:ss'), day.format('YYYY-MM-DD HH:mm:ss'))
-
         const availabilityShouldntBeRendered = fromDate.isAfter(day, 'day')
-          || this.availabilityEnded(availability, fromDate, day)
+          || this.availabilityEnded(availability, day)
           || this.dayInExcluded(availability, day)
 
         if (availabilityShouldntBeRendered) {
           return false
         }
 
-        return this.availabilityIsOnDay(availability, fromDate, day)
+        return this.checkingDateIsOnDay(availability, fromDate, day)
+      },
+
+      /**
+       * Is current availability should be rendered in this day
+       *
+       * @param availability
+       * @param day
+       * @return {*}
+       */
+      availabilityEndFitsInDay (availability, day) {
+        let checkingDate = moment(availability.end)
+        let endSecondsDiff = checkingDate.diff(moment(checkingDate.startOf('day')), 'seconds')
+        checkingDate.startOf('day')
+
+        const endOnCurrentDay = this.checkingDateIsOnDay(
+          availability,
+          moment(availability.start).startOf('day'),
+          moment(day).subtract(this.getAvailabilityDuration(availability), 'seconds').startOf('day'),
+          true
+        )
+
+        if (!endOnCurrentDay) {
+          return false
+        }
+
+        let startDate = moment(day)
+          .add(endSecondsDiff, 'seconds')
+          .subtract(this.getAvailabilityDuration(availability), 'seconds')
+          .startOf('day')
+
+        return !this.dayInViewport(startDate)
+          && !this.dayInExcluded(availability, startDate)
+          && !this.availabilityEnded(availability, startDate)
+          && startDate.isSameOrAfter(moment(availability.start), 'day')
+      },
+
+      /**
+       * Is current date in viewport
+       *
+       * @param date
+       * @return {boolean}
+       */
+      dayInViewport (date) {
+        return date.isSameOrAfter(this.rangeStart, 'day')
+          && date.isSameOrBefore(this.rangeEnd, 'day')
+      },
+
+      /**
+       * Get availability duration in seconds
+       *
+       * @param availability
+       * @return {*}
+       */
+      getAvailabilityDuration (availability) {
+        if (!availability._duration) {
+          availability._duration = Math.abs(moment(availability.start).diff(moment(availability.end), 'seconds'))
+        }
+        return availability._duration
+      },
+
+      getAvailabilityDaysDuration (availability) {
+        if (!availability._daysDuration) {
+          let start = moment(availability.start).startOf('day')
+          let end = moment(availability.end).endOf('day').add(1, 'second')
+          availability._daysDuration = Math.abs(start.diff(end, 'days'))
+        }
+        return availability._daysDuration
       },
 
       /**
@@ -197,21 +349,27 @@ export default function (FullCalendar, moment) {
        * Return true if availability should be rendered ion that day.
        *
        * @param availability
-       * @param fromDate
+       * @param {moment} checkingDate This can be end date, start date or any date that should be checked by availability repeating
        * @param day
        * @return {*}
        */
-      availabilityIsOnDay (availability, fromDate, day) {
+      checkingDateIsOnDay (availability, checkingDate, day, log = false) {
+        let logString = ''
+
         let diff = availability.repeatUnit
-        const metRecurringPeriod = fromDate.diff(day, diff) % availability.repeatPeriod === 0
-        if (!metRecurringPeriod) return false
+        const metRecurringPeriod = checkingDate.diff(day, diff) % availability.repeatPeriod === 0
+        if (!metRecurringPeriod) {
+          return false
+        }
+        if (log) {
+          console.info('metRecurringPeriod TRUE; checkingDate: ' + checkingDate.format('YYYY-MM-DD HH:mm:ss'), '; currentDay: ' + day.format('YYYY-MM-DD HH:mm:ss'), checkingDate.diff(day, diff), diff)
+        }
 
         if (!availability.repeat) {
-          return fromDate.isSame(day, 'day')
+          return checkingDate.isSame(day, 'day')
         }
 
         const vm = this
-
         const repeatingRules = {
           days () {
             return true
@@ -221,10 +379,10 @@ export default function (FullCalendar, moment) {
           },
           months () {
             let mode = availability.repeatMonthlyOn[0]
-            return mode === 'day_of_week' ? vm.momentHelpers.weekdayOfMonthIsSame(fromDate, day) : fromDate.format('D') === day.format('D')
+            return mode === 'day_of_week' ? vm.momentHelpers.weekdayOfMonthIsSame(checkingDate, day) : checkingDate.format('D') === day.format('D')
           },
           years () {
-            return fromDate.format('DD/MM') === day.format('DD/MM')
+            return checkingDate.format('DD/MM') === day.format('DD/MM')
           }
         }
 
@@ -238,14 +396,18 @@ export default function (FullCalendar, moment) {
        * after which availability becomes not available.
        *
        * @param availability
-       * @param fromDate
        * @param day
        * @return {*}
        */
-      availabilityEnded (availability, fromDate, day) {
+      availabilityEnded (availability, day) {
         if (!availability.repeat) {
           return false
         }
+        const fromDate = moment(availability.start)
+        fromDate.set({
+          hour: 0,
+          minute: 0,
+        })
         if (availability.repeatUntil === 'period') {
           return moment(fromDate).add(availability.repeatUntilPeriod, availability.repeatUnit).isBefore(day)
         }
@@ -263,7 +425,7 @@ export default function (FullCalendar, moment) {
        * @param availability
        * @return {{id: null, allDay: *, start: string, end: string, model: {} & any}}
        */
-      availabilityToEvent (availability, day) {
+      availabilityToEvent (availability, day, _color = false) {
         let model = Object.assign({}, availability)
 
         let availabilityDuration = moment(availability.end).diff(moment(availability.start), 'seconds'),
@@ -272,6 +434,10 @@ export default function (FullCalendar, moment) {
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
           eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
 
+        if (model.isAllDay) {
+          eventEnd = moment(eventEnd).endOf('day').add(1, 'second')
+        }
+
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
@@ -279,7 +445,9 @@ export default function (FullCalendar, moment) {
           end: eventEnd,
           allDay: model.isAllDay,
           model
-        })
+        }, _color ? {
+          color: _color,
+        } : {})
       },
 
       /**
@@ -297,12 +465,18 @@ export default function (FullCalendar, moment) {
         if (params) {
           let {start, end, allDay} = params
 
+          if (allDay) {
+            end = moment(end).subtract(1, 'second')
+          }
+
           event = Object.assign({}, event, {
             start: start.format(datetimeFormat),
             end: end.format(datetimeFormat),
             isAllDay: allDay,
           })
         }
+
+        console.info('ev', event)
 
         this.$emit('availability-click', event)
       },
