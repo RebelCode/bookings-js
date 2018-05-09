@@ -56,7 +56,13 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       bookingOptionsFormData () {
         return JSON.stringify({
           availability: {
-            rules: this.availabilities
+            rules: this.availabilities.map(item => {
+              let newItem = Object.assign({}, item)
+              if (newItem.id[0] === '_') {
+                newItem.id = null
+              }
+              return newItem
+            })
           },
           sessionLengths: this.sessions,
           displayOptions: {

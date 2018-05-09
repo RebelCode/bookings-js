@@ -65,15 +65,15 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           repeatWeeklyOn: [],
           repeatMonthlyOn: [], // "day_of_week" | "date_of_month"
 
-          excludesDates: []
+          excludeDates: []
         },
 
         exclusionsPickerVisible: false,
 
-        excludesDatesCollection: new FunctionalArrayCollection(() => {
-          return this.model.excludesDates.sort()
+        excludeDatesCollection: new FunctionalArrayCollection(() => {
+          return this.model.excludeDates.sort()
         }, (newDates) => {
-          this.model.excludesDates = newDates
+          this.model.excludeDates = newDates
         }, (date) => {
           return date
         }),
@@ -144,8 +144,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         return moment(this.model.end).diff(moment(this.model.start), this.model.repeatUnit) + 1
       },
 
-      excludesDatesModels () {
-        let dates = this.model.excludesDates.map((date) => {
+      excludeDatesModels () {
+        let dates = this.model.excludeDates.map((date) => {
           return helpers.getDate(date)
         })
         return { dates }
@@ -281,11 +281,11 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       excludeDateSelected (date) {
         date = moment(date).format('YYYY-MM-DD')
 
-        if (this.excludesDatesCollection.hasItem(date)) {
-          this.excludesDatesCollection.removeItem(date)
+        if (this.excludeDatesCollection.hasItem(date)) {
+          this.excludeDatesCollection.removeItem(date)
         }
         else {
-          this.excludesDatesCollection.addItem(date)
+          this.excludeDatesCollection.addItem(date)
         }
 
         this.$refs.exclusions.selectedDate = null

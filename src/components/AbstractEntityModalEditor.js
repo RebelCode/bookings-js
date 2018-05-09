@@ -272,7 +272,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
         let model = Object.assign({}, savingModel || this.model)
 
         if (!model.id) {
-          let id = Math.random().toString(36).substring(7)
+          let id = '_' + Math.random().toString(36).substring(7)
           this.entitiesCollection.addItem(Object.assign({}, model, { id }))
 
           this.forceCloseModal()

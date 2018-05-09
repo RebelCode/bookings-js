@@ -354,10 +354,10 @@ export default function (FullCalendar, moment) {
        * @return {boolean}
        */
       dayInExcluded (availability, day) {
-        if (!availability.excludesDates || !availability.excludesDates.length)
+        if (!availability.excludeDates || !availability.excludeDates.length)
           return false
 
-        for (let excludedDate of availability.excludesDates) {
+        for (let excludedDate of availability.excludeDates) {
           if (moment(excludedDate, 'YYYY-MM-DD').isSame(day, 'day')) {
             return true
           }
