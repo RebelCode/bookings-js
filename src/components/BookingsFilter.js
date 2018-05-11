@@ -1,16 +1,15 @@
-import { FunctionalCollection } from '@rebelcode/std-lib/src/FunctionalCollection'
-
 /**
- * Component for filtering by status and client.
+ * Component for filtering bookings by status and client.
  *
- * @todo: filter by status
+ * @param {function} mapState Helper method for creating state getters.
+ * @param {function} mapMutations Helper method for creating methods for mutations.
+ * @param {typeof FunctionalCollection} FunctionalCollection constructor.
  *
- * @param mapState
  * @return {Component}
  *
  * @constructor
  */
-export function CfBookingsFilter ({ mapState, mapMutations }) {
+export function CfBookingsFilter ({ mapState, mapMutations }, FunctionalCollection) {
   return {
     template: "#bookings-filter-template",
     inject: {

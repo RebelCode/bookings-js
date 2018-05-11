@@ -1,6 +1,6 @@
 {
   "name": "@rebelcode/bookings-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Booking plugin frontend application",
   "main": "dist/js/app.min.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "@rebelcode/vc-calendar": "^0.1.0",
     "@rebelcode/vc-paged": "^0.1.0",
     "@rebelcode/vc-repeater": "^0.1.0",
+    "vue-wp-list-table": "^1.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-flow": "^6.18.0",
@@ -32,8 +33,5 @@
     "vue-template-compiler": "^2.5.16",
     "webpack": "^3.10.0"
   },
-  "author": "RebelCode",
-  "dependencies": {
-    "vue-wp-list-table": "^1.1.0"
-  }
+  "author": "RebelCode"
 }

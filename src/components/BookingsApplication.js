@@ -1,6 +1,4 @@
-import { FunctionalArrayCollection } from '@rebelcode/std-lib'
-
-export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }, Vue) {
+export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }, Vue, FunctionalArrayCollection) {
   return {
     store,
     inject: {

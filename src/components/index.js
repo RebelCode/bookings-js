@@ -28,7 +28,7 @@ export default function (dependencies) {
       return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
     },
     'bookings-application': function (container) {
-      return CfBookingsApplication(container['APP_STATE'], container.store, container.vuex, container.vue)
+      return CfBookingsApplication(container['APP_STATE'], container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
@@ -85,14 +85,14 @@ export default function (dependencies) {
       return CfBoolSwitcher(container.switcher)
     },
     'session-length': function (container) {
-      return new CfSessionLength(container.vue, container.vuex)
+      return new CfSessionLength(container.vue, container.vuex, dependencies.stdLib.FunctionalArrayCollection)
     },
 
     'abstract-entity-modal-editor': function (container) {
       return new CfAbstractEntityModalEditor(container.vue)
     },
     'service-availability-editor': function (container) {
-      return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment)
+      return new CfServiceAvailabilityEditor(container['abstract-entity-modal-editor'], container.vuex, container.moment, dependencies.stdLib.FunctionalArrayCollection)
     },
 
     'booking-editor': function (container) {
@@ -108,7 +108,7 @@ export default function (dependencies) {
       return new CfBookingsListView(container['abstract-bookings-view'], container.vuex, container.moment)
     },
     'bookings-filter': function (container) {
-      return new CfBookingsFilter(container.vuex)
+      return new CfBookingsFilter(container.vuex, dependencies.stdLib.FunctionalCollection)
     },
   }
 }

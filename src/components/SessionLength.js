@@ -1,6 +1,4 @@
-import { FunctionalArrayCollection } from '@rebelcode/std-lib'
-
-export default function CfSessionLength (Vue, Vuex) {
+export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
   const mapState = Vuex.mapState
   const mapMutations = Vuex.mapMutations
 

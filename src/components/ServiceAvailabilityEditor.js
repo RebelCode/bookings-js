@@ -1,6 +1,4 @@
-import { FunctionalArrayCollection } from '@rebelcode/std-lib'
-
-export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, { mapState, mapMutations }, moment) {
+export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, { mapState, mapMutations }, moment, FunctionalArrayCollection) {
   const helpers = {
     /**
      * Create date object from string in format YYYY-MM-DD
