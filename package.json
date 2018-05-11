@@ -1,7 +1,8 @@
 {
   "name": "@rebelcode/bookings-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Booking plugin frontend application",
+  "main": "dist/js/app.min.js",
   "scripts": {
     "dev": "./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=dev ./node_modules/webpack/bin/webpack.js --watch",
     "build": "./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
