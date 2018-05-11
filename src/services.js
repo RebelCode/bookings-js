@@ -1,11 +1,12 @@
-import { FunctionalToggleable, FunctionalArrayCollection } from '@rebelcode/std-lib'
-
 import store from './store'
 import api from './api'
 import libs from './libs'
 import components from './components'
 
 export function services (dependencies, document) {
+  const FunctionalToggleable = dependencies.stdLib.FunctionalToggleable
+  const FunctionalArrayCollection = dependencies.stdLib.FunctionalArrayCollection
+
   const allServices = {
     document: function () {
       return document
