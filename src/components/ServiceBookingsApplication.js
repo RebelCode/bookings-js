@@ -17,7 +17,6 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
     ],
     data () {
       return {
-        enableBookings: true,
         overlappingAvailabilities: false,
 
         activeTab: 0,
@@ -40,6 +39,16 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
         availabilities: state => state.app.availabilities
       }),
 
+      bookingsEnabled: {
+        get () {
+          return this.$store.state.app.bookingsEnabled
+        },
+
+        set (value) {
+          this.$store.commit('setBookingsEnabled', value)
+        }
+      },
+
       useCustomerTimezone: {
         get () {
           return this.$store.state.app.displayOptions.useCustomerTimezone
@@ -55,7 +64,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
 
       bookingOptionsFormData () {
         return JSON.stringify({
-          bookingsEnabled: this.enableBookings,
+          bookingsEnabled: this.bookingsEnabled,
           availability: {
             rules: this.availabilities.map(item => {
               let newItem = Object.assign({}, item)

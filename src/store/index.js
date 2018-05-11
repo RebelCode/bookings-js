@@ -4,9 +4,9 @@ import ui from './ui'
 
 const state = {
   app: {
+    bookingsEnabled: false,
     availabilities: [],
     sessions: [],
-
     displayOptions: {
       useCustomerTimezone: false
     },
@@ -22,7 +22,7 @@ const state = {
 
 const mutations = {
   setInitialState (state, appState) {
-    state.app = appState
+    state.app = Object.assign({}, state.app, appState)
   },
 
   setNewAvailabilities (state, availabilities) {
@@ -37,6 +37,10 @@ const mutations = {
     let updatedOption = {}
     updatedOption[payload.key] = payload.value
     state.app.displayOptions = Object.assign({}, state.app.displayOptions, updatedOption)
+  },
+
+  setBookingsEnabled (state, newValue) {
+    state.app.bookingsEnabled = newValue
   },
 
   setNewBookings (state, bookings) {
