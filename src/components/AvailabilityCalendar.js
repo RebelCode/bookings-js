@@ -67,7 +67,7 @@ export default function (FullCalendar, moment) {
     },
 
     computed: {
-      events () {
+      generatedEvents () {
         return this.generatedAvailabilities
       }
     },
@@ -503,8 +503,6 @@ export default function (FullCalendar, moment) {
             isAllDay: allDay,
           })
         }
-
-        console.info('ev', event)
 
         this.$emit('availability-click', event)
       },

@@ -31,18 +31,12 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         from: 'translate'
       },
     },
-    data () {
-      return {
-        generatedEvents: []
-      }
-    },
     props: {
       bookings: {
         default () {
           return []
         }
       },
-
       colorScheme: {
         type: String,
         default: 'status'
@@ -61,7 +55,6 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         default () {
           const self = this
           return {
-            // events: this.computedEvents,
             eventLimit: true,
             viewRender (view) {
               self.$emit('period-change', view.start, view.end)
@@ -75,7 +68,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
     },
 
     computed: {
-      events () {
+      generatedEvents () {
         return this.generateEvents(this.bookings, this.colorScheme)
       }
     },

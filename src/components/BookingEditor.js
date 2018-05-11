@@ -284,9 +284,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        */
       startChanged () {
         if (this.model.end) {
-          this.$validator.validateAll({
-            end: this.model.end
-          })
+          this.$validator.validate('end')
         }
         this.errors.remove('start')
       },

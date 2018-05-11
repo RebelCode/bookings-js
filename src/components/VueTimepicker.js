@@ -2,6 +2,7 @@ export function CfVueTimepicker(VueTimepicker) {
   return VueTimepicker.extend({
     template: '#vue-timepicker-template',
     props: {
+      id: {},
       /**
        * Disable time picking before this time
        */

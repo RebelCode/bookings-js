@@ -18,7 +18,7 @@ export default function (dependencies) {
        */
       Vue.use(dependencies.timepicker)
       Vue.use(dependencies.validate, {
-        events: '',
+        events: false,
         dictionary: {
           en: {
             messages: {

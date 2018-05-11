@@ -31,7 +31,7 @@ export default function (dependencies) {
       return CfBookingsApplication(container['APP_STATE'], container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
     calendar: function (container) {
-      return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep)
+      return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep, 'generatedEvents')
     },
     wpListTable: function (container) {
       return container.vue.extend(dependencies.wpListTable.ListTable)
@@ -70,9 +70,9 @@ export default function (dependencies) {
       return new dependencies.tabs.CfTab(container.vue)
     },
     modal: function (container) {
-      return CfModal(container.dialog)
+      return CfModal(container['abstract-dialog'])
     },
-    dialog: function (container) {
+    'abstract-dialog': function (container) {
       return CfAbstractDialog(container.vue)
     },
     'abstract-button-group': function (container) {
