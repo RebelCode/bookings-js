@@ -440,7 +440,7 @@ export default function (FullCalendar, moment) {
             .isBefore(day, availability.repeatUntilPeriod)
         }
         else if (availability.repeatUntil === 'date') {
-          return moment(availability.repeatUntilDate, 'YYYY-MM-DD').isBefore(day)
+          return moment(availability.repeatUntilDate).isBefore(moment(day).startOf('day'), 'day')
         }
         return false
       },
