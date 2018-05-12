@@ -36,6 +36,29 @@ export function CfVueTimepicker(VueTimepicker) {
       }
     },
     computed: {
+      displayTime () {
+        let formatString = String((this.format || 'HH:mm'))
+        if (this.hour) {
+          formatString = formatString.replace(new RegExp(this.hourType, 'g'), this.hour)
+        }
+        if (this.minute) {
+          formatString = formatString.replace(new RegExp(this.minuteType, 'g'), this.minute)
+        }
+        if (this.second && this.secondType) {
+          formatString = formatString.replace(new RegExp(this.secondType, 'g'), this.second)
+        }
+        if (this.apm && this.apmType) {
+          formatString = formatString.replace(new RegExp(this.apmType, 'g'), this.apm)
+        }
+
+        formatString = formatString.replace(new RegExp(this.hourType, 'g'), '--')
+          .replace(new RegExp(this.minuteType, 'g'), '--')
+          .replace(new RegExp(this.secondType, 'g'), '--')
+          .replace(new RegExp(this.apmType, 'g'), '--')
+
+        return formatString
+      },
+
       disabledValues () {
         const def = { hour: [], minute: [], second: [], apm: [] }
 
