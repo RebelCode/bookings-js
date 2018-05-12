@@ -53,8 +53,6 @@ export function CfVueTimepicker(VueTimepicker) {
 
         formatString = formatString.replace(new RegExp(this.hourType, 'g'), '--')
           .replace(new RegExp(this.minuteType, 'g'), '--')
-          .replace(new RegExp(this.secondType, 'g'), '--')
-          .replace(new RegExp(this.apmType, 'g'), '--')
 
         return formatString
       },

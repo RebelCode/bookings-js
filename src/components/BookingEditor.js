@@ -68,6 +68,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           newStatus: '',
         },
 
+        errorMessage: false,
+
         newClient: {
           name: '',
           email: ''
@@ -88,6 +90,15 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           'scheduled': ['draft', 'pending', 'cancelled'],
           'cancelled': ['in-cart', 'draft', 'pending', 'approved', 'scheduled'],
           'completed': ['in-cart', 'draft', 'pending', 'approved', 'scheduled'],
+        }
+      }
+    },
+
+    watch: {
+      model: {
+        deep: true,
+        handler (value) {
+          this.errorMessage = false
         }
       }
     },
@@ -223,6 +234,15 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         return this.saveBookingOnBackend({api: this.bookingsApi, model}).then(() => {
           this.$emit('updated')
           this.forceCloseModal()
+        }, (error) => {
+          const errorResponse = error.response
+          if (!errorResponse) {
+            return
+          }
+          if (errorResponse.data.data && errorResponse.data.data.errors) {
+            this.errorMessage = errorResponse.data.data.errors[0]
+          }
+        }).finally(() => {
           this.isBookingSaving = false
         })
       },
