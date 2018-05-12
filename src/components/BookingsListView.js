@@ -2,6 +2,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
   return AbstractBookingsView.extend({
     inject: {
       'isMobile': 'isMobile',
+      'bookingHelpers': 'bookingHelpers',
       'list-table': {
         from: 'wpListTable'
       },

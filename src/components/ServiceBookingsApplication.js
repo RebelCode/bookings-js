@@ -13,7 +13,8 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       'bool-switcher',
       'selection-list',
       'availability-calendar',
-      'availabilityEditorStateToggleable'
+      'availabilityEditorStateToggleable',
+      'availabilityTransformer'
     ],
     data () {
       return {
@@ -67,11 +68,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
           bookingsEnabled: this.bookingsEnabled,
           availability: {
             rules: this.availabilities.map(item => {
-              let newItem = Object.assign({}, item)
-              if (newItem.id[0] === '_') {
-                newItem.id = null
-              }
-              return newItem
+              return this.availabilityTransformer.transform(Object.assign({}, item))
             })
           },
           sessionLengths: this.sessions,

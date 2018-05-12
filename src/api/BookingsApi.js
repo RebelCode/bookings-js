@@ -31,7 +31,7 @@ export default class BookingsApi extends Api {
    */
   update (model) {
     const updateConfig = this.config['update']
-    return this.http[updateConfig.method](updateConfig.endpoint, this.prepareParams(model))
+    return this.http[updateConfig.method](`${updateConfig.endpoint}${model.id}`, this.prepareParams(model))
   }
 
   /**
@@ -42,6 +42,6 @@ export default class BookingsApi extends Api {
    */
   delete (model) {
     const deleteConfig = this.config['delete']
-    return this.http[deleteConfig.method](deleteConfig.endpoint, this.prepareParams(model))
+    return this.http[deleteConfig.method](`${deleteConfig.endpoint}${model.id}`, this.prepareParams(model))
   }
 }

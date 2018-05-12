@@ -59,7 +59,6 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
             }
           })
         },
-
         screenStatuses: state => state.app.screenStatuses,
         statusesEndpoint: state => state.app.statusesEndpoint,
       }),

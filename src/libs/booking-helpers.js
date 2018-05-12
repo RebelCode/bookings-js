@@ -1,4 +1,4 @@
-export function bookingHelpers (statusesColors) {
+export function bookingHelpers (statusesColors, statusesLabels) {
   return {
     /**
      * Get status style for booking
@@ -11,6 +11,16 @@ export function bookingHelpers (statusesColors) {
         'background-color': statusesColors[status],
         'color': '#000'
       }
+    },
+
+    /**
+     * Get label for status
+     *
+     * @param status
+     * @return {*}
+     */
+    statusLabel (status) {
+      return statusesLabels[status]
     }
   }
 }

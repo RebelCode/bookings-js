@@ -4,6 +4,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
 
+      'bookingTransformer': 'bookingTransformer',
+
       'helpers': {
         from: 'bookingHelpers'
       },
@@ -60,10 +62,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           status: null,
 
-          paymentNumber: null,
+          payment: null,
 
-          clientTimezone: 0,
-          note: null,
+          clientTz: 0,
+          notes: null,
 
           newStatus: '',
         },
@@ -83,13 +85,13 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
          * @see: https://aventura.atlassian.net/wiki/spaces/EDDBK/pages/59751681/Status+Terms
          */
         actionsMap: {
-          'in-cart': ['pending'],
+          'in_cart': ['pending'],
           'draft': ['pending'],
           'pending': ['approved', 'cancelled'],
           'approved': ['scheduled'],
           'scheduled': ['draft', 'pending', 'cancelled'],
-          'cancelled': ['in-cart', 'draft', 'pending', 'approved', 'scheduled'],
-          'completed': ['in-cart', 'draft', 'pending', 'approved', 'scheduled'],
+          'cancelled': ['in_cart', 'draft', 'pending', 'approved', 'scheduled'],
+          'completed': ['in_cart', 'draft', 'pending', 'approved', 'scheduled'],
         }
       }
     },
@@ -160,7 +162,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         if (!this.model.status) {
           return null
         }
-        return this.model.status.charAt(0).toUpperCase() + this.model.status.slice(1)
+        return this.helpers.statusLabel(this.model.status)
       }
     },
 
@@ -217,17 +219,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Save booking.
        */
       saveBooking () {
-        let model = Object.assign({}, this.model)
-
-        if (model['service']) {
-          model['service'] = model['service'].id
-          model['resource'] = model['service']
-        }
-
-        if (model['newStatus']) {
-          model['transition'] = model['newStatus']
-          delete model['newStatus']
-        }
+        let model = this.bookingTransformer.transform(Object.assign({}, this.model))
 
         this.isBookingSaving = true
 

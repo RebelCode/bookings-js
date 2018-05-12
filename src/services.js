@@ -2,6 +2,7 @@ import store from './store'
 import api from './api'
 import libs from './libs'
 import components from './components'
+import transformers from './transformers'
 
 export function services (dependencies, document) {
   const FunctionalToggleable = dependencies.stdLib.FunctionalToggleable
@@ -58,7 +59,7 @@ export function services (dependencies, document) {
     },
     'bookingStatusesColors': function () {
       return {
-        'in-cart': '#f6e58d', // hide
+        in_cart: '#f6e58d', // hide
         draft: '#dfe4ea',
         pending: '#1e90ff',
         approved: '#00d2d3',
@@ -86,11 +87,13 @@ export function services (dependencies, document) {
   const registeredComponents = components(dependencies)
   const registeredApi = api(dependencies)
   const registeredLibs = libs(dependencies)
+  const registeredTransformers = transformers(dependencies)
 
   return {
     ...allServices,
     ...registeredComponents,
     ...registeredApi,
     ...registeredLibs,
+    ...registeredTransformers
   }
 }
