@@ -133,6 +133,23 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       }),
 
       /**
+       * Repeat until date casted to Date type
+       *
+       * @property {Date}
+       */
+      repeatUntilDateModel: {
+        get () {
+          if (!this.model.repeatUntilDate) {
+            return
+          }
+          return moment(this.model.repeatUntilDate).toDate()
+        },
+        set (value) {
+          this.model.repeatUntilDate = moment(value).format('YYYY-MM-DD')
+        }
+      },
+
+      /**
        * Minimal possible repeating period
        */
       minimalRepeatPeriod () {
