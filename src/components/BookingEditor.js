@@ -64,7 +64,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           payment: null,
 
-          clientTz: 0,
+          clientTz: 'UTC+0', // @todo: change it on default pre-set value.
           notes: null,
 
           newStatus: '',

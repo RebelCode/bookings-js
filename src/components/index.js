@@ -18,12 +18,16 @@ import { CfBookingsApplication } from './BookingsApplication'
 import { CfVueTimepicker } from './VueTimepicker'
 import { CfBookingsFilter } from './BookingsFilter'
 import { CfAbstractBookingsView } from './AbstractBookingsView'
+import CfTimezoneSelect from './TimezoneSelect'
 
 /*
  * Exports instances to main container config.
  */
 export default function (dependencies) {
   return {
+    'timezone-select': function (container) {
+      return CfTimezoneSelect()
+    },
     'service-bookings-application': function (container) {
       return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
     },
