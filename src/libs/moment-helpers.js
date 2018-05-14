@@ -10,6 +10,20 @@ export function momentHelpers (moment) {
     weekdaysCache: {},
 
     /**
+     * Create moment in given timezone. 'UTC+2...' format supported.
+     * 
+     * @param {any} value Any value that moment can accept into constructor 
+     * @param {string} tz String representing timezone, including UTC+${offset}
+     */
+    createInTimezone (value, tz) {
+      if (tz.indexOf('UTC') !== 0) {
+        return moment.tz(value, tz)
+      }
+      let offset = Number(tz.replace(/UTC\+?/g, ''))
+      return moment(value).utcOffset(offset)
+    },
+
+    /**
      * Check that dates are the same weekdays in months (two first mondays)
      *
      * @param {moment} firstDate

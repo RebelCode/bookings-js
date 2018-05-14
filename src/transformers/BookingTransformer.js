@@ -1,5 +1,8 @@
 import Transformer from './Transformer'
 
+/**
+ * Prepare data for booking saving endpoins.
+ */
 export default class BookingTransformer extends Transformer {
   /**
    * Rules that will be applied in order for model.
@@ -33,6 +36,11 @@ export default class BookingTransformer extends Transformer {
     end (model, container) {
       model['end'] = container.moment.utc(model['end']).unix()
       return model
-    }
+    },
+    clientTzName (model) {
+      model['clientTz'] = model['clientTzName']
+      delete model['clientTzName']
+      return model
+    },
   }
 }

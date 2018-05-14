@@ -6,6 +6,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
       'bookingTransformer': 'bookingTransformer',
 
+      'momentHelpers': 'momentHelpers',
       'helpers': {
         from: 'bookingHelpers'
       },
@@ -65,7 +66,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           payment: null,
 
-          clientTz: 'UTC+0', // @todo: change it on default pre-set value.
+          clientTzName: 'UTC+0', // @todo: change it on default pre-set value.
           notes: null,
 
           newStatus: '',
@@ -254,11 +255,13 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Format time in given offset for displaying universal
        * and client's times.
        *
-       * @param time
-       * @param offset
+       * @param {any} time Timein any format moment can accept. 
+       * @param {string} timezone Timezone name
+       * 
+       * @return {string} Formatted string
        */
-      format (time, offset = 0) {
-        return moment(time).utcOffset(Number(offset)).format('DD/MM/YY HH:mm')
+      format (time, timezone = 'UTC+0') {
+        return this.momentHelpers.createInTimezone(time, timezone).format('DD/MM/YY HH:mm')
       },
 
       /**

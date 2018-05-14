@@ -42,7 +42,7 @@ export default function (dependencies) {
       return bookingHelpers(container.bookingStatusesColors, container.APP_STATE.statuses)
     },
     moment: function () {
-      return dependencies.moment
+      return dependencies.moment 
     },
     humanizeDuration: function () {
       return dependencies.humanizeDuration
