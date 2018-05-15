@@ -20,7 +20,9 @@ export default class BookingTransformer extends Transformer {
       return model
     },
     newStatus (model) {
-      model['transition'] = model['newStatus']
+      if (model['newStatus']) {
+        model['transition'] = model['newStatus']
+      }
       delete model['newStatus']
       delete model['status']
       return model
@@ -30,11 +32,11 @@ export default class BookingTransformer extends Transformer {
       return model
     },
     start (model, container) {
-      model['start'] = container.moment.utc(model['start']).unix()
+      model['start'] = container.moment(model['start']).format()
       return model
     },
     end (model, container) {
-      model['end'] = container.moment.utc(model['end']).unix()
+      model['end'] = container.moment(model['end']).format()
       return model
     },
     clientTzName (model) {
