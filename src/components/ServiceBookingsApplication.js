@@ -12,6 +12,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       'switcher',
       'bool-switcher',
       'selection-list',
+      'timezone-select',
       'availability-calendar',
       'availabilityEditorStateToggleable',
       'availabilityTransformer'
@@ -40,11 +41,24 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
         availabilities: state => state.app.availabilities
       }),
 
+      /**
+       * Timezone name for service.
+       * 
+       * @property {string} Service timezone
+       */
+      timezone: {
+        get () {
+          return this.$store.state.app.timezone
+        },
+        set (value) {
+          this.$store.commit('setTimezone', value)
+        }
+      },
+
       bookingsEnabled: {
         get () {
           return this.$store.state.app.bookingsEnabled
         },
-
         set (value) {
           this.$store.commit('setBookingsEnabled', value)
         }
@@ -67,6 +81,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
         return JSON.stringify({
           bookingsEnabled: this.bookingsEnabled,
           availability: {
+            serviceTimezone: this.timezone,
             rules: this.availabilities.map(item => {
               return this.availabilityTransformer.transform(Object.assign({}, item))
             })
@@ -110,6 +125,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       'bool-switcher': 'bool-switcher',
       'selection-list': 'selection-list',
       'service-availability-editor': 'service-availability-editor',
+      'timezone-select': 'timezone-select'
     }
   }
 };

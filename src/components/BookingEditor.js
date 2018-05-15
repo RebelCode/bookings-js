@@ -4,6 +4,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
 
+      'websiteConfig': 'websiteConfig',
+
       'bookingTransformer': 'bookingTransformer',
 
       'momentHelpers': 'momentHelpers',
@@ -66,7 +68,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           payment: null,
 
-          clientTzName: 'UTC+0', // @todo: change it on default pre-set value.
+          clientTzName: 'UTC+0',
           notes: null,
 
           newStatus: '',
@@ -105,6 +107,20 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           this.errorMessage = false
         }
       }
+    },
+
+    /**
+     * Created component hook. 
+     * Populates client timezone select with default website timezone.
+     * 
+     * @since [*next-version*]
+     */
+    created () {
+      this.seedLock = true
+      if (this.websiteConfig.timezone) {
+        this.model.clientTzName = this.websiteConfig.timezone
+      }
+      this.seedLock = false
     },
 
     computed: {

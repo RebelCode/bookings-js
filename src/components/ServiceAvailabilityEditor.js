@@ -128,6 +128,9 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
     },
     computed: {
+      ...mapState({
+        timezone: state => state.app.timezone
+      }),
       ...mapState('bookingOptions', {
         entityModel: state => state.serviceAvailabilityModel
       }),

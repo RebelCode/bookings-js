@@ -24,6 +24,18 @@ export function momentHelpers (moment) {
     },
 
     /**
+     * Get label for timezone.
+     * 
+     * @param {string} tz String representing timezone, including UTC+${offset}
+     */
+    timezoneLabel (tz) {
+      return tz.replace(/_/g, ' ')
+        .replace('.25', ':15')
+        .replace('.5', ':30')
+        .replace('.75', ':45')
+    },
+
+    /**
      * Check that dates are the same weekdays in months (two first mondays)
      *
      * @param {moment} firstDate

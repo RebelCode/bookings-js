@@ -67,7 +67,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         viewFilter: state => state.bookings.viewFilter,
       }),
     },
-    mounted () {
+    created () {
       if (!state) {
         throw new Error('App state not initialized')
       }

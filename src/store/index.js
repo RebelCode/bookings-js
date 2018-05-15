@@ -5,6 +5,7 @@ import ui from './ui'
 const state = {
   app: {
     bookingsEnabled: false,
+    timezone: 'UTC+0',
     availabilities: [],
     sessions: [],
     displayOptions: {
@@ -12,9 +13,7 @@ const state = {
     },
 
     bookings: [],
-
     statusesEndpoint: '',
-
     statuses: {},
     screenStatuses: []
   },
@@ -31,6 +30,10 @@ const mutations = {
 
   setSessions (state, sessions) {
     state.app.sessions = sessions
+  },
+
+  setTimezone (state, value) {
+    state.app.timezone = value
   },
 
   setDisplayOptions (state, payload) {
