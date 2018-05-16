@@ -21,14 +21,14 @@ export default class Transformer {
    * @param {object} model Some model to transform
    * @return {object} Transformed model
    */
-  transform (model) {
+  transform (model, payload = {}) {
     for (let sourceField of Object.keys(this.rules)) {
       const handler = this.rules[sourceField]
       if (!model.hasOwnProperty(sourceField)) {
         continue
       }
       model = Object.assign({}, model)
-      model = handler(model, this.container)
+      model = handler(model, this.container, payload)
     }
     return model
   }

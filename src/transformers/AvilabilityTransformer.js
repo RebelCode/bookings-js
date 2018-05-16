@@ -12,6 +12,18 @@ export default class AvailabilityTransformer extends Transformer {
         model['id'] = null
       }
       return model
+    },
+    start (model, container, { timezone }) {
+      model['start'] = container.momentHelpers
+        .createInTimezone(model['start'], timezone)
+        .format()
+      return model
+    },
+    end (model, container, { timezone }) {
+      model['end'] = container.momentHelpers
+        .createInTimezone(model['end'], timezone)
+        .format()
+      return model
     }
   }
 }

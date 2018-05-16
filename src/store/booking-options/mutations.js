@@ -6,8 +6,8 @@ const mutations = {
     state.serviceAvailabilityModel = model
   },
 
-  setSessions (state, sessions) {
-    state.sessions = sessions
+  setSessionLengths (state, setSessionLengths) {
+    state.setSessionLengths = setSessionLengths
   }
 }
 

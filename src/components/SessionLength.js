@@ -52,7 +52,7 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         sessions: new FunctionalArrayCollection(() => {
           return this.storeSessions
         }, (sessions) => {
-          this.setSessions(sessions)
+          this.setSessionLengths(sessions)
         }, (item) => {
           return item.id
         })
@@ -72,14 +72,14 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
     },
     computed: {
       ...mapState({
-        storeSessions: state => state.app.sessions.sort((a, b) => {
+        storeSessions: state => state.app.sessionLengths.sort((a, b) => {
           return a.sessionLength - b.sessionLength
         })
       })
     },
     methods: {
       ...mapMutations([
-        'setSessions'
+        'setSessionLengths'
       ]),
 
       humanize (seconds) {

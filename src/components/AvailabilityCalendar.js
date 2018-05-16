@@ -10,8 +10,6 @@
  * @return {*}
  */
 export default function (FullCalendar, moment) {
-  const datetimeFormat = 'YYYY-MM-DD HH:mm:ss'
-
   return FullCalendar.extend({
     inject: [
       'availabilitiesCollection',
@@ -457,10 +455,10 @@ export default function (FullCalendar, moment) {
         let model = Object.assign({}, availability)
 
         let availabilityDuration = moment(availability.end).diff(moment(availability.start), 'seconds'),
-          availabilityStartTime = moment(availability.start).format('HH:mm:ss')
+          availabilityStartTime = moment(availability.start).format('HH:mm:ssZ')
 
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
-          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
+          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ssZ')
 
         if (model.isAllDay) {
           eventEnd = moment(eventEnd).endOf('day').add(1, 'second')
@@ -498,8 +496,8 @@ export default function (FullCalendar, moment) {
           }
 
           event = Object.assign({}, event, {
-            start: start.format(datetimeFormat),
-            end: end.format(datetimeFormat),
+            start: start.format(),
+            end: end.format(),
             isAllDay: allDay,
           })
         }

@@ -1,7 +1,4 @@
-export function CfServiceBookingsApplication (state, store, Vuex) {
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
-
+export function CfServiceBookingsApplication (state, store, { mapState, mapGetters, mapMutations }) {
   return {
     store,
     inject: [
@@ -37,9 +34,9 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       }
     },
     computed: {
-      ...mapState({
-        sessions: state => state.app.sessions,
-        availabilities: state => state.app.availabilities
+      ...mapGetters({
+        availabilities: 'availabilities',
+        sessions: 'sessionLengths'
       }),
 
       /**
@@ -81,10 +78,12 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       bookingOptionsFormData () {
         return JSON.stringify({
           bookingsEnabled: this.bookingsEnabled,
+          timezone: this.timezone,
           availability: {
-            serviceTimezone: this.timezone,
             rules: this.availabilities.map(item => {
-              return this.availabilityTransformer.transform(Object.assign({}, item))
+              return this.availabilityTransformer.transform(Object.assign({}, item), {
+                timezone: this.timezone
+              })
             })
           },
           sessionLengths: this.sessions,

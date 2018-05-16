@@ -7,8 +7,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
      * @return {Date}
      */
     getDate (date) {
-      const parts = date.split("-");
-      return new Date(parts[0], parts[1] - 1, parts[2])
+      return moment(date).toDate()
     }
   }
 
@@ -151,7 +150,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           return moment(this.model.repeatUntilDate).toDate()
         },
         set (value) {
-          this.model.repeatUntilDate = moment(value).format('YYYY-MM-DD')
+          this.model.repeatUntilDate = moment(value).format()
         }
       },
 
@@ -300,7 +299,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
 
       excludeDateSelected (date) {
-        date = moment(date).format('YYYY-MM-DD')
+        date = moment(date).format()
 
         if (this.excludeDatesCollection.hasItem(date)) {
           this.excludeDatesCollection.removeItem(date)

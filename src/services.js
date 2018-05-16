@@ -42,7 +42,7 @@ export function services (dependencies, document) {
       const store = container.store
 
       return new FunctionalArrayCollection(() => {
-        return store.state.app.availabilities
+        return store.state.app.availabilities.rules
       }, (newValue) => {
         store.commit('setNewAvailabilities', newValue)
       }, (item) => {

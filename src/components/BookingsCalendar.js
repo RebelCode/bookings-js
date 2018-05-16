@@ -101,8 +101,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         }
 
         this.$emit('booking-create', {
-          start: params.start.format('YYYY-MM-DD HH:mm:ss'),
-          end: params.end.format('YYYY-MM-DD HH:mm:ss')
+          start: params.start.format(),
+          end: params.end.format()
         })
       },
 

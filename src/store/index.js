@@ -6,8 +6,10 @@ const state = {
   app: {
     bookingsEnabled: false,
     timezone: 'UTC+0',
-    availabilities: [],
-    sessions: [],
+    availabilities: {
+      rules: []
+    },
+    sessionLengths: [],
     displayOptions: {
       useCustomerTimezone: false
     },
@@ -19,17 +21,32 @@ const state = {
   },
 }
 
+const getters = {
+  availabilities (state) {
+    return state.app.availabilities.rules
+  },
+  sessionLengths (state) {
+    return state.app.sessionLengths
+  }
+}
+
 const mutations = {
   setInitialState (state, appState) {
+    if (appState.sessionLengths) {
+      appState.sessionLengths = appState.sessionLengths.map(sessionLength => {
+        sessionLength.price = sessionLength.price.amount
+        return sessionLength
+      })
+    }
     state.app = Object.assign({}, state.app, appState)
   },
 
-  setNewAvailabilities (state, availabilities) {
-    state.app.availabilities = availabilities
+  setNewAvailabilities (state, rules) {
+    state.app.availabilities.rules = rules
   },
 
-  setSessions (state, sessions) {
-    state.app.sessions = sessions
+  setSessionLengths (state, sessionLengths) {
+    state.app.sessionLengths = sessionLengths
   },
 
   setTimezone (state, value) {
@@ -62,5 +79,6 @@ export default {
     ui
   },
   state,
+  getters,
   mutations
 }

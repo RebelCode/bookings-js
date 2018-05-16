@@ -10,8 +10,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
        * @property {string} Moment-ish format for input
        */
       dataFormat: {
-        type: String,
-        default: 'YYYY-MM-DD HH:mm:ss'
+        default: null
       },
 
       /**
