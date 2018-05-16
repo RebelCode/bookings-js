@@ -15,7 +15,8 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
       'timezone-select',
       'availability-calendar',
       'availabilityEditorStateToggleable',
-      'availabilityTransformer'
+      'availabilityTransformer',
+      'websiteConfig'
     ],
     data () {
       return {
@@ -48,7 +49,7 @@ export function CfServiceBookingsApplication (state, store, Vuex) {
        */
       timezone: {
         get () {
-          return this.$store.state.app.timezone
+          return this.$store.state.app.timezone || this.websiteConfig.timezone
         },
         set (value) {
           this.$store.commit('setTimezone', value)
