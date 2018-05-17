@@ -11,14 +11,18 @@ export default class Transformer {
    */
   rules = {}
 
-  constructor (container) {
-    this.container = container
+  constructor (deps = {}) {
+    for (let key in deps) {
+      this[key] = deps[key]
+    }
   }
 
   /**
    * Transform given model according rules.
    *
    * @param {object} model Some model to transform
+   * @param {object} payload Additional data to use while transformation
+   *
    * @return {object} Transformed model
    */
   transform (model, payload = {}) {
@@ -28,7 +32,7 @@ export default class Transformer {
         continue
       }
       model = Object.assign({}, model)
-      model = handler(model, this.container, payload)
+      model = handler(model, payload)
     }
     return model
   }
