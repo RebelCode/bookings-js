@@ -15,7 +15,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     inject: {
       'momentHelpers': 'momentHelpers',
       'pluralize': 'pluralize',
-      'websiteConfig': 'websiteConfig',
+      'config': 'config',
 
       modalState: {
         from: 'availabilityEditorStateToggleable'
@@ -130,7 +130,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     computed: {
       ...mapState({
         timezone (state) {
-          return state.app.timezone || this.websiteConfig.timezone
+          return state.app.timezone || this.config.timezone
         }
       }),
       ...mapState('bookingOptions', {

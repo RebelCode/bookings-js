@@ -13,7 +13,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       'availability-calendar',
       'availabilityEditorStateToggleable',
       'availabilityTransformer',
-      'websiteConfig'
+      'config'
     ],
     data () {
       return {
@@ -46,7 +46,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
        */
       timezone: {
         get () {
-          return this.$store.state.app.timezone || this.websiteConfig.timezone
+          return this.$store.state.app.timezone || this.config.timezone
         },
         set (value) {
           this.$store.commit('setTimezone', value)

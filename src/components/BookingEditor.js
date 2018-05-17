@@ -4,7 +4,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
 
-      'websiteConfig': 'websiteConfig',
+      'config': 'config',
 
       'bookingTransformer': 'bookingTransformer',
 
@@ -117,8 +117,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
      */
     created () {
       this.seedLock = true
-      if (this.websiteConfig.timezone) {
-        this.model.clientTzName = this.websiteConfig.timezone
+      if (this.config.timezone) {
+        this.model.clientTzName = this.config.timezone
       }
       this.seedLock = false
     },
@@ -315,9 +315,11 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Start value is changed
        */
       startChanged () {
-        if (this.model.end) {
-          this.$validator.validate('end')
-        }
+        this.$nextTick(() => {
+          if (this.model.end) {
+            this.$validator.validate('end')
+          }
+        })
         this.errors.remove('start')
       },
 

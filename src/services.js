@@ -21,8 +21,8 @@ export function services (dependencies, document) {
     store: function (container) {
       return new container.vuex.Store(store)
     },
-    websiteConfig: function (container) {
-      return container['APP_STATE'].websiteConfig || {}
+    config: function (container) {
+      return container['APP_STATE'].config || {}
     },
     availabilityEditorStateToggleable: function (container) {
       return new FunctionalToggleable((newVisibility) => {
