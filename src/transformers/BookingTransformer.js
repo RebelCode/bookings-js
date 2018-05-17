@@ -10,16 +10,16 @@ export default class BookingTransformer extends Transformer {
    * @property {object} rules
    */
   rules = {
-    service (model) {
+    service: (model) => {
       model['service'] = model['service'].id
       model['resource'] = model['service']
       return model
     },
-    client (model) {
+    client: (model) => {
       model['client'] = model['client'].id
       return model
     },
-    newStatus (model) {
+    newStatus: (model) => {
       if (model['newStatus']) {
         model['transition'] = model['newStatus']
       }
@@ -27,19 +27,19 @@ export default class BookingTransformer extends Transformer {
       delete model['status']
       return model
     },
-    isTrusted (model) {
+    isTrusted: (model) => {
       delete model['isTrusted']
       return model
     },
-    start (model, container) {
-      model['start'] = container.moment(model['start']).format()
+    start: (model) => {
+      model['start'] = this.moment(model['start']).format()
       return model
     },
-    end (model, container) {
-      model['end'] = container.moment(model['end']).format()
+    end: (model) => {
+      model['end'] = this.moment(model['end']).format()
       return model
     },
-    clientTzName (model) {
+    clientTzName: (model) => {
       model['clientTz'] = model['clientTzName']
       delete model['clientTzName']
       return model

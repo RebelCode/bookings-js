@@ -7,22 +7,30 @@ export default class AvailabilityTransformer extends Transformer {
    * @property {object} rules
    */
   rules = {
-    id (model) {
+    id: (model) => {
       if (model.id[0] === '_') {
         model['id'] = null
       }
       return model
     },
-    start (model, container, { timezone }) {
-      model['start'] = container.momentHelpers
-        .createInTimezone(model['start'], timezone)
-        .format()
+    start: (model, { timezone }) => {
+      model['start'] = this.transformDatetime(model['start'], timezone)
       return model
     },
-    end (model, container, { timezone }) {
-      model['end'] = container.momentHelpers
-        .createInTimezone(model['end'], timezone)
-        .format()
+    end: (model, { timezone }) => {
+      model['end'] = this.transformDatetime(model['end'], timezone)
+      return model
+    },
+    repeatUntilDate: (model, { timezone }) => {
+      if (model['repeatUntilDate']) {
+        model['repeatUntilDate'] = this.transformDatetime(model['repeatUntilDate'], timezone)
+      }
+      return model
+    },
+    excludeDates: (model, { timezone }) => {
+      model['excludeDates'] = model['excludeDates'].map(excludeDate => {
+        return this.transformDatetime(excludeDate, timezone)
+      })
       return model
     }
   }

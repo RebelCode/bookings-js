@@ -10,17 +10,18 @@ export function momentHelpers (moment) {
     weekdaysCache: {},
 
     /**
-     * Create moment in given timezone. 'UTC+2...' format supported.
+     * Create moment in given timezone but preserve local time. 'UTC+2...' format supported.
      * 
      * @param {any} value Any value that moment can accept into constructor 
      * @param {string} tz String representing timezone, including UTC+${offset}
      */
     createInTimezone (value, tz) {
       if (tz.indexOf('UTC') !== 0) {
-        return moment.tz(value, tz)
+        let momentValue = moment(value)
+        return moment.tz(momentValue.format('YYYY-MM-DDTHH:mm:ss'), 'YYYY-MM-DDTHH:mm:ss', tz)
       }
       let offset = Number(tz.replace(/UTC\+?/g, ''))
-      return moment(value).utcOffset(offset)
+      return moment(value).utcOffset(offset, true)
     },
 
     /**
