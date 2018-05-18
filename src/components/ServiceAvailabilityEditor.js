@@ -150,7 +150,10 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           return moment(this.model.repeatUntilDate).toDate()
         },
         set (value) {
-          this.model.repeatUntilDate = this.momentHelpers.createInTimezone(value, this.timezone).format(this.config.formats.datetime.store)
+          this.model.repeatUntilDate = this.momentHelpers
+            .createInTimezone(value, this.timezone)
+            .startOf('day')
+            .format(this.config.formats.datetime.store)
         }
       },
 

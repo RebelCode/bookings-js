@@ -11,17 +11,24 @@ export function momentHelpers (moment) {
 
     /**
      * Create moment in given timezone but preserve local time. 'UTC+2...' format supported.
+     *
+     * This is useful for switching timezone, but holding time, for example you can switch from this:
+     * - `2018-01-01T18:00:00+02:00 (UTC: 2018-01-01T16:00:00Z)`
+     * to this:
+     * - `2018-01-01T18:00:00+04:00 (UTC: 2018-01-01T14:00:00Z)`
+     * by calling `createInTimezone('2018-01-01T18:00:00+02:00', 'UTC+4')`
      * 
      * @param {any} value Any value that moment can accept into constructor 
      * @param {string} tz String representing timezone, including UTC+${offset}
      */
     createInTimezone (value, tz) {
+      const TIMEZONE_FREE_FORMAT = 'YYYY-MM-DD HH:mm:ss'
+      const momentFixedTimezoneValue = moment.parseZone(value)
       if (tz.indexOf('UTC') !== 0) {
-        let momentValue = moment(value)
-        return moment.tz(momentValue.format('YYYY-MM-DDTHH:mm:ss'), 'YYYY-MM-DDTHH:mm:ss', tz)
+        return moment.tz(momentFixedTimezoneValue.format(TIMEZONE_FREE_FORMAT), TIMEZONE_FREE_FORMAT, tz)
       }
       let offset = Number(tz.replace(/UTC\+?/g, ''))
-      return moment(value).utcOffset(offset, true)
+      return momentFixedTimezoneValue.utcOffset(offset, true)
     },
 
     /**

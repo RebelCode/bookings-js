@@ -106,10 +106,6 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         }
 
         /**
-         * @var {Date} pageDate
-         */
-        const pageDate = this.$refs.datepicker.pageDate
-        /**
          * @var {moment} selectedDate
          */
         const selectedDate = moment(this.disabledBefore)
