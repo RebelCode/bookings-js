@@ -32,12 +32,6 @@ const getters = {
 
 const mutations = {
   setInitialState (state, appState) {
-    if (appState.sessionLengths) {
-      appState.sessionLengths = appState.sessionLengths.map(sessionLength => {
-        sessionLength.price = sessionLength.price.amount
-        return sessionLength
-      })
-    }
     state.app = Object.assign({}, state.app, appState)
   },
 

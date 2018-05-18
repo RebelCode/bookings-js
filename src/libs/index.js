@@ -39,7 +39,7 @@ export default function (dependencies) {
       return momentHelpers(container.moment)
     },
     bookingHelpers: function (container) {
-      return bookingHelpers(container.bookingStatusesColors, container.APP_STATE.statuses)
+      return bookingHelpers(container.bookingStatusesColors, container.state.statuses)
     },
     moment: function () {
       return dependencies.moment 

@@ -29,10 +29,10 @@ export default function (dependencies) {
       return CfTimezoneSelect()
     },
     'service-bookings-application': function (container) {
-      return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
+      return CfServiceBookingsApplication(container.state, container.store, container.vuex)
     },
     'bookings-application': function (container) {
-      return CfBookingsApplication(container['APP_STATE'], container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
+      return CfBookingsApplication(container.state, container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep, 'generatedEvents')

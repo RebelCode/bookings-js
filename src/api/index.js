@@ -7,10 +7,10 @@ import ClientsApi from './ClientsApi'
 export default function (dependencies) {
   return {
     bookingsApi (container) {
-      return new BookingsApi(container.httpClient, container['APP_STATE'].endpointsConfig['bookings'])
+      return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'])
     },
     clientsApi (container) {
-      return new ClientsApi(container.httpClient, container['APP_STATE'].endpointsConfig['clients'])
+      return new ClientsApi(container.httpClient, container.state.endpointsConfig['clients'])
     }
   }
 }

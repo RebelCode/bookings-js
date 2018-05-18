@@ -20,6 +20,8 @@ export function momentHelpers (moment) {
      * 
      * @param {any} value Any value that moment can accept into constructor 
      * @param {string} tz String representing timezone, including UTC+${offset}
+     *
+     * @return {moment}
      */
     createInTimezone (value, tz) {
       const TIMEZONE_FREE_FORMAT = 'YYYY-MM-DD HH:mm:ss'
@@ -32,9 +34,26 @@ export function momentHelpers (moment) {
     },
 
     /**
+     * Switch timezone of given datetime.
+     *
+     * @param {any} value Any value that moment can accept into constructor
+     * @param {string} tz String representing timezone, including UTC+${offset}
+     *
+     * @return {moment}
+     */
+    switchToTimezone (value, tz) {
+      const momentFixedTimezoneValue = moment.parseZone(value)
+      if (tz.indexOf('UTC') !== 0) {
+        return moment.tz(momentFixedTimezoneValue, tz)
+      }
+      let offset = Number(tz.replace(/UTC\+?/g, ''))
+      return momentFixedTimezoneValue.utcOffset(offset)
+    },
+
+    /**
      * Get label for timezone.
      * 
-     * @param {string} tz String representing timezone, including UTC+${offset}
+     * @param {string} tz String representing of timezone to display for humans in UI, including UTC+${offset}
      */
     timezoneLabel (tz) {
       return tz.replace(/_/g, ' ')
@@ -48,6 +67,7 @@ export function momentHelpers (moment) {
      *
      * @param {moment} firstDate
      * @param {moment} secondDate
+     *
      * @return {boolean} Is dates are the same weekdays in months (two first mondays)
      */
     weekdayOfMonthIsSame (firstDate, secondDate) {
