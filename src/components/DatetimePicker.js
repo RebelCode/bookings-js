@@ -44,7 +44,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         get () {
           if (!this.value || this.timeDisabled) return null
 
-          const datetime = moment(this.value)
+          const datetime = moment.parseZone(this.value)
           return {
             HH: datetime.format('HH'),
             mm: datetime.format('mm')
@@ -52,7 +52,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         },
 
         set (newValue) {
-          const datetime = moment(this.value || moment())
+          const datetime = moment.parseZone(this.value || moment())
 
           datetime.set({
             hour: newValue.HH,
@@ -70,11 +70,11 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         get () {
           if (!this.value) return null
 
-          return moment(this.value).format('YYYY-MM-DD')
+          return moment.parseZone(this.value).format('YYYY-MM-DD')
         },
 
         set (newValue) {
-          const value = moment(this.value || moment())
+          const value = moment.parseZone(this.value || moment())
 
           value.set({
             year: newValue.getFullYear(),

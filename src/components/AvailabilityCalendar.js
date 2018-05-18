@@ -11,10 +11,13 @@
  */
 export default function (FullCalendar, moment) {
   return FullCalendar.extend({
-    inject: [
-      'availabilitiesCollection',
-      'momentHelpers'
-    ],
+    inject: {
+      'availabilitiesCollection': 'availabilitiesCollection',
+      'momentHelpers': 'momentHelpers',
+      'appConfig': {
+        from: 'config'
+      }
+    },
     data () {
       return {
         rangeStart: null,
@@ -45,6 +48,9 @@ export default function (FullCalendar, moment) {
         default () {
           return 'agendaWeek'
         },
+      },
+      visibleTimezone: {
+        default: false
       },
       config: {
         type: Object,
@@ -78,6 +84,9 @@ export default function (FullCalendar, moment) {
           this.renderRepeatedAvailabilities()
         }
       },
+      visibleTimezone () {
+        this.renderRepeatedAvailabilities()
+      },
       generatedAvailabilities (value) {
         let overlapping = {}
         for (let availability of value) {
@@ -103,11 +112,30 @@ export default function (FullCalendar, moment) {
     },
 
     methods: {
-      eventRender (event, el) {
+      /**
+       * Render event view.
+       *
+       * @param event
+       * @param element
+       * @param view
+       */
+      eventRender (event, el, view) {
         let endDate = event.end || event.start
         if (endDate.isBefore(moment(), 'day')) {
           el[0].classList.add('fc-event--past')
         }
+
+        el.find('.fc-content')
+          .addClass(`rc-event`)
+          .html(this.getEventMarkup(event))
+      },
+
+      getEventMarkup (event) {
+        const timezone = this.visibleTimezone === this.appConfig.timezone ? '' : this.momentHelpers.timezoneLabel(this.visibleTimezone)
+        return `
+          <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
+          <div class="rc-event-field rc-event-field--timezone">${timezone}</div>
+        `
       },
 
       /**
@@ -190,7 +218,7 @@ export default function (FullCalendar, moment) {
           const checkingDay = moment(this.rangeStart).subtract(i, 'days')
           let startIsOnDay = this.checkingDateIsOnDay(
             availability,
-            moment(availability.start).startOf('day'),
+            moment.parseZone(availability.start).startOf('day'),
             checkingDay,
             true
           )
@@ -200,7 +228,7 @@ export default function (FullCalendar, moment) {
           }
 
           const startIsNotExcluded = !this.dayInExcluded(availability, checkingDay)
-            && checkingDay.isSameOrAfter(moment(availability.start), 'day')
+            && checkingDay.isSameOrAfter(moment.parseZone(availability.start), 'day')
             && !this.availabilityEnded(availability, checkingDay)
 
           if (startIsNotExcluded) {
@@ -240,7 +268,7 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       availabilityStartFitsInDay (availability, day) {
-        let fromDate = moment(availability.start)
+        let fromDate = moment.parseZone(availability.start)
         fromDate.set({
           hour: 0,
           minute: 0,
@@ -266,13 +294,13 @@ export default function (FullCalendar, moment) {
        * @return {*}
        */
       availabilityEndFitsInDay (availability, day) {
-        let checkingDate = moment(availability.end)
+        let checkingDate = moment.parseZone(availability.end)
         let endSecondsDiff = checkingDate.diff(moment(checkingDate.startOf('day')), 'seconds')
         checkingDate.startOf('day')
 
         const endOnCurrentDay = this.checkingDateIsOnDay(
           availability,
-          moment(availability.start).startOf('day'),
+          moment.parseZone(availability.start).startOf('day'),
           moment(day).subtract(this.getAvailabilityDuration(availability), 'seconds').startOf('day'),
           true
         )
@@ -289,7 +317,7 @@ export default function (FullCalendar, moment) {
         return !this.dayInViewport(startDate)
           && !this.dayInExcluded(availability, startDate)
           && !this.availabilityEnded(availability, startDate)
-          && startDate.isSameOrAfter(moment(availability.start), 'day')
+          && startDate.isSameOrAfter(moment.parseZone(availability.start), 'day')
       },
 
       /**
@@ -390,7 +418,7 @@ export default function (FullCalendar, moment) {
           },
           weeks () {
             if (!vm.isAvailabilityOnTheSameDay(availability)) {
-              const render = moment(availability.start).add(repeatUnitDiff, unitDiff).isSame(day, 'day')
+              const render = moment.parseZone(availability.start).add(repeatUnitDiff, unitDiff).isSame(day, 'day')
               return render
             }
             return availability.repeatWeeklyOn.indexOf(day.format('dddd').toLowerCase()) > -1
@@ -408,7 +436,7 @@ export default function (FullCalendar, moment) {
       },
 
       isAvailabilityOnTheSameDay (availability) {
-        return moment(availability.start).isSame(moment(availability.end), 'day')
+        return moment.parseZone(availability.start).isSame(moment.parseZone(availability.end), 'day')
       },
 
       /**
@@ -425,7 +453,7 @@ export default function (FullCalendar, moment) {
         if (!availability.repeat) {
           return false
         }
-        const fromDate = moment(availability.start)
+        const fromDate = moment.parseZone(availability.start)
         fromDate.set({
           hour: 0,
           minute: 0,
@@ -438,7 +466,7 @@ export default function (FullCalendar, moment) {
             .isBefore(day, availability.repeatUntilPeriod)
         }
         else if (availability.repeatUntil === 'date') {
-          return moment(availability.repeatUntilDate).isBefore(moment(day).startOf('day'), 'day')
+          return moment.parseZone(availability.repeatUntilDate).isBefore(moment(day).startOf('day'), 'day')
         }
         return false
       },
@@ -458,10 +486,10 @@ export default function (FullCalendar, moment) {
           availabilityStartTime = moment.parseZone(availability.start).format('HH:mm:ssZ')
 
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
-          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ssZ')
+          eventEnd = moment.parseZone(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ssZ')
 
         if (model.isAllDay) {
-          eventEnd = moment(eventEnd).endOf('day').add(1, 'second')
+          eventEnd = moment.parseZone(eventEnd).endOf('day').add(1, 'second')
         }
 
         return Object.assign({}, {
