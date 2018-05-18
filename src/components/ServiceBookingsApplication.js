@@ -12,7 +12,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       'timezone-select',
       'availability-calendar',
       'availabilityEditorStateToggleable',
-      'availabilityTransformer',
+      'availabilityStoreTransformer',
       'config'
     ],
     data () {
@@ -81,7 +81,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           timezone: this.timezone,
           availability: {
             rules: this.availabilities.map(item => {
-              return this.availabilityTransformer.transform(Object.assign({}, item), {
+              return this.availabilityStoreTransformer.transform(Object.assign({}, item), {
                 timezone: this.timezone
               })
             })

@@ -1,5 +1,8 @@
 import BookingTransformer from './BookingTransformer'
-import AvailabilityTransformer from './AvilabilityTransformer'
+import AvailabilityStoreTransformer from './AvilabilityStoreTransformer'
+import AvailabilityReadTransformer from './AvilabilityReadTransformer'
+import StateTransformer from './StateTransformer'
+import SessionLengthReadTransformer from './SessionLengthReadTransformer'
 
 export default function (dependencies) {
   return {
@@ -8,19 +11,48 @@ export default function (dependencies) {
         moment: container.moment
       })
     },
-    availabilityTransformer (container) {
-      return new AvailabilityTransformer({
+    availabilityStoreTransformer (container) {
+      return new AvailabilityStoreTransformer({
         moment: container.moment,
-        transformDatetime: container.transformDatetime
+        transformDatetimeForStore: container.transformDatetimeForStore
       })
     },
-    transformDatetime (container) {
+    availabilityReadTransformer (container) {
+      return new AvailabilityReadTransformer({
+        moment: container.moment,
+        transformDatetimeForUi: container.transformDatetimeForUi
+      })
+    },
+    sessionLengthReadTransformer () {
+      return new SessionLengthReadTransformer()
+    },
+    stateTransformer (container) {
+      return new StateTransformer({
+        availabilityReadTransformer: container.availabilityReadTransformer,
+        sessionLengthReadTransformer: container.sessionLengthReadTransformer
+      })
+    },
+    transformDatetimeForUi (container) {
+      /**
+       * Transform datetime to work with it in UI
+       *
+       * @param {any} value
+       * @param {string} timezone
+       *
+       * @returns {string}
+       */
+      return (value, timezone) => {
+        return container.momentHelpers
+          .switchToTimezone(value, timezone)
+          .format(container.config.formats.datetime.tzFree)
+      }
+    },
+    transformDatetimeForStore (container) {
       /**
        * Transform datetime to format required by server.
        *
        * @param {any} value
        * @param {string} timezone
-       * @param {object} container
        *
        * @returns {string}
        */

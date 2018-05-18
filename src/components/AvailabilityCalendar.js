@@ -11,10 +11,13 @@
  */
 export default function (FullCalendar, moment) {
   return FullCalendar.extend({
-    inject: [
-      'availabilitiesCollection',
-      'momentHelpers'
-    ],
+    inject: {
+      'availabilitiesCollection': 'availabilitiesCollection',
+      'momentHelpers': 'momentHelpers',
+      'appConfig': {
+        from: 'config'
+      }
+    },
     data () {
       return {
         rangeStart: null,
@@ -45,6 +48,9 @@ export default function (FullCalendar, moment) {
         default () {
           return 'agendaWeek'
         },
+      },
+      visibleTimezone: {
+        default: false
       },
       config: {
         type: Object,
@@ -78,6 +84,9 @@ export default function (FullCalendar, moment) {
           this.renderRepeatedAvailabilities()
         }
       },
+      visibleTimezone () {
+        this.renderRepeatedAvailabilities()
+      },
       generatedAvailabilities (value) {
         let overlapping = {}
         for (let availability of value) {
@@ -103,11 +112,30 @@ export default function (FullCalendar, moment) {
     },
 
     methods: {
-      eventRender (event, el) {
+      /**
+       * Render event view.
+       *
+       * @param event
+       * @param element
+       * @param view
+       */
+      eventRender (event, el, view) {
         let endDate = event.end || event.start
         if (endDate.isBefore(moment(), 'day')) {
           el[0].classList.add('fc-event--past')
         }
+
+        el.find('.fc-content')
+          .addClass(`rc-event`)
+          .html(this.getEventMarkup(event))
+      },
+
+      getEventMarkup (event) {
+        const timezone = this.visibleTimezone === this.appConfig.timezone ? '' : this.momentHelpers.timezoneLabel(this.visibleTimezone)
+        return `
+          <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
+          <div class="rc-event-field rc-event-field--timezone">${timezone}</div>
+        `
       },
 
       /**

@@ -1,4 +1,4 @@
-export function CfDatetimePicker (DatetimePicker, moment) {
+export function CfDatetimePicker (DatetimePicker, moment, format) {
   return DatetimePicker.extend({
     template: '#datepicker-template',
     inject: [
@@ -10,7 +10,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
        * @property {string} Moment-ish format for input
        */
       dataFormat: {
-        default: null
+        default: format
       },
 
       /**
@@ -104,11 +104,6 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         if (!this.disabledBefore || !this.$refs.datepicker) {
           return {}
         }
-
-        /**
-         * @var {Date} pageDate
-         */
-        const pageDate = this.$refs.datepicker.pageDate
         /**
          * @var {moment} selectedDate
          */

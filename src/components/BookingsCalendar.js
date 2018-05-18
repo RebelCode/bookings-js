@@ -133,7 +133,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
-          title: model.service.title,
+          title: model.service.name,
           start: moment(model.start),
           end: moment(model.end),
 

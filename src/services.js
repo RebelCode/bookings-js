@@ -21,6 +21,11 @@ export function services (dependencies, document) {
     store: function (container) {
       return new container.vuex.Store(store)
     },
+    state: function (container) {
+      return container.stateTransformer.transform(container['APP_STATE'], {
+        timezone: container['APP_STATE'].timezone || container['APP_STATE'].config.timezone
+      })
+    },
     config: function (container) {
       return container['APP_STATE'].config || {}
     },

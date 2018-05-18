@@ -271,13 +271,15 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Format time in given offset for displaying universal
        * and client's times.
        *
-       * @param {any} time Timein any format moment can accept. 
+       * @param {any} time Time in any format moment can accept.
        * @param {string} timezone Timezone name
        * 
        * @return {string} Formatted string
        */
       format (time, timezone = 'UTC+0') {
-        return this.momentHelpers.createInTimezone(time, timezone).format('DD/MM/YY HH:mm')
+        const serviceTimezone = !!this.model.service ? this.model.service.timezone : this.config.timezone
+        const timeInServiceTimezone = this.momentHelpers.createInTimezone(time, serviceTimezone)
+        return this.momentHelpers.switchToTimezone(timeInServiceTimezone.format(), timezone).format('DD/MM/YY HH:mm')
       },
 
       /**

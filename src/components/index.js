@@ -29,10 +29,10 @@ export default function (dependencies) {
       return CfTimezoneSelect()
     },
     'service-bookings-application': function (container) {
-      return CfServiceBookingsApplication(container['APP_STATE'], container.store, container.vuex)
+      return CfServiceBookingsApplication(container.state, container.store, container.vuex)
     },
     'bookings-application': function (container) {
-      return CfBookingsApplication(container['APP_STATE'], container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
+      return CfBookingsApplication(container.state, container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep, 'generatedEvents')
@@ -62,7 +62,7 @@ export default function (dependencies) {
       return dependencies.datetimePicker.CfDatetimePicker(container.vue)
     },
     'datetime-picker': function (container) {
-      return CfDatetimePicker(container._datetimePicker, container.moment)
+      return CfDatetimePicker(container._datetimePicker, container.moment, container.config.formats.datetime.tzFree)
     },
     'time-picker': function (container) {
       return CfVueTimepicker(container.vue.options.components['vue-timepicker'])

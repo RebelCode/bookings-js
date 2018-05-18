@@ -1,19 +1,19 @@
 export default class Transformer {
   /**
-   * Instance of application container.
-   */
-  container
-
-  /**
    * List of rules to transform.
    * 
    * @type {{}}
    */
   rules = {}
 
-  constructor (deps = {}) {
-    for (let key in deps) {
-      this[key] = deps[key]
+  /**
+   * Transformer constructor.
+   *
+   * @param {object} dependencies List of dependencies.
+   */
+  constructor (dependencies = {}) {
+    for (let key in dependencies) {
+      this[key] = dependencies[key]
     }
   }
 

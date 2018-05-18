@@ -36,10 +36,10 @@ export default function (dependencies) {
       return dependencies.lodash
     },
     momentHelpers: function (container) {
-      return momentHelpers(container.moment)
+      return momentHelpers(container.moment, container.config.formats.datetime)
     },
     bookingHelpers: function (container) {
-      return bookingHelpers(container.bookingStatusesColors, container.APP_STATE.statuses)
+      return bookingHelpers(container.bookingStatusesColors, container.state.statuses)
     },
     moment: function () {
       return dependencies.moment 
