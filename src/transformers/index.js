@@ -44,7 +44,7 @@ export default function (dependencies) {
       return (value, timezone) => {
         return container.momentHelpers
           .switchToTimezone(value, timezone)
-          .format(container.config.formats.datetime.store)
+          .format(container.config.formats.datetime.tzFree)
       }
     },
     transformDatetimeForStore (container) {

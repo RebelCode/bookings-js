@@ -14,7 +14,6 @@ export default class StateTransformer extends Transformer {
   rules = {
     availabilities: (model, { timezone }) => {
       model.availabilities['rules'] = model.availabilities.rules.map(availability => {
-        console.info('availability after transformation', this.availabilityReadTransformer.transform(availability, { timezone }), { timezone })
         return this.availabilityReadTransformer.transform(availability, { timezone })
       })
       return model

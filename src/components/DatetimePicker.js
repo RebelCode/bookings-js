@@ -1,4 +1,4 @@
-export function CfDatetimePicker (DatetimePicker, moment) {
+export function CfDatetimePicker (DatetimePicker, moment, format) {
   return DatetimePicker.extend({
     template: '#datepicker-template',
     inject: [
@@ -10,7 +10,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
        * @property {string} Moment-ish format for input
        */
       dataFormat: {
-        default: null
+        default: format
       },
 
       /**
@@ -44,7 +44,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         get () {
           if (!this.value || this.timeDisabled) return null
 
-          const datetime = moment.parseZone(this.value)
+          const datetime = moment(this.value)
           return {
             HH: datetime.format('HH'),
             mm: datetime.format('mm')
@@ -52,7 +52,7 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         },
 
         set (newValue) {
-          const datetime = moment.parseZone(this.value || moment())
+          const datetime = moment(this.value || moment())
 
           datetime.set({
             hour: newValue.HH,
@@ -70,11 +70,11 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         get () {
           if (!this.value) return null
 
-          return moment.parseZone(this.value).format('YYYY-MM-DD')
+          return moment(this.value).format('YYYY-MM-DD')
         },
 
         set (newValue) {
-          const value = moment.parseZone(this.value || moment())
+          const value = moment(this.value || moment())
 
           value.set({
             year: newValue.getFullYear(),
@@ -104,7 +104,6 @@ export function CfDatetimePicker (DatetimePicker, moment) {
         if (!this.disabledBefore || !this.$refs.datepicker) {
           return {}
         }
-
         /**
          * @var {moment} selectedDate
          */

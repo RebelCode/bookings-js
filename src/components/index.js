@@ -62,7 +62,7 @@ export default function (dependencies) {
       return dependencies.datetimePicker.CfDatetimePicker(container.vue)
     },
     'datetime-picker': function (container) {
-      return CfDatetimePicker(container._datetimePicker, container.moment)
+      return CfDatetimePicker(container._datetimePicker, container.moment, container.config.formats.datetime.tzFree)
     },
     'time-picker': function (container) {
       return CfVueTimepicker(container.vue.options.components['vue-timepicker'])

@@ -153,7 +153,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           this.model.repeatUntilDate = this.momentHelpers
             .createInTimezone(value, this.timezone)
             .startOf('day')
-            .format(this.config.formats.datetime.store)
+            .format(this.config.formats.datetime.tzFree)
         }
       },
 
@@ -302,7 +302,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
 
       excludeDateSelected (date) {
-        date = moment(date).startOf('day').format(this.config.formats.datetime.store)
+        date = moment(date).startOf('day').format(this.config.formats.datetime.tzFree)
 
         if (this.excludeDatesCollection.hasItem(date)) {
           this.excludeDatesCollection.removeItem(date)
