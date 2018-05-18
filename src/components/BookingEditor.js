@@ -233,6 +233,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         })
       },
 
+
       /**
        * Save booking.
        */
@@ -241,10 +242,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
         this.isBookingSaving = true
 
-        return this.saveBookingOnBackend({api: this.bookingsApi, model}).then(() => {
-          this.$emit('updated')
-          this.forceCloseModal()
-        }, (error) => {
+        const savingError = (error) => {
           const errorResponse = error.response
           if (!errorResponse) {
             return
@@ -252,8 +250,36 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           if (errorResponse.data.data && errorResponse.data.data.errors) {
             this.errorMessage = errorResponse.data.data.errors[0]
           }
-        }).finally(() => {
+        }
+
+        return this.saveBookingOnBackend({api: this.bookingsApi, model}).then((response) => {
+          return response
+        }, savingError).then((response) => {
+          if (!this.model.id && response.data.status === 'in_cart') { // @todo: it will be fixed when transition map will be pulled in
+            return this.applySubmitTransition(response)
+          }
+          return response
+        }, savingError).then((response) => {
+          this.$emit('updated')
+          this.forceCloseModal()
+        }, savingError).finally(() => {
           this.isBookingSaving = false
+        })
+      },
+
+      /**
+       * Apply this transition when new booking is created.
+       *
+       * @param response
+       * @return {*}
+       */
+      applySubmitTransition (response) {
+        const model = {
+          id: response.data.id,
+          transition: 'submit' // @todo: it will be fixed when transition map will be pulled in
+        }
+        return this.saveBookingOnBackend({
+          api: this.bookingsApi, model
         })
       },
 
@@ -277,8 +303,11 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * @return {string} Formatted string
        */
       format (time, timezone = 'UTC+0') {
+        if (!time) return
+
         const serviceTimezone = !!this.model.service ? this.model.service.timezone : this.config.timezone
         const timeInServiceTimezone = this.momentHelpers.createInTimezone(time, serviceTimezone)
+
         return this.momentHelpers.switchToTimezone(timeInServiceTimezone.format(), timezone).format('DD/MM/YY HH:mm')
       },
 
