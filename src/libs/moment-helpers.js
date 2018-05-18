@@ -1,4 +1,4 @@
-export function momentHelpers (moment) {
+export function momentHelpers (moment, formats) {
   return {
     /**
      * Cache for weekdays in month. Example:
@@ -24,10 +24,9 @@ export function momentHelpers (moment) {
      * @return {moment}
      */
     createInTimezone (value, tz) {
-      const TIMEZONE_FREE_FORMAT = 'YYYY-MM-DD HH:mm:ss'
       const momentFixedTimezoneValue = moment.parseZone(value)
       if (tz.indexOf('UTC') !== 0) {
-        return moment.tz(momentFixedTimezoneValue.format(TIMEZONE_FREE_FORMAT), TIMEZONE_FREE_FORMAT, tz)
+        return moment.tz(momentFixedTimezoneValue.format(formats.tzFree), formats.tzFree, tz)
       }
       let offset = Number(tz.replace(/UTC\+?/g, ''))
       return momentFixedTimezoneValue.utcOffset(offset, true)
