@@ -19,12 +19,10 @@ export default class BookingTransformer extends Transformer {
       model['client'] = model['client'].id
       return model
     },
-    newStatus: (model) => {
-      if (model['newStatus']) {
-        model['transition'] = model['newStatus']
+    transition: (model) => {
+      if (!model['transition']) {
+        delete model['transition']
       }
-      delete model['newStatus']
-      delete model['status']
       return model
     },
     isTrusted: (model) => {
