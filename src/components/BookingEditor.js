@@ -82,6 +82,9 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           email: ''
         },
 
+        /**
+         * @property {object[]} List of clients found by search for autocomplete.
+         */
         foundClients: []
       }
     },
@@ -115,12 +118,19 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         services: state => state.services,
       }),
 
+      /**
+       * CSS rules for styling booking status "pill" in editor.
+       *
+       * @return {object}
+       */
       statusStyle () {
         return this.helpers.statusStyle(this.model.status)
       },
 
       /**
-       * Map of available transitions
+       * Map of status keys to map of transitions to status keys.
+       * It will give ability to show only allowed transitions for
+       * editing booking.
        *
        * @return {object}
        */
@@ -129,7 +139,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
-       * Map of available translated transitions labels
+       * Map of transition keys to translated transitions labels.
        *
        * @return {object}
        */
