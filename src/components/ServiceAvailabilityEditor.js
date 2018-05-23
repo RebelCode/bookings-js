@@ -324,6 +324,32 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         }
 
         this.$refs.exclusions.selectedDate = null
+      },
+
+      /**
+       * Fires when availability start value is changed.
+       * Here we are trying to make sure that start datetime is not
+       * bigger than end datetime. If validation fails we show error in UI.
+       */
+      startChanged () {
+        this.$nextTick(() => {
+          if (this.model.end) {
+            this.$validator.validate('end')
+          }
+        })
+        this.errors.remove('start')
+      },
+
+      /**
+       * Validate current availability and if everything is fine, save it.
+       */
+      saveAvailability () {
+        this.$validator.validateAll().then((result) => {
+          if (!result) {
+            return
+          }
+          this.saveItem()
+        })
       }
     },
     components: {
