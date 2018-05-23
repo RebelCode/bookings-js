@@ -3,12 +3,22 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
     inject: {
       'isMobile': 'isMobile',
       'bookingHelpers': 'bookingHelpers',
+      'config': 'config',
       'list-table': {
         from: 'wpListTable'
       },
       '_': {
         from: 'translate'
       },
+
+      /**
+       * Function for text formatting, it will replace placeholders to given values.
+       *
+       * @var {Function}
+       */
+      'formatter': {
+        from: 'textFormatter'
+      }
     },
 
     data () {
