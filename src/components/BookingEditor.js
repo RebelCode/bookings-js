@@ -14,7 +14,17 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         from: 'bookingHelpers'
       },
 
+      /**
+       * Function for text formatting, it will replace placeholders to given values.
+       *
+       * @var {Function}
+       */
+      'formatter': {
+        from: 'textFormatter'
+      },
+
       'humanizeDuration': 'humanizeDuration',
+
       /**
        * Modal state injected from elsewhere.
        *
