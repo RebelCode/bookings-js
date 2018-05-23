@@ -5,6 +5,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'bookingsApi': 'bookingsApi',
 
       'config': 'config',
+      'state': 'state',
 
       'bookingTransformer': 'bookingTransformer',
 
@@ -71,7 +72,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           clientTzName: 'UTC+0',
           notes: null,
 
-          newStatus: '',
+          transition: '',
         },
 
         errorMessage: false,
@@ -81,22 +82,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           email: ''
         },
 
-        foundClients: [],
-
         /**
-         * Actions that can be taken with given booking. Action is transition to another status.
-         *
-         * @see: https://aventura.atlassian.net/wiki/spaces/EDDBK/pages/59751681/Status+Terms
+         * @property {object[]} List of clients found by search for autocomplete.
          */
-        actionsMap: {
-          'in_cart': ['pending'],
-          'draft': ['pending'],
-          'pending': ['approved', 'cancelled'],
-          'approved': ['scheduled'],
-          'scheduled': ['draft', 'pending', 'cancelled'],
-          'cancelled': ['in_cart', 'draft', 'pending', 'approved', 'scheduled'],
-          'completed': ['in_cart', 'draft', 'pending', 'approved', 'scheduled'],
-        }
+        foundClients: []
       }
     },
 
@@ -130,20 +119,32 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       }),
 
       /**
-       * Get available actions for current booking status.
-       * Action is transition to another status.
+       * CSS rules for styling booking status "pill" in editor.
        *
-       * @see https://aventura.atlassian.net/wiki/spaces/EDDBK/pages/59751681/Status+Terms
-       *
-       * @return {array}
+       * @return {object}
        */
-      availableActions () {
-        if (!this.model.id) return []
-        return this.actionsMap[this.model.status] || []
-      },
-
       statusStyle () {
         return this.helpers.statusStyle(this.model.status)
+      },
+
+      /**
+       * Map of status keys to map of transitions to status keys.
+       * It will give ability to show only allowed transitions for
+       * editing booking.
+       *
+       * @return {object}
+       */
+      transitionsMap () {
+        return this.state.statusTransitions
+      },
+
+      /**
+       * Map of transition keys to translated transitions labels.
+       *
+       * @return {object}
+       */
+      transitionsLabels () {
+        return this.state.transitionsLabels
       },
 
       /**
@@ -381,13 +382,19 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
-       * Check booking can be saved with given status
+       * Check that given transition can be applied to current booking.
        *
-       * @param newStatus
+       * @param {string} transition Transition to check
+       *
        * @return {boolean}
        */
-      bookingCanBe (newStatus) {
-        return this.availableActions.indexOf(newStatus) > -1
+      canDoTransition (transition) {
+        const status = this.model.status || 'none'
+        const availableTransitions = this.transitionsMap[status]
+        if (!availableTransitions) {
+          return false
+        }
+        return !!availableTransitions[transition]
       }
     },
 
