@@ -98,10 +98,12 @@ export function CfDatetimePicker (DatetimePicker, moment, format) {
       },
 
       /**
-       * Disabled dates config.
+       * Disabled dates configuration for `datepicker` component.
+       *
+       * @property {{to: Date}}|{{}}
        */
       disabledDates () {
-        if (!this.disabledBefore || !this.$refs.datepicker) {
+        if (!this.disabledBefore) {
           return {}
         }
         /**

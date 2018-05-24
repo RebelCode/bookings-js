@@ -95,12 +95,21 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         }
       },
       /**
+       * Watch by any availability change and fix repeat period if it is out
+       * of range (smaller that availability duration, or bigger than allowed for repeat unit).
+       */
+      'model': {
+        deep: true,
+        handler: function () {
+          if (this.seedLock) return
+          this.normalizeRepeatPeriod()
+        }
+      },
+      /**
        * Change default values when repeats changes.
        */
       'model.repeatUnit': function (newValue) {
         if (this.seedLock) return
-
-        this.model.repeatPeriod = 1
 
         switch (newValue) {
           case 'months':
@@ -158,7 +167,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
 
       /**
-       * Minimal possible repeating period
+       * @property {Number} Minimal possible repeating period according availability duration and repeat unit.
        */
       minimalRepeatPeriod () {
         if (!this.model.start || !this.model.end) {
@@ -265,6 +274,9 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         return helpers.getDate(date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
       },
 
+      /**
+       * Set correct repeat period according availability duration and repeat unit.
+       */
       normalizeRepeatPeriod () {
         if (!this.model.start || !this.model.end) {
           return
@@ -312,6 +324,32 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         }
 
         this.$refs.exclusions.selectedDate = null
+      },
+
+      /**
+       * Fires when availability start value is changed.
+       * Here we are trying to make sure that start datetime is not
+       * bigger than end datetime. If validation fails we show error in UI.
+       */
+      startChanged () {
+        this.$nextTick(() => {
+          if (this.model.end) {
+            this.$validator.validate('end')
+          }
+        })
+        this.errors.remove('start')
+      },
+
+      /**
+       * Validate current availability and if everything is fine, save it.
+       */
+      saveAvailability () {
+        this.$validator.validateAll().then((result) => {
+          if (!result) {
+            return
+          }
+          this.saveItem()
+        })
       }
     },
     components: {
