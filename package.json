@@ -1,6 +1,6 @@
 {
   "name": "@rebelcode/bookings-js",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Booking plugin frontend application",
   "main": "dist/js/app.min.js",
   "scripts": {
