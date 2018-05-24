@@ -85,6 +85,13 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           transition: '',
         },
 
+        /**
+         * Transition name for applying when booking is created.
+         *
+         * @property {string}
+         */
+        createTransition: false,
+
         errorMessage: false,
 
         newClient: {
@@ -215,6 +222,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
         this.isCreateConfirming = false
         this.isCreatingClient = false
+
+        this.createTransition = false
       },
 
       /**
@@ -222,10 +231,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * confirmation dialog with asking user to confirm saving
        * booking with status.
        *
-       * @param {string} newStatus Status for newly created booking.
+       * @param {string|boolean} createTransition Status for newly created booking.
        */
-      saveNewBooking (newStatus) {
-        this.model.newStatus = newStatus
+      saveNewBooking (createTransition = false) {
+        this.createTransition = createTransition
         this.isCreateConfirming = true
       },
 
@@ -250,6 +259,10 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        */
       saveBooking () {
         let model = this.bookingTransformer.transform(Object.assign({}, this.model))
+        // @todo: fix this
+        if (!model.id) {
+          model['transition'] = 'draft'
+        }
 
         this.isBookingSaving = true
 
@@ -266,11 +279,11 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         return this.saveBookingOnBackend({api: this.bookingsApi, model}).then((response) => {
           return response
         }, savingError).then((response) => {
-          if (!this.model.id && response.data.status === 'in_cart') { // @todo: it will be fixed when transition map will be pulled in
-            return this.applySubmitTransition(response)
+          if (!this.model.id && this.createTransition) {
+            return this.applyTransition(response, this.createTransition)
           }
           return response
-        }, savingError).then((response) => {
+        }, savingError).then(() => {
           this.$emit('updated')
           this.forceCloseModal()
         }, savingError).finally(() => {
@@ -281,13 +294,14 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       /**
        * Apply this transition when new booking is created.
        *
-       * @param response
+       * @param {object} response
+       * @param {string} transition Transition to apply.
        * @return {*}
        */
-      applySubmitTransition (response) {
+      applyTransition (response, transition) {
         const model = {
           id: response.data.id,
-          transition: 'submit' // @todo: it will be fixed when transition map will be pulled in
+          transition
         }
         return this.saveBookingOnBackend({
           api: this.bookingsApi, model
