@@ -51,7 +51,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       vueselect: 'vueselect',
 
       'datetime-picker': 'datetime-picker',
-      'timezone-select': 'timezone-select'
+      'timezone-select': 'timezone-select',
+      'service-session-selector': 'service-session-selector',
     },
 
     data () {
@@ -426,7 +427,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       modal: 'modal',
       vueselect: 'vueselect',
       'datetime-picker': 'datetime-picker',
-      'timezone-select': 'timezone-select'
+      'timezone-select': 'timezone-select',
+      'service-session-selector': 'service-session-selector'
     }
   })
 }

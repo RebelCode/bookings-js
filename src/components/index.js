@@ -19,6 +19,8 @@ import { CfVueTimepicker } from './VueTimepicker'
 import { CfBookingsFilter } from './BookingsFilter'
 import { CfAbstractBookingsView } from './AbstractBookingsView'
 import CfTimezoneSelect from './TimezoneSelect'
+import CfServiceSessionSelector from './ServiceSessionSelector'
+import CfSessionPicker from './SessionPicker'
 
 /*
  * Exports instances to main container config.
@@ -63,6 +65,12 @@ export default function (dependencies) {
     },
     'datetime-picker': function (container) {
       return CfDatetimePicker(container._datetimePicker, container.moment, container.config.formats.datetime.tzFree)
+    },
+    'service-session-selector': function (container) {
+      return CfServiceSessionSelector(container.moment, container.sessionsApi)
+    },
+    'session-picker': function () {
+      return CfSessionPicker()
     },
     'time-picker': function (container) {
       return CfVueTimepicker(container.vue.options.components['vue-timepicker'])

@@ -1,4 +1,13 @@
+import RequestCache from './RequestCache'
+
 export default class Api {
+  /**
+   * Request cache, allows to cache requests result.
+   *
+   * @property {RequestCache}
+   */
+  cache
+
   /**
    * Api constructor
    *
@@ -8,6 +17,8 @@ export default class Api {
   constructor (httpClient, config) {
     this.http = httpClient
     this.config = config
+
+    this.cache = new RequestCache()
   }
 
   /**
