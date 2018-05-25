@@ -3,9 +3,16 @@
  *
  * @since [*next-version*]
  *
+ * @param {moment} moment MomentJS.
+ * @param {{
+ *  sessionTime: (string), // How to format session time,
+ *  dayFull: (string), // How to format day for day heading,
+ *  dayShort: (string), // How to format day for sessions,
+ * }} dateFormats Map of date formats for formatting dates in UI.
+ *
  * @return {object}
  */
-export default function CfSessionPicker () {
+export default function CfSessionPicker (moment, dateFormats) {
   return {
     template: '#session-picker-template',
 
@@ -123,7 +130,29 @@ export default function CfSessionPicker () {
         return this.sessions.filter((session) => {
           return session.duration === this.selectedSessionLength.sessionLength
         })
-      }
+      },
+
+      /**
+       * Formatted day label for selected day row.
+       *
+       * @since [*next-version*]
+       *
+       * @property {string}
+       */
+      selectedDayLabel () {
+        return moment(this.selectedDay).format(dateFormats.dayFull)
+      },
+
+      /**
+       * Formatted day label for session selection row.
+       *
+       * @since [*next-version*]
+       *
+       * @property {string}
+       */
+      selectedDaySessionsLabel () {
+        return moment(this.selectedDay).format(dateFormats.dayShort)
+      },
     },
 
     methods: {
@@ -141,6 +170,35 @@ export default function CfSessionPicker () {
           units: ['w', 'd', 'h', 'm'],
           round: true
         })
+      },
+
+      /**
+       * Session label for representing session in UI.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} session Session object to get label for.
+       *
+       * @return {*}
+       */
+      sessionLabel (session) {
+        return moment(session.start).format(dateFormats.sessionTime)
+      },
+
+      /**
+       * Check that session is currently selected session.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} session Session to check.
+       *
+       * @return {boolean}
+       */
+      isSelected (session) {
+        return this.value
+          && this.value.start === session.start
+          && this.value.end === session.end
+          && this.value.resource === session.resource
       },
 
       /**

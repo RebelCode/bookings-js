@@ -75,6 +75,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           start: null,
           end: null,
+          session: null,
 
           status: null,
 

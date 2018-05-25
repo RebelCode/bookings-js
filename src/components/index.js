@@ -69,8 +69,8 @@ export default function (dependencies) {
     'service-session-selector': function (container) {
       return CfServiceSessionSelector(container.moment, container.sessionsApi)
     },
-    'session-picker': function () {
-      return CfSessionPicker()
+    'session-picker': function (container) {
+      return CfSessionPicker(container.moment, container.config.formats.datetime)
     },
     'time-picker': function (container) {
       return CfVueTimepicker(container.vue.options.components['vue-timepicker'])

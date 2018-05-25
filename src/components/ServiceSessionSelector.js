@@ -101,12 +101,44 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
     },
     computed: {
       /**
+       * Computed proxy for model. This is used to allow child components
+       * change value of parent's model.
+       *
+       * @since [*next-version*]
+       *
+       * @property {object}
+       */
+      session: {
+        /**
+         * Model getter.
+         *
+         * @since [*next-version*]
+         *
+         * @return {object}
+         */
+        get () {
+          return this.value
+        },
+
+        /**
+         * Setter for model.
+         *
+         * @since [*next-version*]
+         *
+         * @param {object} newValue
+         */
+        set (newValue) {
+          this.$emit('input', newValue)
+        }
+      },
+
+      /**
        * Transformed sessions to work with. During transformation we'll
        * add `duration` field, so sessions can be properly filtered.
        *
        * @since [*next-version*]
        *
-       * @return {object[]}
+       * @property {object[]}
        */
       transformedSessions () {
         return this.sessions.map(session => {
