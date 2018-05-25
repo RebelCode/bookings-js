@@ -101,6 +101,21 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
     },
     computed: {
       /**
+       * Transformed sessions to work with. During transformation we'll
+       * add `duration` field, so sessions can be properly filtered.
+       *
+       * @since [*next-version*]
+       *
+       * @return {object[]}
+       */
+      transformedSessions () {
+        return this.sessions.map(session => {
+          session['duration'] = moment(session.end).unix() - moment(session.start).unix()
+          return session
+        })
+      },
+
+      /**
        * Computed property that maps days (string) to sessions (array of sessions).
        *
        * @since [*next-version*]
@@ -109,12 +124,7 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
        */
       daysWithSessions () {
         let daysWithSessions = {}
-        for (let session of this.sessions) {
-
-          // @todo: move to transformer and computed property before commit!
-          // Anton, if you read this, please know, I'M NOT PLANING TO PUSH IT!
-          session['duration'] = moment(session.end).unix() - moment(session.start).unix()
-
+        for (let session of this.transformedSessions) {
           const dayKey = this._getDayKey(session.start)
           if (!daysWithSessions[dayKey]) {
             daysWithSessions[dayKey] = []
