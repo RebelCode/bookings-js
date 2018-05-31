@@ -11,14 +11,14 @@ export default class Api {
   /**
    * Api constructor
    *
-   * @param httpClient {Object} Http client like axios
-   * @param config
+   * @param {object} httpClient Http client like axios
+   * @param {object} config
+   * @param {RequestCache} cache Requests caching implementation.
    */
-  constructor (httpClient, config) {
+  constructor (httpClient, config, cache) {
     this.http = httpClient
     this.config = config
-
-    this.cache = new RequestCache()
+    this.cache = cache
   }
 
   /**
