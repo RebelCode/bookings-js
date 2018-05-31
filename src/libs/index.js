@@ -1,7 +1,6 @@
 import { momentHelpers } from './moment-helpers'
 import { bookingHelpers } from './booking-helpers'
 import { isMobile } from './is-mobile'
-import { hashCode } from './hash-code'
 
 export default function (dependencies) {
   return {
@@ -46,6 +45,9 @@ export default function (dependencies) {
       const moment = dependencies.moment
       return dependencies.momentRange.extendMoment(moment)
     },
+    sha1: function () {
+      return dependencies.sha1
+    },
     humanizeDuration: function () {
       return dependencies.humanizeDuration
     },
@@ -71,8 +73,8 @@ export default function (dependencies) {
         return container.translator.translate(format, params)
       }
     },
-    hashCode: function () {
-      return hashCode
+    hashCode: function (container) {
+      return container.sha1
     },
     isMobile: function () {
       return isMobile
