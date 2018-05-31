@@ -16,7 +16,7 @@ export default function (dependencies) {
       return new RangeCache(container.moment, container.lodash)
     },
     bookingsApi (container) {
-      return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'], container.requestCache)
+      return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'], container.requestCache, container.bookingReadTransformer)
     },
     clientsApi (container) {
       return new ClientsApi(container.httpClient, container.state.endpointsConfig['clients'], container.requestCache)

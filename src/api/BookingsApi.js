@@ -2,6 +2,19 @@ import Api from './Api'
 
 export default class BookingsApi extends Api {
   /**
+   * Api constructor
+   *
+   * @param {object} httpClient Http client like axios
+   * @param {object} config
+   * @param {RequestCache} cache Requests caching implementation.
+   * @param {Transformer} bookingReadTransformer Transformer for preparing booking for using in UI.
+   */
+  constructor (httpClient, config, cache, bookingReadTransformer) {
+    super(httpClient, config, cache)
+    this.bookingReadTransformer = bookingReadTransformer
+  }
+
+  /**
    * Fetch bookings list using params. Expect GET
    *
    * @param params

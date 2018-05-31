@@ -3,7 +3,7 @@ import Transformer from './Transformer'
 /**
  * Prepare data for booking saving endpoins.
  */
-export default class BookingTransformer extends Transformer {
+export default class BookingStoreTransformer extends Transformer {
   /**
    * Rules that will be applied in order for model.
    *
@@ -19,7 +19,6 @@ export default class BookingTransformer extends Transformer {
      */
     service: (model) => {
       model['service'] = model['service'].id
-      model['resource'] = model['service']
       return model
     },
     /**
@@ -59,25 +58,17 @@ export default class BookingTransformer extends Transformer {
       return model
     },
     /**
-     * Transform booking start date to ISO8601 before sending on API.
+     * Transform session object to separate fields.
      *
      * @param {object} model Model to transform
      *
      * @return {object} Transformed model
      */
-    start: (model) => {
-      model['start'] = this.moment(model['start']).format()
-      return model
-    },
-    /**
-     * Transform booking end date to ISO8601 before sending on API.
-     *
-     * @param {object} model Model to transform
-     *
-     * @return {object} Transformed model
-     */
-    end: (model) => {
-      model['end'] = this.moment(model['end']).format()
+    session: (model) => {
+      model['start'] = model.session.start
+      model['end'] = model.session.end
+      model['resource'] = model.session.resource
+      delete model['session']
       return model
     },
     /**

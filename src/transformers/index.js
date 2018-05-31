@@ -1,16 +1,18 @@
-import BookingTransformer from './BookingTransformer'
+import BookingStoreTransformer from './BookingStoreTransformer'
 import AvailabilityStoreTransformer from './AvilabilityStoreTransformer'
 import AvailabilityReadTransformer from './AvilabilityReadTransformer'
 import StateTransformer from './StateTransformer'
 import SessionLengthReadTransformer from './SessionLengthReadTransformer'
 import SessionReadTransformer from './SessionReadTransformer'
+import BookingReadTransformer from './BookingReadTransformer'
 
 export default function (dependencies) {
   return {
-    bookingTransformer (container) {
-      return new BookingTransformer({
-        moment: container.moment
-      })
+    bookingStoreTransformer () {
+      return new BookingStoreTransformer()
+    },
+    bookingReadTransformer () {
+      return new BookingReadTransformer()
     },
     availabilityStoreTransformer (container) {
       return new AvailabilityStoreTransformer({
