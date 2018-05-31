@@ -15,6 +15,26 @@ export default class RequestCache {
   _cache = {}
 
   /**
+   * Function for getting hash code.
+   *
+   * @since [*next-version*]
+   *
+   * @type {Function}
+   */
+  hashCode
+
+  /**
+   * Request cache constructor.
+   *
+   * @since [*next-version*]
+   *
+   * @param {Function} hashCode Function for getting hash code from object.
+   */
+  constructor (hashCode) {
+    this.hashCode = hashCode
+  }
+
+  /**
    * Remember result in cache. If it is already in cache - return it.
    *
    * @since [*next-version*]
@@ -85,6 +105,10 @@ export default class RequestCache {
    * @return {string}
    */
   _getCacheKey (params) {
-    return JSON.stringify(params)
+    let orderedParams = {}
+    Object.keys(params).sort().map(key => {
+      orderedParams[key] = params[key]
+    })
+    return this.hashCode(JSON.stringify(orderedParams))
   }
 }

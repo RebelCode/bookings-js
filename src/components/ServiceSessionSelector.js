@@ -279,9 +279,9 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
         this.isSessionsLoading = true
         sessionsApi.fetch(this._prepareSessionRequestParams()).then(sessions => {
           this.sessions = sessions
+          this.isSessionsLoading = false
         }, error => {
           console.error(error)
-        }).finally(() => {
           this.isSessionsLoading = false
         })
       },

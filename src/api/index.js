@@ -8,17 +8,17 @@ import RequestCache from './RequestCache'
  */
 export default function (dependencies) {
   return {
-    requestCache () {
-      return new RequestCache()
+    requestCache (container) {
+      return new RequestCache(container.hashCode)
     },
     bookingsApi (container) {
-      return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'], this.requestCache)
+      return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'], container.requestCache)
     },
     clientsApi (container) {
-      return new ClientsApi(container.httpClient, container.state.endpointsConfig['clients'], this.requestCache)
+      return new ClientsApi(container.httpClient, container.state.endpointsConfig['clients'], container.requestCache)
     },
     sessionsApi (container) {
-      return new SessionsApi(container.httpClient, container.state.endpointsConfig['sessions'], this.requestCache)
+      return new SessionsApi(container.httpClient, container.state.endpointsConfig['sessions'], container.requestCache)
     }
   }
 }

@@ -1,6 +1,7 @@
 import { momentHelpers } from './moment-helpers'
 import { bookingHelpers } from './booking-helpers'
 import { isMobile } from './is-mobile'
+import { hashCode } from './hash-code'
 
 export default function (dependencies) {
   return {
@@ -68,6 +69,9 @@ export default function (dependencies) {
       return function (format, params) {
         return container.translator.translate(format, params)
       }
+    },
+    hashCode: function () {
+      return hashCode
     },
     isMobile: function () {
       return isMobile
