@@ -217,6 +217,17 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
       availableDays () {
         return Object.keys(this.daysWithSessions)
       },
+
+      /**
+       * The current day to disable datepicker to it.
+       *
+       * @since [*next-version*]
+       *
+       * @property {Date}
+       */
+      currentDay () {
+        return moment().startOf('day').toDate()
+      }
     },
     methods: {
       /**
@@ -259,7 +270,9 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
         this.selectedMonth = moment().toDate()
         this.sessions = []
 
-        this.loadSessions()
+        if (this.service) {
+          this.loadSessions()
+        }
       },
 
       /**
