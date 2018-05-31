@@ -67,7 +67,7 @@ export default function (dependencies) {
       return CfDatetimePicker(container._datetimePicker, container.moment, container.config.formats.datetime.tzFree)
     },
     'service-session-selector': function (container) {
-      return CfServiceSessionSelector(container.moment, container.sessionsApi)
+      return CfServiceSessionSelector(container.moment, container.sessionsApi, container.config.formats.datetime)
     },
     'session-picker': function (container) {
       return CfSessionPicker(container.moment, container.config.formats.datetime)

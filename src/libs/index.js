@@ -43,7 +43,8 @@ export default function (dependencies) {
       return bookingHelpers(container.bookingStatusesColors, container.state.statuses)
     },
     moment: function () {
-      return dependencies.moment 
+      const moment = dependencies.moment
+      return dependencies.momentRange.extendMoment(moment)
     },
     humanizeDuration: function () {
       return dependencies.humanizeDuration

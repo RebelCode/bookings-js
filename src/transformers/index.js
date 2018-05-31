@@ -3,6 +3,7 @@ import AvailabilityStoreTransformer from './AvilabilityStoreTransformer'
 import AvailabilityReadTransformer from './AvilabilityReadTransformer'
 import StateTransformer from './StateTransformer'
 import SessionLengthReadTransformer from './SessionLengthReadTransformer'
+import SessionReadTransformer from './SessionReadTransformer'
 
 export default function (dependencies) {
   return {
@@ -25,6 +26,12 @@ export default function (dependencies) {
     },
     sessionLengthReadTransformer () {
       return new SessionLengthReadTransformer()
+    },
+    sessionReadTransformer (container) {
+      return new SessionReadTransformer({
+        moment: container.moment,
+        dateFormats: container.config.formats.datetime
+      })
     },
     stateTransformer (container) {
       return new StateTransformer({

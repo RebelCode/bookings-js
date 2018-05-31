@@ -8,10 +8,14 @@
  *
  * @param {moment} moment MomentJS.
  * @param {object} sessionsApi Session API wrapper, used for querying sessions.
+ * @param {{
+ *  monthKey: (string), // How to format month as a key,
+ *  dayKey: (string), // How to format day as a key,
+ * }} dateFormats Map of date formats for formatting dates in UI.
  *
  * @return {object}
  */
-export default function CfServiceSessionSelector (moment, sessionsApi) {
+export default function CfServiceSessionSelector (moment, sessionsApi, dateFormats) {
   return {
     template: '#service-session-selector-template',
 
@@ -133,21 +137,6 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
       },
 
       /**
-       * Transformed sessions to work with. During transformation we'll
-       * add `duration` field, so sessions can be properly filtered.
-       *
-       * @since [*next-version*]
-       *
-       * @property {object[]}
-       */
-      transformedSessions () {
-        return this.sessions.map(session => {
-          session['duration'] = moment(session.end).unix() - moment(session.start).unix()
-          return session
-        })
-      },
-
-      /**
        * Computed property that maps days (string) to sessions (array of sessions).
        *
        * @since [*next-version*]
@@ -156,7 +145,10 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
        */
       daysWithSessions () {
         let daysWithSessions = {}
-        for (let session of this.transformedSessions) {
+        for (let session of this.sessions) {
+          if (!this._sessionInCurrentMonth(session)) {
+            continue
+          }
           const dayKey = this._getDayKey(session.start)
           if (!daysWithSessions[dayKey]) {
             daysWithSessions[dayKey] = []
@@ -278,7 +270,9 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
       loadSessions () {
         this.isSessionsLoading = true
         sessionsApi.fetch(this._prepareSessionRequestParams()).then(sessions => {
-          this.sessions = sessions
+          if (sessions) {
+            this.sessions = [...this.sessions, ...sessions]
+          }
           this.isSessionsLoading = false
         }, error => {
           console.error(error)
@@ -318,8 +312,21 @@ export default function CfServiceSessionSelector (moment, sessionsApi) {
        * @return {string} Day key.
        */
       _getDayKey (value) {
-        return moment(value).format('YYYY-MM-DD')
-      }
+        return moment(value).format(dateFormats.dayKey)
+      },
+
+      /**
+       * Check that given session belongs to current month.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} session Session to check.
+       *
+       * @return {boolean} Is given session belongs to current month.
+       */
+      _sessionInCurrentMonth (session) {
+        return session.monthKey === moment(this.selectedMonth).format(dateFormats.monthKey)
+      },
     },
     components: {
       'datepicker': 'datepicker',
