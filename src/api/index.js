@@ -27,7 +27,8 @@ export default function (dependencies) {
         container.state.endpointsConfig['sessions'],
         container.requestCache,
         container.rangeCache,
-        container.sessionReadTransformer
+        container.sessionReadTransformer,
+        container.moment
       )
     }
   }

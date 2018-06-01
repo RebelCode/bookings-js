@@ -146,9 +146,6 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
       daysWithSessions () {
         let daysWithSessions = {}
         for (let session of this.sessions) {
-          if (!this._sessionInCurrentMonth(session)) {
-            continue
-          }
           const dayKey = this._getDayKey(session.start)
           if (!daysWithSessions[dayKey]) {
             daysWithSessions[dayKey] = []
@@ -326,20 +323,7 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
        */
       _getDayKey (value) {
         return moment(value).format(dateFormats.dayKey)
-      },
-
-      /**
-       * Check that given session belongs to current month.
-       *
-       * @since [*next-version*]
-       *
-       * @param {object} session Session to check.
-       *
-       * @return {boolean} Is given session belongs to current month.
-       */
-      _sessionInCurrentMonth (session) {
-        return session.monthKey === moment(this.selectedMonth).format(dateFormats.monthKey)
-      },
+      }
     },
     components: {
       'datepicker': 'datepicker',

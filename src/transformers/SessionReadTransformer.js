@@ -13,7 +13,9 @@ export default class SessionReadTransformer extends Transformer {
    */
   rules = {
     start: (model) => {
-      model['duration'] = this.moment(model.end).unix() - this.moment(model.start).unix()
+      model['startUnix'] = this.moment(model.start).unix()
+      model['endUnix'] = this.moment(model.end).unix()
+      model['duration'] = model.endUnix - model.startUnix
       model['monthKey'] = this.moment(model.start).format(this.dateFormats.monthKey)
       return model
     }
