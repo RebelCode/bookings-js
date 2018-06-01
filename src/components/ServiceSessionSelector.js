@@ -9,8 +9,9 @@
  * @param {moment} moment MomentJS.
  * @param {object} sessionsApi Session API wrapper, used for querying sessions.
  * @param {{
- *  monthKey: (string), // How to format month as a key,
  *  dayKey: (string), // How to format day as a key,
+ *  sessionTime: (string), // How to format session time,
+ *  dayFull: (string), // How to format day for day heading,
  * }} dateFormats Map of date formats for formatting dates in UI.
  *
  * @return {object}
@@ -32,7 +33,14 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
        *
        * @since [*next-version*]
        */
-      'session-picker'
+      'session-picker',
+
+      /**
+       * Session transformer for transforming sessions for interacting with them in the UI.
+       *
+       * @since [*next-version*]
+       */
+      'sessionReadTransformer'
     ],
     data () {
       return {
@@ -62,7 +70,33 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
          *
          * @property {Boolean} isSessionsLoading Is sessions are loading right now.
          */
-        isSessionsLoading: false
+        isSessionsLoading: false,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {Boolean} isEditing Is selector in edit mode now.
+         */
+        isEditing: false,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {object} preloadedSession Session that was chosen when component was created.
+         */
+        preloadedSession: null
+      }
+    },
+    /**
+     * Hook that would be triggered when component is created. Here
+     * we are checking if value is already set, and if so we are in the
+     * edit mode.
+     *
+     * @since [*next-version*]
+     */
+    created () {
+      if (this.value) {
+        this.isEditing = true
       }
     },
     watch: {
@@ -145,7 +179,8 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
        */
       daysWithSessions () {
         let daysWithSessions = {}
-        for (let session of this.sessions) {
+        const sessions = this._addPreloadedSession(this.sessions, this.preloadedSession)
+        for (let session of sessions) {
           const dayKey = this._getDayKey(session.start)
           if (!daysWithSessions[dayKey]) {
             daysWithSessions[dayKey] = []
@@ -224,6 +259,19 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
        */
       currentDay () {
         return moment().startOf('day').toDate()
+      },
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {String} Label for describing selected session in human readable format.
+       */
+      selectedSessionLabel () {
+        if (!this.value) {
+          return null
+        }
+        const sessionStart = moment(this.value.start)
+        return sessionStart.format(dateFormats.sessionTime) + ', ' + sessionStart.format(dateFormats.dayFull)
       }
     },
     methods: {
@@ -237,6 +285,69 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
       onMonthChange (newMonth) {
         this.selectedMonth = newMonth
         this.loadSessions()
+      },
+
+      /**
+       * When the picker in the edit mode (so session is preloaded), this allows
+       * to edit that session time.
+       *
+       * @since [*next-version*]
+       */
+      editSession () {
+        this.preloadedSession = this.sessionReadTransformer.transform(this.value)
+
+        const sessionStart = moment(this.preloadedSession.start)
+
+        this.selectedDay = moment(sessionStart).startOf('day').format()
+        this.selectedMonth = moment(sessionStart).startOf('month').format()
+
+        this.loadSessions().then(() => {
+          this.isEditing = false
+        })
+      },
+
+      /**
+       * Add preloaded session to all sessions to work with them.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} sessions All sessions.
+       * @param {object} preloadedSession Session that was selected when picker was opened.
+       *
+       * @return {*}
+       */
+      _addPreloadedSession (sessions, preloadedSession = null) {
+        if (!preloadedSession) {
+          return sessions
+        }
+
+        const preselectedInFetched = sessions.find(session => {
+          return this._sessionsIsSame(session, preloadedSession)
+        })
+
+        if (preselectedInFetched) {
+          return sessions
+        }
+
+        sessions.push(preloadedSession)
+        return sessions
+      },
+
+      /**
+       * Check that sessions are the same.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} a First session to check
+       * @param {object} b Second session to check
+       *
+       * @return {boolean}
+       */
+      _sessionsIsSame (a, b) {
+        return a.service === b.service
+          && a.resource === b.resource
+          && a.startUnix === b.startUnix
+          && a.endUnix === b.endUnix
       },
 
       /**
@@ -267,22 +378,24 @@ export default function CfServiceSessionSelector (moment, sessionsApi, dateForma
         this.selectedMonth = moment().toDate()
         this.sessions = []
 
-        if (this.service) {
-          this.loadSessions()
-        }
+        this.$nextTick(() => {
+          if (this.service && !this.isEditing) {
+            this.loadSessions()
+          }
+        })
       },
 
       /**
        * Load sessions from API.
        *
        * @since [*next-version*]
+       *
+       * @return {Promise<any>}
        */
       loadSessions () {
         this.isSessionsLoading = true
-        sessionsApi.fetch(this._prepareSessionRequestParams()).then(sessions => {
-          if (sessions) {
-            this.sessions = [...this.sessions, ...sessions]
-          }
+        return sessionsApi.fetch(this._prepareSessionRequestParams()).then(sessions => {
+          this.sessions = sessions
           this.isSessionsLoading = false
         }, error => {
           console.error(error)

@@ -12,11 +12,39 @@ export default class SessionReadTransformer extends Transformer {
    * @property {object} rules
    */
   rules = {
+    /**
+     * Add helping time related fields to model.
+     *
+     * @param {object} model Model to transform.
+     *
+     * @return {*}
+     */
     start: (model) => {
       model['startUnix'] = this.moment(model.start).unix()
       model['endUnix'] = this.moment(model.end).unix()
       model['duration'] = model.endUnix - model.startUnix
-      model['monthKey'] = this.moment(model.start).format(this.dateFormats.monthKey)
+      return model
+    },
+    /**
+     * Transform service to Number.
+     *
+     * @param {object} model Model to transform.
+     *
+     * @return {*}
+     */
+    service: (model) => {
+      model['service'] = parseInt(model['service'])
+      return model
+    },
+    /**
+     * Transform resource to Number.
+     *
+     * @param {object} model Model to transform.
+     *
+     * @return {*}
+     */
+    resource: (model) => {
+      model['resource'] = parseInt(model['resource'])
       return model
     }
   }
