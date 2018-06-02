@@ -23,7 +23,7 @@ export default function (dependencies) {
       return new SessionLengthReadTransformer()
     },
     sessionReadTransformer (container) {
-      return new dependencies.bookingWizardComponents.SessionReadTransformer(container.moment, container.config.formats.datetime)
+      return new dependencies.bookingWizardComponents.SessionReadTransformer(container.moment)
     },
     stateTransformer (container) {
       return new StateTransformer(container.availabilityReadTransformer, container.sessionLengthReadTransformer)
