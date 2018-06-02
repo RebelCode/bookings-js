@@ -7,7 +7,7 @@ import ClientsApi from './ClientsApi'
 export default function (dependencies) {
   return {
     requestCache (container) {
-      return new dependencies.bookingWizardComponents.RequestCache(container.hashCode)
+      return new dependencies.stdLib.RequestCache(container.hashCode)
     },
     rangeCache (container) {
       return new dependencies.bookingWizardComponents.RangeCache(container.moment, container.lodash)

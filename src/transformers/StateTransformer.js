@@ -7,9 +7,21 @@ import { Transformer } from '@rebelcode/std-lib'
  */
 export default class StateTransformer extends Transformer {
   /**
+   * StateTransformer constructor.
+   *
+   * @param {AvailabilityReadTransformer} availabilityReadTransformer Transformer for changing availability to using in UI.
+   * @param {SessionLengthReadTransformer} sessionLengthReadTransformer Transforms session length data to use it in the UI.
+   */
+  constructor (availabilityReadTransformer, sessionLengthReadTransformer) {
+    super()
+    this.availabilityReadTransformer = availabilityReadTransformer
+    this.sessionLengthReadTransformer = sessionLengthReadTransformer
+  }
+
+  /**
    * Rules that will be applied in order for model.
    *
-   * @property {object} rules
+   * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
     availabilities: (model, { timezone }) => {

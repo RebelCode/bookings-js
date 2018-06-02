@@ -7,7 +7,7 @@ export default class BookingReadTransformer extends Transformer {
   /**
    * Rules that will be applied in order for model.
    *
-   * @property {object} rules
+   * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
     /**

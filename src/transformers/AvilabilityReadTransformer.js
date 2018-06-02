@@ -7,9 +7,21 @@ import { Transformer } from '@rebelcode/std-lib'
  */
 export default class AvailabilityReadTransformer extends Transformer {
   /**
+   * AvailabilityReadTransformer constructor.
+   *
+   * @param {Function} moment Moment JS.
+   * @param {Function} transformDatetimeForUi Function that transform datetime from state to format used in UI.
+   */
+  constructor (moment, transformDatetimeForUi) {
+    super()
+    this.moment = moment
+    this.transformDatetimeForUi = transformDatetimeForUi
+  }
+
+  /**
    * Rules that will be applied in order for model.
    *
-   * @property {object} rules
+   * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
     start: (model, { timezone }) => {

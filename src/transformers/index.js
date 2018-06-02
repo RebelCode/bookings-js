@@ -14,31 +14,19 @@ export default function (dependencies) {
       return new BookingReadTransformer()
     },
     availabilityStoreTransformer (container) {
-      return new AvailabilityStoreTransformer({
-        moment: container.moment,
-        transformDatetimeForStore: container.transformDatetimeForStore
-      })
+      return new AvailabilityStoreTransformer(container.moment, container.transformDatetimeForStore)
     },
     availabilityReadTransformer (container) {
-      return new AvailabilityReadTransformer({
-        moment: container.moment,
-        transformDatetimeForUi: container.transformDatetimeForUi
-      })
+      return new AvailabilityReadTransformer(container.moment, container.transformDatetimeForUi)
     },
     sessionLengthReadTransformer () {
       return new SessionLengthReadTransformer()
     },
     sessionReadTransformer (container) {
-      return new dependencies.bookingWizardComponents.SessionReadTransformer({
-        moment: container.moment,
-        dateFormats: container.config.formats.datetime
-      })
+      return new dependencies.bookingWizardComponents.SessionReadTransformer(container.moment, container.config.formats.datetime)
     },
     stateTransformer (container) {
-      return new StateTransformer({
-        availabilityReadTransformer: container.availabilityReadTransformer,
-        sessionLengthReadTransformer: container.sessionLengthReadTransformer
-      })
+      return new StateTransformer(container.availabilityReadTransformer, container.sessionLengthReadTransformer)
     },
     transformDatetimeForUi (container) {
       /**
