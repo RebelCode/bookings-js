@@ -1,8 +1,5 @@
 import BookingsApi from './BookingsApi'
 import ClientsApi from './ClientsApi'
-import SessionsApi from './SessionsApi'
-import RequestCache from './RequestCache'
-import RangeCache from './RangeCache'
 
 /*
  * Exports instances to main container config.
@@ -10,10 +7,10 @@ import RangeCache from './RangeCache'
 export default function (dependencies) {
   return {
     requestCache (container) {
-      return new RequestCache(container.hashCode)
+      return new dependencies.bookingWizardComponents.RequestCache(container.hashCode)
     },
     rangeCache (container) {
-      return new RangeCache(container.moment, container.lodash)
+      return new dependencies.bookingWizardComponents.RangeCache(container.moment, container.lodash)
     },
     bookingsApi (container) {
       return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'], container.requestCache, container.bookingReadTransformer)

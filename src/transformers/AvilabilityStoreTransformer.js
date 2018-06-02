@@ -1,4 +1,4 @@
-import Transformer from './Transformer'
+import { Transformer } from '@rebelcode/std-lib'
 
 /**
  * Transformer that applied to availability before storing it.

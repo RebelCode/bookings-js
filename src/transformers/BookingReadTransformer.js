@@ -1,4 +1,4 @@
-import Transformer from './Transformer'
+import { Transformer } from '@rebelcode/std-lib'
 
 /**
  * Prepare data for working with booking in the UI.

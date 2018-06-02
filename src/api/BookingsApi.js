@@ -1,4 +1,4 @@
-import Api from './Api'
+import { Api } from '@rebelcode/std-lib'
 
 export default class BookingsApi extends Api {
   /**
