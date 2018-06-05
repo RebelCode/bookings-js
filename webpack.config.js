@@ -9,7 +9,6 @@ let config = {
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
-          mangle: false,
           sourcemap: false
         }),
     ],
@@ -22,7 +21,7 @@ let config = {
     output: {
         path: __dirname + "/dist/js",
         filename: "app.min.js",
-        libraryTarget: 'amd'
+        libraryTarget: 'umd'
     }
 };
 
