@@ -7,7 +7,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'config': 'config',
       'state': 'state',
 
-      'bookingTransformer': 'bookingTransformer',
+      'bookingStoreTransformer': 'bookingStoreTransformer',
 
       'momentHelpers': 'momentHelpers',
       'helpers': {
@@ -51,7 +51,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       vueselect: 'vueselect',
 
       'datetime-picker': 'datetime-picker',
-      'timezone-select': 'timezone-select'
+      'timezone-select': 'timezone-select',
+      'service-session-selector': 'service-session-selector',
     },
 
     data () {
@@ -71,9 +72,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
           client: null,
           service: null,
-
-          start: null,
-          end: null,
+          session: null,
 
           status: null,
 
@@ -258,7 +257,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * Save booking.
        */
       saveBooking () {
-        let model = this.bookingTransformer.transform(Object.assign({}, this.model))
+        let model = this.bookingStoreTransformer.transform(Object.assign({}, this.model))
         // @todo: fix this
         if (!model.id) {
           model['transition'] = 'draft'
@@ -268,6 +267,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
         const savingError = (error) => {
           const errorResponse = error.response
+          this.isBookingSaving = false
           if (!errorResponse) {
             return
           }
@@ -286,9 +286,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         }, savingError).then(() => {
           this.$emit('updated')
           this.forceCloseModal()
-        }, savingError).finally(() => {
           this.isBookingSaving = false
-        })
+        }, savingError)
       },
 
       /**
@@ -426,7 +425,8 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       modal: 'modal',
       vueselect: 'vueselect',
       'datetime-picker': 'datetime-picker',
-      'timezone-select': 'timezone-select'
+      'timezone-select': 'timezone-select',
+      'service-session-selector': 'service-session-selector'
     }
   })
 }

@@ -1,6 +1,6 @@
 {
   "name": "@rebelcode/bookings-js",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Booking plugin frontend application",
   "main": "dist/js/app.min.js",
   "scripts": {
@@ -8,8 +8,11 @@
     "build": "./node_modules/cross-env/dist/bin/cross-env.js NODE_ENV=production ./node_modules/webpack/bin/webpack.js",
     "prepublish": "npm run build"
   },
+  "dependencies": {
+    "@rebelcode/std-lib": "^0.1.4"
+  },
   "devDependencies": {
-    "@rebelcode/std-lib": "^0.1.2",
+    "@rebelcode/std-lib": "^0.1.4",
     "@rebelcode/ui-framework": "^0.1.0",
     "@rebelcode/vc-calendar": "^0.1.0",
     "@rebelcode/vc-paged": "^0.1.0",

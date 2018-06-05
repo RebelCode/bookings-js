@@ -1,4 +1,4 @@
-import Transformer from './Transformer'
+import { Transformer } from '@rebelcode/std-lib'
 
 /**
  * Transformer that applied to session length before any state interaction in UI.
@@ -9,7 +9,7 @@ export default class SessionLengthReadTransformer extends Transformer {
   /**
    * Rules that will be applied in order for model.
    *
-   * @property {object} rules
+   * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
     price: (model) => {

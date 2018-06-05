@@ -1,36 +1,32 @@
-import BookingTransformer from './BookingTransformer'
+import BookingStoreTransformer from './BookingStoreTransformer'
 import AvailabilityStoreTransformer from './AvilabilityStoreTransformer'
 import AvailabilityReadTransformer from './AvilabilityReadTransformer'
 import StateTransformer from './StateTransformer'
 import SessionLengthReadTransformer from './SessionLengthReadTransformer'
+import BookingReadTransformer from './BookingReadTransformer'
 
 export default function (dependencies) {
   return {
-    bookingTransformer (container) {
-      return new BookingTransformer({
-        moment: container.moment
-      })
+    bookingStoreTransformer () {
+      return new BookingStoreTransformer()
+    },
+    bookingReadTransformer () {
+      return new BookingReadTransformer()
     },
     availabilityStoreTransformer (container) {
-      return new AvailabilityStoreTransformer({
-        moment: container.moment,
-        transformDatetimeForStore: container.transformDatetimeForStore
-      })
+      return new AvailabilityStoreTransformer(container.moment, container.transformDatetimeForStore)
     },
     availabilityReadTransformer (container) {
-      return new AvailabilityReadTransformer({
-        moment: container.moment,
-        transformDatetimeForUi: container.transformDatetimeForUi
-      })
+      return new AvailabilityReadTransformer(container.moment, container.transformDatetimeForUi)
     },
     sessionLengthReadTransformer () {
       return new SessionLengthReadTransformer()
     },
+    sessionReadTransformer (container) {
+      return new dependencies.bookingWizardComponents.SessionReadTransformer(container.moment)
+    },
     stateTransformer (container) {
-      return new StateTransformer({
-        availabilityReadTransformer: container.availabilityReadTransformer,
-        sessionLengthReadTransformer: container.sessionLengthReadTransformer
-      })
+      return new StateTransformer(container.availabilityReadTransformer, container.sessionLengthReadTransformer)
     },
     transformDatetimeForUi (container) {
       /**

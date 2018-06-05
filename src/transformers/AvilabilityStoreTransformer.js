@@ -1,4 +1,4 @@
-import Transformer from './Transformer'
+import { Transformer } from '@rebelcode/std-lib'
 
 /**
  * Transformer that applied to availability before storing it.
@@ -7,9 +7,21 @@ import Transformer from './Transformer'
  */
 export default class AvailabilityStoreTransformer extends Transformer {
   /**
+   * AvailabilityStoreTransformer constructor.
+   *
+   * @param {Function} moment Moment JS.
+   * @param {Function} transformDatetimeForStore Function that transform datetime from UI to format in store.
+   */
+  constructor (moment, transformDatetimeForStore) {
+    super()
+    this.moment = moment
+    this.transformDatetimeForStore = transformDatetimeForStore
+  }
+
+  /**
    * Rules that will be applied in order for model.
    *
-   * @property {object} rules
+   * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
     id: (model) => {

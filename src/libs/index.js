@@ -42,7 +42,11 @@ export default function (dependencies) {
       return bookingHelpers(container.bookingStatusesColors, container.state.statuses)
     },
     moment: function () {
-      return dependencies.moment 
+      const moment = dependencies.moment
+      return dependencies.momentRange.extendMoment(moment)
+    },
+    sha1: function () {
+      return dependencies.sha1
     },
     humanizeDuration: function () {
       return dependencies.humanizeDuration
@@ -68,6 +72,9 @@ export default function (dependencies) {
       return function (format, params) {
         return container.translator.translate(format, params)
       }
+    },
+    hashCode: function (container) {
+      return container.sha1
     },
     isMobile: function () {
       return isMobile
