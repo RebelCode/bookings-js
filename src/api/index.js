@@ -21,7 +21,7 @@ export default function (dependencies) {
     sessionsApi (container) {
       return new dependencies.bookingWizardComponents.SessionApi(
         container.httpClient,
-        container.state.endpointsConfig['sessions'],
+        container.state.endpointsConfig ? container.state.endpointsConfig['sessions'] : {},
         container.requestCache,
         container.rangeCache,
         container.sessionReadTransformer,

@@ -33,7 +33,7 @@ export default function (dependencies) {
       return dependencies.jquery
     },
     lodash: function () {
-      return dependencies.lodash
+      return dependencies.lodash.noConflict()
     },
     momentHelpers: function (container) {
       return momentHelpers(container.moment, container.config.formats.datetime)
