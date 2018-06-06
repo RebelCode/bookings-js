@@ -14,6 +14,14 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
   return AbstractEntityModalEditor.extend({
     inject: {
       'momentHelpers': 'momentHelpers',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {AvailabilityHelpers} availabilityHelpers Helper functions for availabilities.
+       */
+      'availabilityHelpers': 'availabilityHelpers',
+
       'pluralize': 'pluralize',
       'config': 'config',
 
@@ -293,15 +301,17 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
 
       /**
-       * Check that availability start is on the same day.
+       * Check that availability start is on the same day with availability end.
        *
-       * @return {boolean}
+       * @since [*next-version*]
+       *
+       * @return {boolean} Is availability start and end on the same day.
        */
       isSameDay () {
         if (!this.model.start || !this.model.end) {
           return false
         }
-        return moment(this.model.start).isSame(this.model.end, 'day')
+        return this.availabilityHelpers.isOneDay(this.model)
       },
 
       /**

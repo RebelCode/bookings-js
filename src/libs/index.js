@@ -1,6 +1,7 @@
 import { momentHelpers } from './moment-helpers'
 import { bookingHelpers } from './booking-helpers'
 import { isMobile } from './is-mobile'
+import AvailabilityHelpers from './AvailabilityHelpers'
 
 export default function (dependencies) {
   return {
@@ -40,6 +41,9 @@ export default function (dependencies) {
     },
     bookingHelpers: function (container) {
       return bookingHelpers(container.bookingStatusesColors, container.state.statuses)
+    },
+    availabilityHelpers: function (container) {
+      return new AvailabilityHelpers(container.moment)
     },
     moment: function () {
       const moment = dependencies.moment
