@@ -18,7 +18,7 @@ export default function (FullCalendar, moment) {
       /**
        * @since [*next-version*]
        *
-       * @property {AvailabilityHelpers} Helper functions for availabilities.
+       * @property {AvailabilityHelpers} availabilityHelpers Helper functions for availabilities.
        */
       'availabilityHelpers': 'availabilityHelpers',
 
