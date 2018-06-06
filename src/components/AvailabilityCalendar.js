@@ -14,6 +14,14 @@ export default function (FullCalendar, moment) {
     inject: {
       'availabilitiesCollection': 'availabilitiesCollection',
       'momentHelpers': 'momentHelpers',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {AvailabilityHelpers} Helper functions for availabilities.
+       */
+      'availabilityHelpers': 'availabilityHelpers',
+
       'appConfig': {
         from: 'config'
       }
@@ -435,8 +443,17 @@ export default function (FullCalendar, moment) {
         return repeatingRules[availability.repeatUnit] ? repeatingRules[availability.repeatUnit]() : false
       },
 
+      /**
+       * Check that availability start is on the same day with availability end.
+       *
+       * @since [*next-version*]
+       *
+       * @param {Availability} availability Availability for check.
+       *
+       * @return {boolean} Is availability start and end on the same day.
+       */
       isAvailabilityOnTheSameDay (availability) {
-        return moment(availability.start).isSame(moment(availability.end), 'day')
+        return this.availabilityHelpers.isOneDay(availability)
       },
 
       /**
