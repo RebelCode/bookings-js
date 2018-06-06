@@ -2,6 +2,8 @@
  * Availability object is rule for sessions generation that describes
  * how exactly sessions should be generated.
  *
+ * @since [*next-version*]
+ *
  * @typedef {Object} Availability
  *
  * @property {number} id Availability id.
