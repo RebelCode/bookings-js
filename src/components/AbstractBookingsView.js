@@ -63,7 +63,8 @@ export function CfAbstractBookingsView (Vue, { mapState, mapMutations }) {
 
     methods: {
       ...mapMutations('bookings', [
-        'setBookingsFilter'
+        'setBookingsFilter',
+        'setBookingsViewFilter'
       ]),
 
       buildParams () {
@@ -95,7 +96,8 @@ export function CfAbstractBookingsView (Vue, { mapState, mapMutations }) {
 
         params = Object.assign({}, params, viewFilter)
 
-        this.$emit('update-filter', params)
+        this.setBookingsViewFilter(params)
+        this.$emit('update-filter')
       },
     },
 

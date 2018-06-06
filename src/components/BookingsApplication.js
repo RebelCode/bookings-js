@@ -128,15 +128,9 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
        * Fetch bookings by search parameters.
        *
        * @since [*next-version*]
-       *
-       * @param {object|null} params Bookings search parameters.
        */
-      fetch (params = null) {
-        if (params) {
-          this.setBookingsViewFilter(Object.assign({}, params))
-        }
-        params = this.normalizeParams(this.viewFilter)
-
+      fetch () {
+        const params = this.normalizeParams(this.viewFilter)
         this.setBookingsIsLoading(true)
         this.fetchBookings({ api: this.api, params }).then(() => {
           this.setBookingsIsLoading(false)
