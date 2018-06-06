@@ -124,12 +124,36 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
           })
       },
 
-      fetch (params = false) {
+      /**
+       * Fetch bookings by search parameters.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object|null} params Bookings search parameters.
+       */
+      fetch (params = null) {
         if (params) {
           this.setBookingsViewFilter(Object.assign({}, params))
         }
-        params = Object.assign({}, this.viewFilter)
+        params = this.normalizeParams(this.viewFilter)
 
+        this.setBookingsIsLoading(true)
+        this.fetchBookings({ api: this.api, params }).then(() => {
+          this.setBookingsIsLoading(false)
+        })
+      },
+
+      /**
+       * Prepare params for searching bookings.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} params Bookings filter params.
+       *
+       * @return {object} Prepared params for booking search.
+       */
+      normalizeParams (params) {
+        params = Object.assign({}, params)
         /*
          * Screen statuses to load
          */
@@ -137,11 +161,13 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         if (params['status'] === 'all') {
           params['status'] = this.screenStatuses.join(',')
         }
-
-        this.setBookingsIsLoading(true)
-        this.fetchBookings({ api: this.api, params }).then(() => {
-          this.setBookingsIsLoading(false)
-        })
+        /*
+         * Remove empty search field
+         */
+        if (!params['search']) {
+          delete params['search']
+        }
+        return params
       },
 
       createBooking (bookingParams = {}) {
