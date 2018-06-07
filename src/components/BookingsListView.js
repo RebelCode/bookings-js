@@ -23,10 +23,17 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
 
     data () {
       return {
-        params: {
-          page: 1,
-        },
-        month: false,
+        page: 1,
+        month: null,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string[]} Array of component's fields that will be used for bookings search.
+         */
+        requestParams: [
+          'page', 'month', 'service', 'search', 'status'
+        ],
 
         actions: [
           {
@@ -41,7 +48,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
 
         columns: {
           'date': {
-            label: this._(this.isMobile () ? 'Booking details' : 'Booking date and time'),
+            label: this._(this.isMobile() ? 'Booking details' : 'Booking date and time'),
           },
           'client': {
             label: this._('Client Name')
@@ -79,20 +86,9 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
         }
       },
 
-      buildParams () {
-        let params = Object.assign({}, this.params)
-        if (this.service) {
-          params['service'] = this.service
-        }
-        if (this.month) {
-          params['month'] = this.month
-        }
-        return params
-      },
-
       goToPage (page) {
-        this.params.page = page
-        this.updateFilter()
+        this.page = page
+        this.applyFilter()
       },
 
       _month(monthNumber) {

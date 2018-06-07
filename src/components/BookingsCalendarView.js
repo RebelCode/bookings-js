@@ -25,10 +25,15 @@ export function CfBookingsCalendarView (AbstractBookingsView, { mapState, mapMut
         calendarView: 'agendaWeek', // 'month', 'agendaDay'
         colorScheme: 'status', // OR 'service'
 
-        params: {
-          start: null,
-          end: null
-        },
+        start: null,
+        end: null,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string[]} Array of component's fields that will be used for bookings search.
+         */
+        requestParams: ['start', 'end', 'service', 'search', 'status']
       }
     },
 
@@ -70,19 +75,9 @@ export function CfBookingsCalendarView (AbstractBookingsView, { mapState, mapMut
        * @param end {moment} End date
        */
       updateBookings (start, end) {
-        this.params.start = start.format('YYYY-MM-DD')
-        this.params.end = end.format('YYYY-MM-DD')
-
-        this.updateFilter()
-      },
-
-      /**
-       * Build parameters for request
-       *
-       * @return {object}
-       */
-      buildParams () {
-        return Object.assign({}, this.params)
+        this.start = start.format('YYYY-MM-DD')
+        this.end = end.format('YYYY-MM-DD')
+        this.applyFilter()
       }
     },
 

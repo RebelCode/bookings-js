@@ -63,6 +63,16 @@ const mutations = {
    */
   setBookingsFilter (state, { key, value }) {
     state.filter[key] = value
+  },
+
+  /**
+   * Store last request parameters in state.
+   *
+   * @param {object} state
+   * @param {object} lastRequestParameters
+   */
+  setLastRequestParameters (state, lastRequestParameters) {
+    state.lastRequestParameters = lastRequestParameters
   }
 }
 
