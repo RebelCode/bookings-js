@@ -33,6 +33,11 @@ const state = {
     search: null,
     service: null,
   },
+
+  /**
+   * @property {object|null} Last request parameters that was used for filtering bookings.
+   */
+  lastRequestParameters: {}
 }
 
 export default state

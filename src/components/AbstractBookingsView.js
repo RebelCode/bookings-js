@@ -11,6 +11,17 @@ export function CfAbstractBookingsView (Vue, { mapState, mapMutations }) {
       }
     },
 
+    data () {
+      return {
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string[]} Array of component's fields that will be used for bookings search.
+         */
+        requestParams: []
+      }
+    },
+
     computed: {
       ...mapState('bookings', [
         'bookings',
@@ -58,46 +69,40 @@ export function CfAbstractBookingsView (Vue, { mapState, mapMutations }) {
 
     mounted () {
       this.$emit('ready')
-      this.$nextTick(this.updateFilter)
+      this.$nextTick(() => {
+        if (this.isLoading) {
+          return
+        }
+        this.applyFilter()
+      })
     },
 
     methods: {
       ...mapMutations('bookings', [
-        'setBookingsFilter',
-        'setBookingsViewFilter'
+        'setBookingsFilter'
       ]),
 
-      buildParams () {
-        throw new Error('Implement `buildParams()` method.')
+      /**
+       * Get search parameters for request.
+       *
+       * @since [*next-version*]
+       *
+       * @return {object}
+       */
+      getRequestParams () {
+        return this.requestParams.filter(paramName => {
+          return this[paramName] !== null
+        }).reduce((res, key) => (res[key] = this[key], res), {})
       },
 
-      updateFilter () {
-        /*
-         * Get view-specific parameters, for example:
-         *
-         * `page` for page number in list view;
-         * `start` and `end` for calendar view.
-         */
-        let params = this.buildParams()
-
-        /*
-         * Get params that are the same for both views.
-         */
-        let viewFilter = Object.assign({}, this.filter)
-
-        /*
-         * Remove null keys from filter.
-         */
-        viewFilter = Object.keys(viewFilter)
-          .filter(key => {
-            return viewFilter[key] !== null
-          })
-          .reduce((res, key) => (res[key] = viewFilter[key], res), {})
-
-        params = Object.assign({}, params, viewFilter)
-
-        this.setBookingsViewFilter(params)
-        this.$emit('update-filter')
+      /**
+       * Apply search filter for bookings application.
+       *
+       * @since [*next-version*]
+       */
+      applyFilter () {
+        const requestParameters = this.getRequestParams()
+        this.$emit('apply-filter', requestParameters)
       },
     },
 

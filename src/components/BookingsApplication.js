@@ -1,4 +1,4 @@
-export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions }, Vue, FunctionalArrayCollection) {
+export function CfBookingsApplication(state, store, { mapState, mapMutations, mapActions, mapGetters }, Vue, FunctionalArrayCollection) {
   return {
     store,
     inject: {
@@ -66,6 +66,9 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         isLoading: state => state.bookings.isLoading,
         viewFilter: state => state.bookings.viewFilter,
       }),
+      ...mapGetters('bookings', [
+        'getLastRequestParameters'
+      ])
     },
     created () {
       if (!state) {
@@ -94,11 +97,11 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         'setServices',
         'setBookingEditorState',
         'setBookings',
-        'setBookingsCount'
+        'setBookingsCount',
+        'setLastRequestParameters'
       ]),
 
       ...mapMutations('ui', [
-        'setBookingsViewFilter',
         'setBookingsIsLoading',
       ]),
 
@@ -117,7 +120,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         this.httpClient.post(this.statusesEndpoint, { statuses })
           .then(() => {
             this.$store.commit('setScreenStatuses', statuses)
-            this.fetch()
+            this.refresh()
           })
           .finally(() => {
             this.isStatusesSaving = false
@@ -125,14 +128,39 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       },
 
       /**
-       * Fetch bookings by search parameters.
+       * Update bookings list using request parameters.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} params Request parameters for updating bookings.
+       */
+      update (params) {
+        this.setLastRequestParameters(params)
+        params = this.normalizeParams(params)
+        this.fetch(params)
+      },
+
+      /**
+       * Refresh bookings list using last request parameters.
        *
        * @since [*next-version*]
        */
-      fetch () {
-        const params = this.normalizeParams(this.viewFilter)
+      refresh () {
+        let params = this.getLastRequestParameters()
+        params = this.normalizeParams(params)
+        this.fetch(params)
+      },
+
+      /**
+       * Fetch bookings by search parameters.
+       *
+       * @since [*next-version*]
+       *
+       * @return {Promise<any>} Bookings fetch request promise.
+       */
+      fetch (params = {}) {
         this.setBookingsIsLoading(true)
-        this.fetchBookings({ api: this.api, params }).then(() => {
+        return this.fetchBookings({ api: this.api, params }).then(() => {
           this.setBookingsIsLoading(false)
         })
       },
@@ -199,7 +227,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
           Vue.set(model, 'isDeleting', false)
 
           this._closeBookingEditor()
-          this.fetch()
+          this.refresh()
         })
       },
 

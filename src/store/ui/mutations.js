@@ -8,9 +8,6 @@ const mutations = {
   setBookingModalVisibility (state, newVisibility) {
     state.bookingModalVisible = newVisibility
   },
-  setBookingsViewFilter (state, viewFilter) {
-    state.bookings.viewFilter = viewFilter
-  },
   setBookingsIsLoading (state, isLoading) {
     state.bookings.isLoading = isLoading
   },
