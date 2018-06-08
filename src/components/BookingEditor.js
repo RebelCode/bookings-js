@@ -4,6 +4,15 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
 
+      /**
+       * API Errors Handler factory function.
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function}
+       */
+      'makeApiErrorHandler': 'makeApiErrorHandler',
+
       'config': 'config',
       'state': 'state',
 
@@ -91,7 +100,19 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
          */
         createTransition: false,
 
-        errorMessage: false,
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string|null} errorMessage Booking's API response error message
+         */
+        errorMessage: null,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string|null} clientErrorMessage Client's API response error message
+         */
+        clientErrorMessage: null,
 
         newClient: {
           name: '',
@@ -101,7 +122,30 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         /**
          * @property {object[]} List of clients found by search for autocomplete.
          */
-        foundClients: []
+        foundClients: [],
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} bookingApiHandler Handles error responses for bookings.
+         */
+        bookingApiErrorHandler: this.makeApiErrorHandler((error) => {
+          this.isBookingSaving = false
+          this.isDeleting = false
+          this.errorMessage = error
+        }),
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} clientApiHandler Handles error responses for clients.
+         */
+        clientApiErrorHandler: this.makeApiErrorHandler((error) => {
+          this.isClientsLoading = false
+          this.isCreatingClient = false
+          this.isSavingClient = false
+          this.clientErrorMessage = error
+        })
       }
     },
 
@@ -276,28 +320,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           this.$emit('updated')
           this.forceCloseModal()
           this.isBookingSaving = false
-        }).catch(this.handleBookingSaveError)
-      },
-
-      /**
-       * Handle booking saving error.
-       *
-       * @since [*next-version*]
-       *
-       * @param {Error} error Error that occurred on booking saving.
-       */
-      handleBookingSaveError (error) {
-        const errorResponse = error.response
-        this.isBookingSaving = false
-        if (!errorResponse) {
-          return
-        }
-        if (errorResponse.data.data && errorResponse.data.data.errors) {
-          this.errorMessage = errorResponse.data.data.errors[0]
-        }
-        if (errorResponse.data.message) {
-          this.errorMessage = errorResponse.data.message
-        }
+        }).catch(this.bookingApiErrorHandler.handle.bind(this.bookingApiErrorHandler))
       },
 
       /**
