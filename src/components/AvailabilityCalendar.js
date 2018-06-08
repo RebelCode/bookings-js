@@ -478,7 +478,6 @@ export default function (FullCalendar, moment) {
         })
         if (availability.repeatUntil === 'period') {
           return moment(fromDate)
-            .startOf(availability.repeatUnit)
             .add(availability.repeatUntilPeriod, availability.repeatUnit)
             .isBefore(day, availability.repeatUntilPeriod)
         }
