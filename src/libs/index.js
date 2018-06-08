@@ -2,6 +2,7 @@ import { momentHelpers } from './moment-helpers'
 import { bookingHelpers } from './booking-helpers'
 import { isMobile } from './is-mobile'
 import AvailabilityHelpers from './AvailabilityHelpers'
+import NotificationsCenter from './NotificationsCenter'
 
 export default function (dependencies) {
   return {
@@ -18,6 +19,7 @@ export default function (dependencies) {
        * Built timepicker's restriction. It should be installed as a plugin.
        */
       Vue.use(dependencies.timepicker)
+
       Vue.use(dependencies.validate, {
         events: false,
         dictionary: {
@@ -28,7 +30,16 @@ export default function (dependencies) {
           }
         }
       })
+
+      Vue.use(dependencies.toasted.default, {
+        position: 'top-center',
+        duration: 4000
+      })
+
       return Vue
+    },
+    notificationsCenter (container) {
+      return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
     jquery: function () {
       return dependencies.jquery

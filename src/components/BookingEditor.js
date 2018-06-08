@@ -4,6 +4,15 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       'clientsApi': 'clientsApi',
       'bookingsApi': 'bookingsApi',
 
+      /**
+       * API Errors Handler factory function.
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function}
+       */
+      'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
+
       'config': 'config',
       'state': 'state',
 
@@ -91,7 +100,19 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
          */
         createTransition: false,
 
-        errorMessage: false,
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string|null} errorMessage Booking's API response error message
+         */
+        errorMessage: null,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {string|null} clientErrorMessage Client's API response error message
+         */
+        clientErrorMessage: null,
 
         newClient: {
           name: '',
@@ -101,15 +122,43 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         /**
          * @property {object[]} List of clients found by search for autocomplete.
          */
-        foundClients: []
+        foundClients: [],
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} bookingApiHandler Handles error responses for bookings.
+         */
+        bookingApiErrorHandler: this.apiErrorHandlerFactory((error) => {
+          this.isBookingSaving = false
+          this.isDeleting = false
+          this.errorMessage = error
+        }),
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} clientApiHandler Handles error responses for clients.
+         */
+        clientApiErrorHandler: this.apiErrorHandlerFactory((error) => {
+          this.isClientsLoading = false
+          this.isSavingClient = false
+          this.clientErrorMessage = error
+        })
       }
     },
 
     watch: {
       model: {
         deep: true,
-        handler (value) {
-          this.errorMessage = false
+        handler () {
+          this.errorMessage = null
+        }
+      },
+      newClient: {
+        deep: true,
+        handler () {
+          this.clientErrorMessage = null
         }
       }
     },
@@ -265,29 +314,18 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
         this.isBookingSaving = true
 
-        const savingError = (error) => {
-          const errorResponse = error.response
-          this.isBookingSaving = false
-          if (!errorResponse) {
-            return
-          }
-          if (errorResponse.data.data && errorResponse.data.data.errors) {
-            this.errorMessage = errorResponse.data.data.errors[0]
-          }
-        }
-
         return this.saveBookingOnBackend({api: this.bookingsApi, model}).then((response) => {
           return response
-        }, savingError).then((response) => {
+        }).then((response) => {
           if (!this.model.id && this.createTransition) {
             return this.applyTransition(response, this.createTransition)
           }
           return response
-        }, savingError).then(() => {
+        }).then(() => {
           this.$emit('updated')
           this.forceCloseModal()
           this.isBookingSaving = false
-        }, savingError)
+        }).catch(error => this.bookingApiErrorHandler.handle(error))
       },
 
       /**
@@ -399,7 +437,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
             this.model.client = response.data
             this.isSavingClient = false
             this.isCreatingClient = false
-          })
+          }).catch(error => this.clientApiErrorHandler.handle(error))
         })
 
       },

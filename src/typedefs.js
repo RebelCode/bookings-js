@@ -20,3 +20,11 @@
  * @property {string} repeatMonthlyOn How to repeat availability on monthly repeating ("day_of_week" | "date_of_month")
  * @property {string[]} excludeDates Array of dates in ISO8601 that should be excluded from repeating.
  */
+
+/**
+ * Callback for handling API errors.
+ *
+ * @callback ApiErrorHandlingFunction
+ *
+ * @param {object|string} Errors bag or single error that occurred during API response.
+ */

@@ -1,5 +1,6 @@
 import BookingsApi from './BookingsApi'
 import ClientsApi from './ClientsApi'
+import GeneralApiErrorHandler from './GeneralApiErrorHandler'
 
 /*
  * Exports instances to main container config.
@@ -27,6 +28,11 @@ export default function (dependencies) {
         container.sessionReadTransformer,
         container.moment
       )
+    },
+    apiErrorHandlerFactory (container) {
+      return (handler) => {
+        return new GeneralApiErrorHandler(handler)
+      }
     }
   }
 }
