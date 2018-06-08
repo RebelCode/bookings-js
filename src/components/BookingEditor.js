@@ -11,7 +11,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        *
        * @var {Function}
        */
-      'makeApiErrorHandler': 'makeApiErrorHandler',
+      'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
 
       'config': 'config',
       'state': 'state',
@@ -129,7 +129,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
          *
          * @property {ApiErrorHandler} bookingApiHandler Handles error responses for bookings.
          */
-        bookingApiErrorHandler: this.makeApiErrorHandler((error) => {
+        bookingApiErrorHandler: this.apiErrorHandlerFactory((error) => {
           this.isBookingSaving = false
           this.isDeleting = false
           this.errorMessage = error
@@ -140,7 +140,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
          *
          * @property {ApiErrorHandler} clientApiHandler Handles error responses for clients.
          */
-        clientApiErrorHandler: this.makeApiErrorHandler((error) => {
+        clientApiErrorHandler: this.apiErrorHandlerFactory((error) => {
           this.isClientsLoading = false
           this.isSavingClient = false
           this.clientErrorMessage = error
@@ -325,7 +325,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           this.$emit('updated')
           this.forceCloseModal()
           this.isBookingSaving = false
-        }).catch(this.bookingApiErrorHandler.handle.bind(this.bookingApiErrorHandler))
+        }).catch(error => this.bookingApiErrorHandler.handle(error))
       },
 
       /**
@@ -437,7 +437,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
             this.model.client = response.data
             this.isSavingClient = false
             this.isCreatingClient = false
-          }).catch(this.clientApiErrorHandler.handle.bind(this.clientApiErrorHandler))
+          }).catch(error => this.clientApiErrorHandler.handle(error))
         })
 
       },

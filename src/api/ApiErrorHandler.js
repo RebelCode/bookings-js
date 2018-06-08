@@ -12,7 +12,7 @@ export default class ApiErrorHandler {
    *
    * @since [*next-version*]
    *
-   * @param {ApiErrorHandlingFunction} handler Handler function that will proceed errors found in response.
+   * @param {ApiErrorHandlingFunction} handler Handler function that will process errors found in response.
    */
   constructor (handler) {
     this.handler = handler

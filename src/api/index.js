@@ -29,7 +29,7 @@ export default function (dependencies) {
         container.moment
       )
     },
-    makeApiErrorHandler (container) {
+    apiErrorHandlerFactory (container) {
       return (handler) => {
         return new GeneralApiErrorHandler(handler)
       }

@@ -35,12 +35,11 @@ export default function (dependencies) {
         position: 'top-center',
         duration: 4000
       })
-      Vue.use(NotificationsCenter, {
-        show: Vue.toasted.show,
-        error: Vue.toasted.error,
-      })
 
       return Vue
+    },
+    notificationsCenter (container) {
+      return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
     jquery: function () {
       return dependencies.jquery
