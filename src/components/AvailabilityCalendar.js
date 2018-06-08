@@ -500,10 +500,10 @@ export default function (FullCalendar, moment) {
         let model = Object.assign({}, availability)
 
         let availabilityDuration = moment(availability.end).diff(moment(availability.start), 'seconds'),
-          availabilityStartTime = moment(availability.start).format('HH:mm:ssZ')
+          availabilityStartTime = moment(availability.start).format('HH:mm:ss')
 
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
-          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ssZ')
+          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
 
         if (model.isAllDay) {
           eventEnd = moment(eventEnd).endOf('day').add(1, 'second')
