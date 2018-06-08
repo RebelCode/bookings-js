@@ -26,6 +26,15 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       modalState: {
         from: 'bookingEditorState'
       },
+
+      /**
+       * API Errors Handler factory function.
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function}
+       */
+      'makeApiErrorHandler': 'makeApiErrorHandler',
     },
     data () {
       return {
@@ -46,6 +55,16 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
           return this.statuses
         }, (newValue) => {}, (item) => {
           return item.key
+        }),
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} bookingApiHandler Handles error responses for bookings.
+         */
+        bookingApiErrorHandler: this.makeApiErrorHandler((error) => {
+          this.setBookingsIsLoading(false)
+          this.$notificationsCenter.error(error)
         }),
       }
     },
@@ -162,7 +181,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         this.setBookingsIsLoading(true)
         return this.fetchBookings({ api: this.api, params }).then(() => {
           this.setBookingsIsLoading(false)
-        })
+        }).catch(this.bookingApiErrorHandler.handle.bind(this.bookingApiErrorHandler))
       },
 
       /**
