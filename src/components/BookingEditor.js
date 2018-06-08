@@ -142,7 +142,6 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
          */
         clientApiErrorHandler: this.makeApiErrorHandler((error) => {
           this.isClientsLoading = false
-          this.isCreatingClient = false
           this.isSavingClient = false
           this.clientErrorMessage = error
         })
@@ -152,8 +151,14 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
     watch: {
       model: {
         deep: true,
-        handler (value) {
-          this.errorMessage = false
+        handler () {
+          this.errorMessage = null
+        }
+      },
+      newClient: {
+        deep: true,
+        handler () {
+          this.clientErrorMessage = null
         }
       }
     },
@@ -432,7 +437,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
             this.model.client = response.data
             this.isSavingClient = false
             this.isCreatingClient = false
-          })
+          }).catch(this.clientApiErrorHandler.handle.bind(this.clientApiErrorHandler))
         })
 
       },
