@@ -265,29 +265,39 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
 
         this.isBookingSaving = true
 
-        const savingError = (error) => {
-          const errorResponse = error.response
-          this.isBookingSaving = false
-          if (!errorResponse) {
-            return
-          }
-          if (errorResponse.data.data && errorResponse.data.data.errors) {
-            this.errorMessage = errorResponse.data.data.errors[0]
-          }
-        }
-
         return this.saveBookingOnBackend({api: this.bookingsApi, model}).then((response) => {
           return response
-        }, savingError).then((response) => {
+        }).then((response) => {
           if (!this.model.id && this.createTransition) {
             return this.applyTransition(response, this.createTransition)
           }
           return response
-        }, savingError).then(() => {
+        }).then(() => {
           this.$emit('updated')
           this.forceCloseModal()
           this.isBookingSaving = false
-        }, savingError)
+        }).catch(this.handleBookingSaveError)
+      },
+
+      /**
+       * Handle booking saving error.
+       *
+       * @since [*next-version*]
+       *
+       * @param {Error} error Error that occurred on booking saving.
+       */
+      handleBookingSaveError (error) {
+        const errorResponse = error.response
+        this.isBookingSaving = false
+        if (!errorResponse) {
+          return
+        }
+        if (errorResponse.data.data && errorResponse.data.data.errors) {
+          this.errorMessage = errorResponse.data.data.errors[0]
+        }
+        if (errorResponse.data.message) {
+          this.errorMessage = errorResponse.data.message
+        }
       },
 
       /**
