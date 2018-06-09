@@ -74,7 +74,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
 
     methods: {
       humanizeDate (date) {
-        return moment(date).format('ha, dddd, Do MMMM YYYY')
+        return moment(date).format('h:mm a, dddd, Do MMMM YYYY')
       },
 
       onActionClick (action, row) {
