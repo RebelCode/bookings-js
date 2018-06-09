@@ -65,7 +65,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           repeatPeriod: 1,
           repeatUnit: 'days', // | "weeks" | "months" | "years"
           repeatUntil: 'period', // | "date"
-          repeatUntilPeriod: 4,
+          repeatUntilPeriod: 1,
           repeatUntilDate: null,
 
           repeatWeeklyOn: [],
