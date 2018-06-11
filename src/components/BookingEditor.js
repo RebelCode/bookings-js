@@ -24,6 +24,17 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
+       * Function for i18n strings
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function} _
+       */
+      '_': {
+        from: 'translate'
+      },
+
+      /**
        * Function for text formatting, it will replace placeholders to given values.
        *
        * @var {Function}
@@ -153,6 +164,12 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         deep: true,
         handler () {
           this.errorMessage = null
+          /*
+           * Add self-transition when modal for editing is opened.
+           */
+          if (this.selfTransition && !this.model.transition) {
+            this.mountedModel.transition = this.model.transition = this.selfTransition
+          }
         }
       },
       newClient: {
@@ -193,23 +210,57 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
-       * Map of status keys to map of transitions to status keys.
-       * It will give ability to show only allowed transitions for
-       * editing booking.
+       * Transition key that will keep booking status.
        *
-       * @return {object}
+       * @since [*next-version*]
+       *
+       * @return {string | undefined}
        */
-      transitionsMap () {
-        return this.state.statusTransitions
+      selfTransition () {
+        const bookingStatus = this.model.status
+        if (!bookingStatus) {
+          return
+        }
+
+        const transitions = this.state.statusTransitions[bookingStatus]
+
+        return Object.keys(transitions)
+          .find(transition => transitions[transition] === bookingStatus)
       },
 
       /**
-       * Map of transition keys to translated transitions labels.
+       * Get map of available transitions for current booking.
        *
-       * @return {object}
+       * @since [*next-version*]
+       *
+       * @return {object} Map of transition key to labels.
        */
-      transitionsLabels () {
-        return this.state.transitionsLabels
+      availableTransitions () {
+        const bookingStatus = this.model.status
+        const transitions = this.state.statusTransitions[bookingStatus]
+        const hiddenTransitions = this.state.hiddenStatusesTransitions[bookingStatus] ||  this.state.hiddenStatusesTransitions['all']
+
+        /*
+         * Remove hidden transitions
+         */
+        let allowedTransitions = Object.keys(transitions)
+          .filter(transition => hiddenTransitions.indexOf(transition) === -1)
+          .filter(transition => transition !== this.selfTransition)
+        allowedTransitions.unshift(this.selfTransition)
+
+        let transitionsMap = allowedTransitions.reduce((res, key) => (res[key] = this.state.statusesTransitionsLabels['all'][key], res), {})
+
+        /*
+         * Apply status-specific labels, if there are some
+         */
+        if (this.state.statusesTransitionsLabels[bookingStatus]) {
+          for (let transitionKey in this.state.statusesTransitionsLabels[bookingStatus]) {
+            transitionsMap[transitionKey] = this.state.statusesTransitionsLabels[bookingStatus][transitionKey]
+          }
+        }
+        transitionsMap[this.selfTransition] = this._("Don't change booking status")
+
+        return transitionsMap
       },
 
       /**
@@ -440,22 +491,6 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           }).catch(error => this.clientApiErrorHandler.handle(error))
         })
 
-      },
-
-      /**
-       * Check that given transition can be applied to current booking.
-       *
-       * @param {string} transition Transition to check
-       *
-       * @return {boolean}
-       */
-      canDoTransition (transition) {
-        const status = this.model.status || 'none'
-        const availableTransitions = this.transitionsMap[status]
-        if (!availableTransitions) {
-          return false
-        }
-        return !!availableTransitions[transition]
       }
     },
 
