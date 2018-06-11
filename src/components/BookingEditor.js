@@ -164,6 +164,12 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         deep: true,
         handler () {
           this.errorMessage = null
+          /*
+           * Add self-transition when modal for editing is opened.
+           */
+          if (this.selfTransition && !this.model.transition) {
+            this.mountedModel.transition = this.model.transition = this.selfTransition
+          }
         }
       },
       newClient: {
@@ -204,6 +210,25 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
+       * Transition key that will keep booking status.
+       *
+       * @since [*next-version*]
+       *
+       * @return {string | undefined}
+       */
+      selfTransition () {
+        const bookingStatus = this.model.status
+        if (!bookingStatus) {
+          return
+        }
+
+        const transitions = this.state.statusTransitions[bookingStatus]
+
+        return Object.keys(transitions)
+          .find(transition => transitions[transition] === bookingStatus)
+      },
+
+      /**
        * Get map of available transitions for current booking.
        *
        * @since [*next-version*]
@@ -211,24 +236,17 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
        * @return {object} Map of transition key to labels.
        */
       availableTransitions () {
-        const keepTransition = this._("Don't change booking status")
         const bookingStatus = this.model.status
         const transitions = this.state.statusTransitions[bookingStatus]
         const hiddenTransitions = this.state.hiddenStatusesTransitions[bookingStatus] ||  this.state.hiddenStatusesTransitions['all']
-
-        /*
-         * Get self transition
-         */
-        let selfTransition = Object.keys(transitions)
-          .find(transition => transitions[transition] === bookingStatus)
 
         /*
          * Remove hidden transitions
          */
         let allowedTransitions = Object.keys(transitions)
           .filter(transition => hiddenTransitions.indexOf(transition) === -1)
-          .filter(transition => transition !== selfTransition)
-        allowedTransitions.unshift(selfTransition)
+          .filter(transition => transition !== this.selfTransition)
+        allowedTransitions.unshift(this.selfTransition)
 
         let transitionsMap = allowedTransitions.reduce((res, key) => (res[key] = this.state.statusesTransitionsLabels['all'][key], res), {})
 
@@ -240,7 +258,7 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
             transitionsMap[transitionKey] = this.state.statusesTransitionsLabels[bookingStatus][transitionKey]
           }
         }
-        transitionsMap[selfTransition] = keepTransition
+        transitionsMap[this.selfTransition] = this._("Don't change booking status")
 
         return transitionsMap
       },
