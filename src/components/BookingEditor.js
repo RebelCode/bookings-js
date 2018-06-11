@@ -24,6 +24,17 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
+       * Function for i18n strings
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function} _
+       */
+      '_': {
+        from: 'translate'
+      },
+
+      /**
        * Function for text formatting, it will replace placeholders to given values.
        *
        * @var {Function}
@@ -193,23 +204,45 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
       },
 
       /**
-       * Map of status keys to map of transitions to status keys.
-       * It will give ability to show only allowed transitions for
-       * editing booking.
+       * Get map of available transitions for current booking.
        *
-       * @return {object}
+       * @since [*next-version*]
+       *
+       * @return {object} Map of transition key to labels.
        */
-      transitionsMap () {
-        return this.state.statusTransitions
-      },
+      availableTransitions () {
+        const keepTransition = this._("Don't change booking status")
+        const bookingStatus = this.model.status
+        const transitions = this.state.statusTransitions[bookingStatus]
+        const hiddenTransitions = this.state.hiddenStatusesTransitions[bookingStatus] ||  this.state.hiddenStatusesTransitions['all']
 
-      /**
-       * Map of transition keys to translated transitions labels.
-       *
-       * @return {object}
-       */
-      transitionsLabels () {
-        return this.state.transitionsLabels
+        /*
+         * Get self transition
+         */
+        let selfTransition = Object.keys(transitions)
+          .find(transition => transitions[transition] === bookingStatus)
+
+        /*
+         * Remove hidden transitions
+         */
+        let allowedTransitions = Object.keys(transitions)
+          .filter(transition => hiddenTransitions.indexOf(transition) === -1)
+          .filter(transition => transition !== selfTransition)
+        allowedTransitions.unshift(selfTransition)
+
+        let transitionsMap = allowedTransitions.reduce((res, key) => (res[key] = this.state.statusesTransitionsLabels['all'][key], res), {})
+
+        /*
+         * Apply status-specific labels, if there are some
+         */
+        if (this.state.statusesTransitionsLabels[bookingStatus]) {
+          for (let transitionKey in this.state.statusesTransitionsLabels[bookingStatus]) {
+            transitionsMap[transitionKey] = this.state.statusesTransitionsLabels[bookingStatus][transitionKey]
+          }
+        }
+        transitionsMap[selfTransition] = keepTransition
+
+        return transitionsMap
       },
 
       /**
@@ -440,22 +473,6 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
           }).catch(error => this.clientApiErrorHandler.handle(error))
         })
 
-      },
-
-      /**
-       * Check that given transition can be applied to current booking.
-       *
-       * @param {string} transition Transition to check
-       *
-       * @return {boolean}
-       */
-      canDoTransition (transition) {
-        const status = this.model.status || 'none'
-        const availableTransitions = this.transitionsMap[status]
-        if (!availableTransitions) {
-          return false
-        }
-        return !!availableTransitions[transition]
       }
     },
 
