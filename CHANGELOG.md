@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
 ### Fixed
-- All day repeating daylight saving issue.
+- Daylight saving issue during rendering repeated all day events in availability calendar.
 
 ## [0.1.19] - 2018-06-11
 ### Changed
