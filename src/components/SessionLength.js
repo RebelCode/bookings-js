@@ -21,9 +21,11 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         }, {
           title: this._('days'),
           seconds: 60 * 60 * 24,
+          disabled: true
         }, {
           title: this._('weeks'),
           seconds: 60 * 60 * 24 * 7,
+          disabled: true
         }],
 
         sessionTimeUnit: 60,
