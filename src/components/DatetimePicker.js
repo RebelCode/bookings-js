@@ -42,7 +42,13 @@ export function CfDatetimePicker (DatetimePicker, moment, format) {
        */
       timeValue: {
         get () {
-          if (!this.value || this.timeDisabled) return null
+          if (!this.value || this.timeDisabled) {
+            return {
+              HH: 0,
+              mm: 0,
+              ss: 0
+            }
+          }
 
           const datetime = moment(this.value)
           return {
