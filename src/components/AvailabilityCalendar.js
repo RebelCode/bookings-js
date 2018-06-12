@@ -502,7 +502,7 @@ export default function (FullCalendar, moment) {
           availabilityStartTime = moment(availability.start).format('HH:mm:ss')
 
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
-          eventEnd = moment(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
+          eventEnd = moment.utc(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
 
         if (model.isAllDay) {
           eventEnd = moment(eventEnd).endOf('day').add(1, 'second')

@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+### Fixed
+- All day repeating daylight saving issue.
+
 ## [0.1.19] - 2018-06-11
 ### Changed
 - A logic and UX for actions in booking editor.
