@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
 
+## [0.1.21] - 2018-06-13
+### Added
+- Session length limit property for session lengths component.
+
 ## [0.1.20] - 2018-06-12
 ### Changed
 - The DateTime picker now always produces a value in `ISO8601` format.
