@@ -60,6 +60,16 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         })
       }
     },
+    props: {
+      /**
+       * @since [*next-version*]
+       *
+       * @property {number} sessionLengthLimit Session length limit in seconds.
+       */
+      sessionLengthLimit: {
+        type: Number
+      }
+    },
     watch: {
       /**
        * Session default watcher that removes validation error
@@ -95,8 +105,7 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
        * @var {number}
        */
       maxSessionLength () {
-        const maxSessionLength = 60 * 60 * 24 - 1
-        return Math.floor(maxSessionLength / this.sessionTimeUnit)
+        return Math.floor(this.sessionLengthLimit / this.sessionTimeUnit)
       }
     },
     methods: {
@@ -117,6 +126,9 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
        * @since [*next-version*]
        */
       limitSessionLength () {
+        if (!this.sessionLengthLimit) {
+          return
+        }
         if (this.sessionDefault.sessionLength > this.maxSessionLength) {
           this.sessionDefault.sessionLength = this.maxSessionLength
         }
