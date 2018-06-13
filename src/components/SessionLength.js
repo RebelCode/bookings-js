@@ -69,7 +69,16 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         deep: true,
         handler () {
           this.validationError = null
+          this.limitSessionLength()
         }
+      },
+      /**
+       * Watch for `maxSessionLength` change and apply session length limit if needed.
+       *
+       * @since [*next-version*]
+       */
+      maxSessionLength () {
+        this.limitSessionLength()
       }
     },
     computed: {
@@ -77,7 +86,18 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         storeSessions: state => state.app.sessionLengths.sort((a, b) => {
           return a.sessionLength - b.sessionLength
         })
-      })
+      }),
+      /**
+       * Max possible value of session length (less then day).
+       *
+       * @since [*next-version*]
+       *
+       * @var {number}
+       */
+      maxSessionLength () {
+        const maxSessionLength = 60 * 60 * 24 - 1
+        return Math.floor(maxSessionLength / this.sessionTimeUnit)
+      }
     },
     methods: {
       ...mapMutations([
@@ -89,6 +109,17 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
           units: ['w', 'd', 'h', 'm'],
           round: true
         })
+      },
+
+      /**
+       * Apply session length limit if needed.
+       *
+       * @since [*next-version*]
+       */
+      limitSessionLength () {
+        if (this.sessionDefault.sessionLength > this.maxSessionLength) {
+          this.sessionDefault.sessionLength = this.maxSessionLength
+        }
       },
 
       /**
