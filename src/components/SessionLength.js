@@ -60,6 +60,16 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         })
       }
     },
+    props: {
+      /**
+       * @since [*next-version*]
+       *
+       * @property {number} sessionLengthLimit Session length limit in seconds.
+       */
+      sessionLengthLimit: {
+        type: Number
+      }
+    },
     watch: {
       /**
        * Session default watcher that removes validation error
@@ -69,7 +79,16 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         deep: true,
         handler () {
           this.validationError = null
+          this.limitSessionLength()
         }
+      },
+      /**
+       * Watch for `maxSessionLength` change and apply session length limit if needed.
+       *
+       * @since [*next-version*]
+       */
+      maxSessionLength () {
+        this.limitSessionLength()
       }
     },
     computed: {
@@ -77,7 +96,17 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         storeSessions: state => state.app.sessionLengths.sort((a, b) => {
           return a.sessionLength - b.sessionLength
         })
-      })
+      }),
+      /**
+       * Max possible value of session length (less then day).
+       *
+       * @since [*next-version*]
+       *
+       * @var {number}
+       */
+      maxSessionLength () {
+        return Math.floor(this.sessionLengthLimit / this.sessionTimeUnit)
+      }
     },
     methods: {
       ...mapMutations([
@@ -89,6 +118,20 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
           units: ['w', 'd', 'h', 'm'],
           round: true
         })
+      },
+
+      /**
+       * Apply session length limit if needed.
+       *
+       * @since [*next-version*]
+       */
+      limitSessionLength () {
+        if (!this.sessionLengthLimit) {
+          return
+        }
+        if (this.sessionDefault.sessionLength > this.maxSessionLength) {
+          this.sessionDefault.sessionLength = this.maxSessionLength
+        }
       },
 
       /**
