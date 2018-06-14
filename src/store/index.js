@@ -33,6 +33,11 @@ const getters = {
 const mutations = {
   setInitialState (state, appState) {
     state.app = Object.assign({}, state.app, appState)
+
+    /*
+     * Set initial timezone value for bookings page.
+     */
+    state.bookings.timezone = appState.config.bookingsTimezone || appState.config.timezone
   },
 
   setNewAvailabilities (state, rules) {

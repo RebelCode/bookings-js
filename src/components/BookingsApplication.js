@@ -8,6 +8,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       'booking-editor': 'booking-editor',
       'tabs': 'tabs',
       'tab': 'tab',
+      'timezone-select': 'timezone-select',
 
       'httpClient': 'httpClient',
 
@@ -96,7 +97,22 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       }),
       ...mapGetters('bookings', [
         'getLastRequestParameters'
-      ])
+      ]),
+      /**
+       * Timezone in which all components will render bookings time.
+       *
+       * @since [*next-version*]
+       *
+       * @var {string}
+       */
+      timezone: {
+        get () {
+          return this.$store.state.bookings.timezone
+        },
+        set (value) {
+          this.$store.commit('bookings/setTimezone', value)
+        }
+      }
     },
     created () {
       if (!state) {
@@ -275,6 +291,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       'bookings-list-view' : 'bookings-list-view',
       'tabs': 'tabs',
       'tab': 'tab',
+      'timezone-select': 'timezone-select',
       'selection-list': 'selection-list',
     }
   }

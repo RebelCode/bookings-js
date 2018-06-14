@@ -73,6 +73,18 @@ const mutations = {
    */
   setLastRequestParameters (state, lastRequestParameters) {
     state.lastRequestParameters = lastRequestParameters
+  },
+
+  /**
+   * Set timezone for bookings page.
+   *
+   * @since [*next-version*]
+   *
+   * @param {object} state Module's state.
+   * @param {string} value Timezone name.
+   */
+  setTimezone (state, value) {
+    state.timezone = value
   }
 }
 

@@ -30,6 +30,15 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       '_': {
         from: 'translate'
       },
+
+      /**
+       * Set of moment functions for dealing with timezone.
+       *
+       * @since [*next-version*]
+       *
+       * @property {{switchToTimezone: Function}} momentHelpers
+       */
+      'momentHelpers': 'momentHelpers'
     },
     props: {
       bookings: {
@@ -70,7 +79,10 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
     computed: {
       generatedEvents () {
         return this.generateEvents(this.bookings, this.colorScheme)
-      }
+      },
+      ...mapState('bookings', [
+        'timezone'
+      ])
     },
 
     mounted () {
@@ -134,8 +146,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           id: model.id,
           editable: false, // disable dragging and resizing
           title: model.service.name,
-          start: moment(model.start),
-          end: moment(model.end),
+          start: this.momentHelpers.switchToTimezone(model.start, this.timezone),
+          end: this.momentHelpers.switchToTimezone(model.end, this.timezone),
 
           clientName: model.client.name,
 

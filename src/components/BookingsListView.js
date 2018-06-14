@@ -1,4 +1,4 @@
-export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutations, mapActions }, moment) {
+export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) {
   return AbstractBookingsView.extend({
     inject: {
       'isMobile': 'isMobile',
@@ -18,7 +18,16 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
        */
       'formatter': {
         from: 'textFormatter'
-      }
+      },
+
+      /**
+       * Set of moment functions for dealing with timezone.
+       *
+       * @since [*next-version*]
+       *
+       * @property {{switchToTimezone: Function}} momentHelpers
+       */
+      'momentHelpers': 'momentHelpers'
     },
 
     data () {
@@ -70,11 +79,14 @@ export function CfBookingsListView (AbstractBookingsView, { mapState, mapMutatio
         }
         return Math.ceil(this.bookingsCount / 10)
       },
+      ...mapState('bookings', [
+        'timezone'
+      ])
     },
 
     methods: {
       humanizeDate (date) {
-        return moment(date).format('h:mm a, dddd, Do MMMM YYYY')
+        return this.momentHelpers.switchToTimezone(date, this.timezone).format('h:mm a, dddd, Do MMMM YYYY')
       },
 
       onActionClick (action, row) {
