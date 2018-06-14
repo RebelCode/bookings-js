@@ -21,13 +21,13 @@ export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) 
       },
 
       /**
-       * Set of moment functions for dealing with timezone.
+       * Function for creating datetime in timezone.
        *
        * @since [*next-version*]
        *
-       * @property {{switchToTimezone: Function}} momentHelpers
+       * @property {CreateDatetimeFunction} createDatetime
        */
-      'momentHelpers': 'momentHelpers'
+      'createDatetime': 'createDatetime'
     },
 
     data () {
@@ -86,7 +86,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) 
 
     methods: {
       humanizeDate (date) {
-        return this.momentHelpers.switchToTimezone(date, this.timezone).format('h:mm a, dddd, Do MMMM YYYY')
+        return this.createDatetime(date, this.timezone).format('h:mm a, dddd, Do MMMM YYYY')
       },
 
       onActionClick (action, row) {

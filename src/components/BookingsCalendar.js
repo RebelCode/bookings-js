@@ -32,13 +32,13 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       },
 
       /**
-       * Set of moment functions for dealing with timezone.
+       * Function for creating datetime in timezone.
        *
        * @since [*next-version*]
        *
-       * @property {{switchToTimezone: Function}} momentHelpers
+       * @property {CreateDatetimeFunction} createDatetime
        */
-      'momentHelpers': 'momentHelpers'
+      'createDatetime': 'createDatetime'
     },
     props: {
       bookings: {
@@ -146,8 +146,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           id: model.id,
           editable: false, // disable dragging and resizing
           title: model.service.name,
-          start: this.momentHelpers.switchToTimezone(model.start, this.timezone),
-          end: this.momentHelpers.switchToTimezone(model.end, this.timezone),
+          start: this.createDatetime(model.start, this.timezone),
+          end: this.createDatetime(model.end, this.timezone),
 
           clientName: model.client.name,
 
