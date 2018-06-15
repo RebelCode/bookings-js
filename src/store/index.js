@@ -15,7 +15,7 @@ const state = {
     },
 
     bookings: [],
-    statusesEndpoint: '',
+    screenOptionsEndpoint: '',
     statuses: {},
     screenStatuses: []
   },
@@ -37,7 +37,7 @@ const mutations = {
     /*
      * Set initial timezone value for bookings page.
      */
-    state.bookings.timezone = appState.config.bookingsTimezone || appState.config.timezone
+    state.bookings.timezone = appState.bookingsTimezone || appState.config.timezone
   },
 
   setNewAvailabilities (state, rules) {
