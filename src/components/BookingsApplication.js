@@ -8,6 +8,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       'booking-editor': 'booking-editor',
       'tabs': 'tabs',
       'tab': 'tab',
+      'timezone-select': 'timezone-select',
 
       'httpClient': 'httpClient',
 
@@ -58,6 +59,8 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         
         selectedStatuses: [],
 
+        timezone: null,
+
         isStatusesSaving: false,
 
         statusesCollection: new FunctionalArrayCollection(() => {
@@ -88,7 +91,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
           })
         },
         screenStatuses: state => state.app.screenStatuses,
-        statusesEndpoint: state => state.app.statusesEndpoint,
+        screenOptionsEndpoint: state => state.app.screenOptionsEndpoint,
       }),
       ...mapState('ui', {
         isLoading: state => state.bookings.isLoading,
@@ -115,6 +118,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       }
 
       this.selectedStatuses = this.screenStatuses.slice()
+      this.timezone = state.bookingsTimezone || state.config.timezone
     },
     methods: {
       ...mapMutations([
@@ -126,7 +130,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         'setBookingEditorState',
         'setBookings',
         'setBookingsCount',
-        'setLastRequestParameters'
+        'setLastRequestParameters',
       ]),
 
       ...mapMutations('ui', [
@@ -143,11 +147,12 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
         this.setBookingsCount(0)
       },
 
-      setScreenStatuses (statuses) {
+      saveScreenOptions (statuses, bookingsTimezone) {
         this.isStatusesSaving = true
-        this.httpClient.post(this.statusesEndpoint, { statuses })
+        this.httpClient.post(this.screenOptionsEndpoint, { statuses, bookingsTimezone })
           .then(() => {
             this.$store.commit('setScreenStatuses', statuses)
+            this.$store.commit('bookings/setTimezone', bookingsTimezone)
             this.refresh()
           })
           .finally(() => {
@@ -275,6 +280,7 @@ export function CfBookingsApplication(state, store, { mapState, mapMutations, ma
       'bookings-list-view' : 'bookings-list-view',
       'tabs': 'tabs',
       'tab': 'tab',
+      'timezone-select': 'timezone-select',
       'selection-list': 'selection-list',
     }
   }

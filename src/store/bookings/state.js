@@ -37,7 +37,12 @@ const state = {
   /**
    * @property {object|null} Last request parameters that was used for filtering bookings.
    */
-  lastRequestParameters: {}
+  lastRequestParameters: {},
+
+  /**
+   * @property {string} timezone Timezone on bookings page
+   */
+  timezone: 'UTC+0'
 }
 
 export default state

@@ -30,6 +30,15 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       '_': {
         from: 'translate'
       },
+
+      /**
+       * Function for creating datetime in timezone.
+       *
+       * @since [*next-version*]
+       *
+       * @property {CreateDatetimeFunction} createDatetime
+       */
+      'createDatetime': 'createDatetime'
     },
     props: {
       bookings: {
@@ -70,7 +79,10 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
     computed: {
       generatedEvents () {
         return this.generateEvents(this.bookings, this.colorScheme)
-      }
+      },
+      ...mapState('bookings', [
+        'timezone'
+      ])
     },
 
     mounted () {
@@ -134,8 +146,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           id: model.id,
           editable: false, // disable dragging and resizing
           title: model.service.name,
-          start: moment(model.start),
-          end: moment(model.end),
+          start: this.createDatetime(model.start, this.timezone),
+          end: this.createDatetime(model.end, this.timezone),
 
           clientName: model.client.name,
 
