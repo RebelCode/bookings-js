@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
 
+## [0.1.22] - 2018-06-15
+### Added
+- Added ability to change timezone in which bookings are displayed (list view, calendar view and editor) on bookings page.
+
 ## [0.1.21] - 2018-06-13
 ### Added
 - Session length limit property for session lengths component.
