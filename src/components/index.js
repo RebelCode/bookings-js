@@ -64,11 +64,14 @@ export default function (dependencies) {
     'datetime-picker': function (container) {
       return CfDatetimePicker(container._datetimePicker, container.moment, container.config.formats.datetime.tzFree)
     },
+    'createDatetimeCapable': function (container) {
+      return dependencies.bookingWizardComponents.MfCreateDatetimeCapable(container.moment)
+    },
     'service-session-selector': function (container) {
-      return dependencies.bookingWizardComponents.CfServiceSessionSelector(container.moment, container.sessionsApi, container.config.formats.datetime)
+      return dependencies.bookingWizardComponents.CfServiceSessionSelector(container.createDatetimeCapable, container.sessionsApi, container.config.formats.datetime)
     },
     'session-picker': function (container) {
-      return dependencies.bookingWizardComponents.CfSessionPicker(container.moment, container.config.formats.datetime)
+      return dependencies.bookingWizardComponents.CfSessionPicker(container.createDatetimeCapable, container.config.formats.datetime)
     },
     'time-picker': function (container) {
       return CfVueTimepicker(container.vue.options.components['vue-timepicker'])
