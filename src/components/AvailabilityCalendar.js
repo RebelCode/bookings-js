@@ -22,6 +22,15 @@ export default function (FullCalendar, moment) {
        */
       'availabilityHelpers': 'availabilityHelpers',
 
+      /**
+       * Function for rendering template.
+       *
+       * @since [*next-version*]
+       *
+       * @property {RenderFunction} renderTemplate
+       */
+      'renderTemplate': 'renderTemplate',
+
       'appConfig': {
         from: 'config'
       }
@@ -128,22 +137,19 @@ export default function (FullCalendar, moment) {
        * @param view
        */
       eventRender (event, el, view) {
-        let endDate = event.end || event.start
+        const endDate = event.end || event.start
+        const timezone = this.visibleTimezone === this.appConfig.timezone ? '' : this.momentHelpers.timezoneLabel(this.visibleTimezone)
         if (endDate.isBefore(moment(), 'day')) {
           el[0].classList.add('fc-event--past')
         }
 
         el.find('.fc-content')
           .addClass(`rc-event`)
-          .html(this.getEventMarkup(event))
-      },
-
-      getEventMarkup (event) {
-        const timezone = this.visibleTimezone === this.appConfig.timezone ? '' : this.momentHelpers.timezoneLabel(this.visibleTimezone)
-        return `
-          <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
-          <div class="rc-event-field rc-event-field--timezone">${timezone}</div>
-        `
+          .html(this.renderTemplate('rc-availability-calendar-event', {
+            start: event.start.format('HH:mm'),
+            end: event.end.format('HH:mm'),
+            timezone
+          }))
       },
 
       /**

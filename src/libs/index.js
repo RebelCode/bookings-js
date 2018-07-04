@@ -41,6 +41,19 @@ export default function (dependencies) {
     notificationsCenter (container) {
       return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
+
+    renderTemplate (container) {
+      let templateRenderFunctions = {}
+      return (templateId, context) => {
+        if (!templateRenderFunctions[templateId]) {
+          const templateString = container.document.getElementById(templateId).innerHTML
+          templateRenderFunctions[templateId] = (templateData) => new Function(`{${Object.keys(templateData).join(',')}}`, 'return `' + templateString + '`')(templateData);
+        }
+        const templateRenderFunction = templateRenderFunctions[templateId]
+        return templateRenderFunction(context)
+      }
+    },
+
     jquery: function () {
       return dependencies.jquery
     },

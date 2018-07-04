@@ -1,26 +1,4 @@
 export default function (FullCalendar, { mapState, mapMutations }, moment) {
-  /**
-   * Render function for event parts
-   *
-   * @todo: move this stuff to templates from backend || vue
-   * @todo: this is temp solution
-   *
-   * @param event
-   * @return {string}
-   */
-  const renderEvent = function (event, _) {
-    const title = event.title || _('New booking')
-    const clientName = event.clientName || ''
-    const action = event.title ? _('Click for more details') : _('Release to create booking')
-
-    return `
-      <div class="rc-event-field rc-event-field--title">${title}</div>
-      <div class="rc-event-field rc-event-field--time">${event.start.format('HH:mm')} - ${event.end.format('HH:mm')}</div>
-      <div class="rc-event-field rc-event-field--month-collapse">${clientName}</div>
-      <div class="rc-event-field rc-event-field--month-collapse rc-event-field--click">${action}</div>
-    `
-  }
-
   return FullCalendar.extend({
     inject: {
       'bookingStatusesColors': 'bookingStatusesColors',
@@ -38,7 +16,16 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
        *
        * @property {CreateDatetimeFunction} createDatetime
        */
-      'createDatetime': 'createDatetime'
+      'createDatetime': 'createDatetime',
+
+      /**
+       * Function for rendering template.
+       *
+       * @since [*next-version*]
+       *
+       * @property {RenderFunction} renderTemplate
+       */
+      'renderTemplate': 'renderTemplate'
     },
     props: {
       bookings: {
@@ -196,7 +183,13 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
 
         element.find('.fc-content')
           .addClass(`rc-event`)
-          .html(renderEvent(event, this._))
+          .html(this.renderTemplate('rc-booking-calendar-event', {
+            title: event.title || this._('New booking'),
+            clientName: event.clientName || '',
+            action: event.title ? this._('Click for more details') : this._('Release to create booking'),
+            start: event.start.format('HH:mm'),
+            end: event.end.format('HH:mm')
+          }))
       },
 
       /**
