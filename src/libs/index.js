@@ -42,6 +42,16 @@ export default function (dependencies) {
       return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
 
+    /**
+     * Service definition for template render function. For
+     * template render function description see `typedefs.js`.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunction}
+     */
     renderTemplate (container) {
       let templateRenderFunctions = {}
       return (templateId, context) => {

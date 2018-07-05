@@ -28,3 +28,15 @@
  *
  * @param {object|string} Errors bag or single error that occurred during API response.
  */
+
+/**
+ * Function for rendering templates. Under the hood this function creates
+ * new function based on ES6 strings and execute that code to get result.
+ *
+ * @function TemplateRenderFunction
+ *
+ * @param {string} templateId Template identifier. Template processed as ES6 string, so valid syntax can be used there.
+ * @param {object} context Variables that will be available in template.
+ *
+ * @return {string} Rendered template content.
+ */
