@@ -19,13 +19,13 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       'createDatetime': 'createDatetime',
 
       /**
-       * Function for rendering template.
+       * Function for rendering bookings event template.
        *
        * @since [*next-version*]
        *
-       * @property {RenderFunction} renderTemplate
+       * @property {TemplateRenderFunction} renderBookingsEventTemplate
        */
-      'renderTemplate': 'renderTemplate'
+      renderBookingsEventTemplate: 'renderBookingsEventTemplate'
     },
     props: {
       bookings: {
@@ -183,7 +183,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
 
         element.find('.fc-content')
           .addClass(`rc-event`)
-          .html(this.renderTemplate('rc-booking-calendar-event', {
+          .html(this.renderBookingsEventTemplate({
             title: event.title || this._('New booking'),
             clientName: event.clientName || '',
             action: event.title ? this._('Click for more details') : this._('Release to create booking'),

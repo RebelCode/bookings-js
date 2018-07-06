@@ -43,8 +43,23 @@ export default function (dependencies) {
     },
 
     /**
-     * Service definition for template render function. For
-     * template render function description see `typedefs.js`.
+     * Service definition for template render function factory.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunctionFactory}
+     */
+    makeTemplateRenderFunction (container) {
+      return (templateId) => {
+        const templateString = container.document.getElementById(templateId).innerHTML
+        return (templateData) => new Function(`{${Object.keys(templateData).join(',')}}`, 'return `' + templateString + '`')(templateData);
+      }
+    },
+
+    /**
+     * Booking calendar event template renderer function.
      *
      * @since [*next-version*]
      *
@@ -52,16 +67,21 @@ export default function (dependencies) {
      *
      * @return {TemplateRenderFunction}
      */
-    renderTemplate (container) {
-      let templateRenderFunctions = {}
-      return (templateId, context) => {
-        if (!templateRenderFunctions[templateId]) {
-          const templateString = container.document.getElementById(templateId).innerHTML
-          templateRenderFunctions[templateId] = (templateData) => new Function(`{${Object.keys(templateData).join(',')}}`, 'return `' + templateString + '`')(templateData);
-        }
-        const templateRenderFunction = templateRenderFunctions[templateId]
-        return templateRenderFunction(context)
-      }
+    renderBookingsEventTemplate (container) {
+      return container.makeTemplateRenderFunction('rc-booking-calendar-event')
+    },
+
+    /**
+     * Availability calendar event template renderer function.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunction}
+     */
+    renderAvailabilityEventTemplate (container) {
+      return container.makeTemplateRenderFunction('rc-availability-calendar-event')
     },
 
     jquery: function () {

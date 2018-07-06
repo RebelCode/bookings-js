@@ -30,12 +30,20 @@
  */
 
 /**
- * Function for rendering templates. Under the hood this function creates
- * new function based on ES6 strings and execute that code to get result.
+ * Creates function that renders template using given context.
+ *
+ * @function TemplateRenderFunctionFactory
+ *
+ * @param {string} templateId Template ID in DOM.
+ *
+ * @return {TemplateRenderFunction} Function that renders template using given context.
+ */
+
+/**
+ * Renders template using given context.
  *
  * @function TemplateRenderFunction
  *
- * @param {string} templateId Template identifier. Template processed as ES6 string, so valid syntax can be used there.
  * @param {object} context Variables that will be available in template.
  *
  * @return {string} Rendered template content.

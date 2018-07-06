@@ -23,13 +23,13 @@ export default function (FullCalendar, moment) {
       'availabilityHelpers': 'availabilityHelpers',
 
       /**
-       * Function for rendering template.
+       * Function for rendering availability event template.
        *
        * @since [*next-version*]
        *
-       * @property {RenderFunction} renderTemplate
+       * @property {TemplateRenderFunction} renderAvailabilityEventTemplate
        */
-      'renderTemplate': 'renderTemplate',
+      renderAvailabilityEventTemplate: 'renderAvailabilityEventTemplate',
 
       'appConfig': {
         from: 'config'
@@ -145,7 +145,7 @@ export default function (FullCalendar, moment) {
 
         el.find('.fc-content')
           .addClass(`rc-event`)
-          .html(this.renderTemplate('rc-availability-calendar-event', {
+          .html(this.renderAvailabilityEventTemplate({
             start: event.start.format('HH:mm'),
             end: event.end.format('HH:mm'),
             timezone
