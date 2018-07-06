@@ -7,6 +7,14 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
       '_': {
         from: 'translate'
       },
+
+      /**
+       * Website configuration.
+       *
+       * @since [*next-version*]
+       */
+      'config': 'config',
+
       'repeater': 'repeater',
       'humanizeDuration': 'humanizeDuration'
     },
@@ -20,12 +28,10 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
           seconds: 60 * 60,
         }, {
           title: this._('days'),
-          seconds: 60 * 60 * 24,
-          disabled: true
+          seconds: 60 * 60 * 24
         }, {
           title: this._('weeks'),
-          seconds: 60 * 60 * 24 * 7,
-          disabled: true
+          seconds: 60 * 60 * 24 * 7
         }],
 
         sessionTimeUnit: 60,
