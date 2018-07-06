@@ -41,6 +41,49 @@ export default function (dependencies) {
     notificationsCenter (container) {
       return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
+
+    /**
+     * Service definition for template render function factory.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunctionFactory}
+     */
+    makeTemplateRenderFunction (container) {
+      return (templateId) => {
+        const templateString = container.document.getElementById(templateId).innerHTML
+        return (templateData) => new Function(`{${Object.keys(templateData).join(',')}}`, 'return `' + templateString + '`')(templateData)
+      }
+    },
+
+    /**
+     * Booking calendar event template renderer function.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunction}
+     */
+    renderBookingsEventTemplate (container) {
+      return container.makeTemplateRenderFunction('rc-booking-calendar-event')
+    },
+
+    /**
+     * Availability calendar event template renderer function.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunction}
+     */
+    renderAvailabilityEventTemplate (container) {
+      return container.makeTemplateRenderFunction('rc-availability-calendar-event')
+    },
+
     jquery: function () {
       return dependencies.jquery
     },

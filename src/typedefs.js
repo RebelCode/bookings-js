@@ -28,3 +28,23 @@
  *
  * @param {object|string} Errors bag or single error that occurred during API response.
  */
+
+/**
+ * Creates function that renders template using given context.
+ *
+ * @function TemplateRenderFunctionFactory
+ *
+ * @param {string} templateId Template ID in DOM.
+ *
+ * @return {TemplateRenderFunction} Function that renders template using given context.
+ */
+
+/**
+ * Renders template using given context.
+ *
+ * @function TemplateRenderFunction
+ *
+ * @param {object} context Variables that will be available in template.
+ *
+ * @return {string} Rendered template content.
+ */

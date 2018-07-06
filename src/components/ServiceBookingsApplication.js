@@ -1,20 +1,25 @@
 export function CfServiceBookingsApplication (state, store, { mapState, mapGetters, mapMutations }) {
   return {
     store,
-    inject: [
-      'repeater',
-      'tabs', 'tab', 'modal',
-      'session-length',
-      'service-availability-editor',
-      'switcher',
-      'bool-switcher',
-      'selection-list',
-      'timezone-select',
-      'availability-calendar',
-      'availabilityEditorStateToggleable',
-      'availabilityStoreTransformer',
-      'config'
-    ],
+    inject: {
+      'repeater': 'repeater',
+      'tabs': 'tabs',
+      'tab': 'tab',
+      'modal': 'modal',
+      'session-length': 'session-length',
+      'service-availability-editor': 'service-availability-editor',
+      'switcher': 'switcher',
+      'bool-switcher': 'bool-switcher',
+      'selection-list': 'selection-list',
+      'timezone-select': 'timezone-select',
+      'availability-calendar': 'availability-calendar',
+      'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
+      'availabilityStoreTransformer': 'availabilityStoreTransformer',
+      'config': 'config',
+      '_': {
+        from: 'translate'
+      }
+    },
     data () {
       return {
         overlappingAvailabilities: false,
