@@ -54,7 +54,7 @@ export default function (dependencies) {
     makeTemplateRenderFunction (container) {
       return (templateId) => {
         const templateString = container.document.getElementById(templateId).innerHTML
-        return (templateData) => new Function(`{${Object.keys(templateData).join(',')}}`, 'return `' + templateString + '`')(templateData);
+        return (templateData) => new Function(`{${Object.keys(templateData).join(',')}}`, 'return `' + templateString + '`')(templateData)
       }
     },
 
