@@ -129,7 +129,7 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
       _hydrateStore (fields, values) {
         this.$store.replaceState(Object.assign({}, this.$store.state, {
           [STORE_SETTINGS_KEY]: Object.keys(fields).reduce((obj, key) => {
-            obj[key] = values[key];
+            obj[key] = values[key] || null;
             return obj;
           }, {})
         }))
