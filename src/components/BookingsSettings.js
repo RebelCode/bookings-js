@@ -59,7 +59,7 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
      */
     created () {
       this.initialSettingsValues = Object.assign({}, this.settingsValues)
-      this._hydrateStore(settingsKeys)
+      this._hydrateStore(settingsKeys, this.settingsValues)
     },
 
     computed: {
@@ -123,12 +123,13 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
        *
        * @since [*next-version*]
        *
-       * @param {object} fields
+       * @param {object} fields Map of settings fields to its aliases in component.
+       * @param {object} values Settings fields values.
        */
-      _hydrateStore (fields) {
+      _hydrateStore (fields, values) {
         this.$store.replaceState(Object.assign({}, this.$store.state, {
           [STORE_SETTINGS_KEY]: Object.keys(fields).reduce((obj, key) => {
-            obj[key] = null;
+            obj[key] = values[key];
             return obj;
           }, {})
         }))
