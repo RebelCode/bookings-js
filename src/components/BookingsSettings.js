@@ -121,9 +121,9 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
       /**
        * Set structure of store for settings.
        *
-       * @param {object} fields
+       * @since [*next-version*]
        *
-       * @private
+       * @param {object} fields
        */
       _hydrateStore (fields) {
         this.$store.replaceState(Object.assign({}, this.$store.state, {
