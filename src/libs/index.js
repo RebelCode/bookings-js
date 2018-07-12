@@ -3,6 +3,7 @@ import { bookingHelpers } from './booking-helpers'
 import { isMobile } from './is-mobile'
 import AvailabilityHelpers from './AvailabilityHelpers'
 import NotificationsCenter from './NotificationsCenter'
+import makeMapStore from './makeMapStore'
 
 export default function (dependencies) {
   return {
@@ -82,6 +83,19 @@ export default function (dependencies) {
      */
     renderAvailabilityEventTemplate (container) {
       return container.makeTemplateRenderFunction('rc-availability-calendar-event')
+    },
+
+    /**
+     * Function for mapping store fields.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container DI Container.
+     *
+     * @return {mapStoreFunction}
+     */
+    mapStore (container) {
+      return makeMapStore(container.lodash.get)
     },
 
     jquery: function () {

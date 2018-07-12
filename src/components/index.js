@@ -37,7 +37,7 @@ export default function (dependencies) {
     },
 
     'settings-application' (container) {
-      return CfSettingsApplication(container.store, container.vuex, container.mapStore)
+      return CfSettingsApplication(container.store, container.vuex, container.mapStore, container.settingsKeys)
     },
 
     calendar: function (container) {

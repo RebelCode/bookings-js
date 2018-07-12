@@ -1,4 +1,4 @@
-import store from './store'
+import makeStoreObject from './store'
 import api from './api'
 import libs from './libs'
 import components from './components'
@@ -18,9 +18,29 @@ export function services (dependencies, document) {
     selectorList: function () {
       return []
     },
-    store: function (container) {
+
+    store (container) {
+      const store = makeStoreObject({
+        deepSet: container.lodash.set,
+        deepHas: container.lodash.has,
+      })
       return new container.vuex.Store(store)
     },
+
+    settingsValues (container) {
+      if (!container.config.settings) {
+        return {}
+      }
+      return container.config.settings.values || {}
+    },
+
+    settingsKeys (container) {
+      if (!container.config.settings) {
+        return {}
+      }
+      return container.config.settings.fields || {}
+    },
+
     state: function (container) {
       return container.stateTransformer.transform(container['APP_STATE'], {
         timezone: container['APP_STATE'].timezone || container['APP_STATE'].config.timezone

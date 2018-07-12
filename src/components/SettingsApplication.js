@@ -1,4 +1,4 @@
-export function CfSettingsApplication (store, { mapActions }, mapStore, settingsKeys) {
+export function CfSettingsApplication (store, { mapActions }, mapStore, settingsKeys = {}) {
   /**
    * Key of settings fields in store.
    *
@@ -40,7 +40,28 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        */
       '_': {
         from: 'translate'
-      }
+      },
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {object} switcher Component for selecting value by switching button.
+       */
+      switcher: 'switcher',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {object} tabs Tabs component.
+       */
+      tabs: 'tabs',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {object} tab Tab component.
+       */
+      tab: 'tab',
     },
 
     data () {
@@ -57,7 +78,14 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
          *
          * @property {object} initialSettingsValues Initial value of settings.
          */
-        initialSettingsValues: {}
+        initialSettingsValues: {},
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {number|string} activeTab Active tab ID.
+         */
+        activeTab: 0
       }
     },
 
@@ -152,6 +180,12 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
           }, {})
         }))
       }
+    },
+
+    components: {
+      switcher: 'switcher',
+      tabs: 'tabs',
+      tab: 'tab'
     }
   }
 }
