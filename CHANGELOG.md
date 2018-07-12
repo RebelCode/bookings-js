@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
 
-## [0.1.22] - 2018-06-15
+## [0.1.22] - 2018-07-12
+### Changed
+- Services definitions for the latest version of booking wizard components (`0.1.4`).
+
 ### Added
 - Added ability to change timezone in which bookings are displayed (list view, calendar view and editor) on bookings page.
 
