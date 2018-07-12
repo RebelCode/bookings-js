@@ -40,7 +40,7 @@ export function momentHelpers (moment, formats) {
      *
      * @return {moment}
      */
-    switchToTimezone (value, tz = 'UTC') {
+    switchToTimezone (value, tz) {
       const momentFixedTimezoneValue = moment.parseZone(value)
       if (tz.indexOf('UTC') !== 0) {
         return moment.tz(momentFixedTimezoneValue, tz)
