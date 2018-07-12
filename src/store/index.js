@@ -1,6 +1,7 @@
 import bookings from './bookings'
 import bookingOptions from './booking-options'
 import ui from './ui'
+import settings from './settings'
 
 const state = {
   app: {
@@ -75,7 +76,8 @@ export default {
   modules: {
     bookings,
     bookingOptions,
-    ui
+    ui,
+    settings
   },
   state,
   getters,

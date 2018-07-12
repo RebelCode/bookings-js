@@ -1,4 +1,4 @@
-export default function ({ mapActions }, mapStore, settingsKeys) {
+export function CfSettingsApplication (store, { mapActions }, mapStore, settingsKeys) {
   /**
    * Key of settings fields in store.
    *
@@ -9,6 +9,8 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
   const STORE_SETTINGS_KEY = 'settings'
 
   return {
+    store,
+
     inject: {
       /**
        * @since [*next-version*]

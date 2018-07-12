@@ -19,6 +19,7 @@ import { CfVueTimepicker } from './VueTimepicker'
 import { CfBookingsFilter } from './BookingsFilter'
 import { CfAbstractBookingsView } from './AbstractBookingsView'
 import CfTimezoneSelect from './TimezoneSelect'
+import { CfSettingsApplication } from './SettingsApplication'
 
 /*
  * Exports instances to main container config.
@@ -34,6 +35,11 @@ export default function (dependencies) {
     'bookings-application': function (container) {
       return CfBookingsApplication(container.state, container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
+
+    'settings-application' (container) {
+      return CfSettingsApplication(container.store, container.vuex, container.mapStore)
+    },
+
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep, 'generatedEvents')
     },
