@@ -104,7 +104,7 @@ export default function (dependencies) {
       return dependencies.momentRange.extendMoment(moment)
     },
     createDatetime: function (container) {
-      return (value, timezone) => container.momentHelpers.switchToTimezone(value, timezone || 'UTC')
+      return (value, timezone) => container.momentHelpers.switchToTimezone(value, timezone)
     },
     sha1: function () {
       return dependencies.sha1
