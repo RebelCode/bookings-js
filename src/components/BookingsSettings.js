@@ -27,6 +27,13 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
       /**
        * @since [*next-version*]
        *
+       * @property {{settings: object}} config Configuration of application.
+       */
+      config: 'config',
+
+      /**
+       * @since [*next-version*]
+       *
        * @property {TranslateFunction} _ Function for i18n strings.
        */
       '_': {
@@ -77,6 +84,15 @@ export default function ({ mapActions }, mapStore, settingsKeys) {
        */
       settingsState () {
         return this.$store.state[STORE_SETTINGS_KEY]
+      },
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {object} settingsConfig Configuration of settings UI.
+       */
+      settingsConfig () {
+        return this.config.settings
       }
     },
 
