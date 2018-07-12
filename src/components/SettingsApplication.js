@@ -1,4 +1,4 @@
-export function CfSettingsApplication (store, { mapActions }, mapStore, settingsKeys = {}) {
+export function CfSettingsApplication (store, { mapActions }, mapStore, settingsValues = {}) {
   /**
    * Key of settings fields in store.
    *
@@ -12,13 +12,6 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
     store,
 
     inject: {
-      /**
-       * @since [*next-version*]
-       *
-       * @property {object} settingsValues Map of setting name to value.
-       */
-      settingsValues: 'settingsValues',
-
       /**
        * @since [*next-version*]
        *
@@ -62,6 +55,13 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        * @property {object} tab Tab component.
        */
       tab: 'tab',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {VueComponent} color-picker Color picker component.
+       */
+      'color-picker': 'color-picker'
     },
 
     data () {
@@ -95,8 +95,8 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
      * @since [*next-version*]
      */
     created () {
-      this.initialSettingsValues = Object.assign({}, this.settingsValues)
-      this._hydrateStore(settingsKeys, this.settingsValues)
+      this.initialSettingsValues = Object.assign({}, JSON.parse(JSON.stringify(settingsValues)))
+      this._hydrateStore(settingsValues)
     },
 
     computed: {
@@ -105,7 +105,7 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        *
        * @since [*next-version*]
        */
-      ...mapStore(STORE_SETTINGS_KEY, settingsKeys),
+      ...mapStore(STORE_SETTINGS_KEY, Object.keys(settingsValues)),
 
       /**
        * @since [*next-version*]
@@ -160,7 +160,7 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        */
       revertChanges () {
         for (let fieldName in this.initialSettingsValues) {
-          this[fieldName] = this.initialSettingsValues[fieldName]
+          this[fieldName] = JSON.parse(JSON.stringify(this.initialSettingsValues[fieldName]))
         }
       },
 
@@ -169,20 +169,17 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        *
        * @since [*next-version*]
        *
-       * @param {object} fields Map of settings fields to its aliases in component.
-       * @param {object} values Settings fields values.
+       * @param {object} fields Map of settings fields to their values.
        */
-      _hydrateStore (fields, values) {
+      _hydrateStore (fields) {
         this.$store.replaceState(Object.assign({}, this.$store.state, {
-          [STORE_SETTINGS_KEY]: Object.keys(fields).reduce((obj, key) => {
-            obj[key] = values[key] || null;
-            return obj;
-          }, {})
+          [STORE_SETTINGS_KEY]: fields
         }))
       }
     },
 
     components: {
+      'color-picker': 'color-picker',
       switcher: 'switcher',
       tabs: 'tabs',
       tab: 'tab'

@@ -37,7 +37,7 @@ export default function (dependencies) {
     },
 
     'settings-application' (container) {
-      return CfSettingsApplication(container.store, container.vuex, container.mapStore, container.settingsKeys)
+      return CfSettingsApplication(container.store, container.vuex, container.mapStore, container.settingsValues)
     },
 
     calendar: function (container) {
@@ -202,5 +202,9 @@ export default function (dependencies) {
     'bookings-filter': function (container) {
       return new CfBookingsFilter(container.vuex, dependencies.stdLib.FunctionalCollection)
     },
+
+    'color-picker' (container) {
+      return dependencies.vueColor.Sketch
+    }
   }
 }
