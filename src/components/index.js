@@ -20,6 +20,7 @@ import { CfBookingsFilter } from './BookingsFilter'
 import { CfAbstractBookingsView } from './AbstractBookingsView'
 import CfTimezoneSelect from './TimezoneSelect'
 import { CfSettingsApplication } from './SettingsApplication'
+import { CfColorPicker } from './ColorPicker'
 
 /*
  * Exports instances to main container config.
@@ -203,8 +204,12 @@ export default function (dependencies) {
       return new CfBookingsFilter(container.vuex, dependencies.stdLib.FunctionalCollection)
     },
 
-    'color-picker' (container) {
+    'core-color-picker' (container) {
       return dependencies.vueColor.Sketch
+    },
+
+    'color-picker' (container) {
+      return CfColorPicker(container.clickOutside)
     }
   }
 }

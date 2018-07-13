@@ -4,6 +4,7 @@ import { isMobile } from './is-mobile'
 import AvailabilityHelpers from './AvailabilityHelpers'
 import NotificationsCenter from './NotificationsCenter'
 import makeMapStore from './makeMapStore'
+import { makeClickOutside } from './makeClickOutside'
 
 export default function (dependencies) {
   return {
@@ -96,6 +97,10 @@ export default function (dependencies) {
      */
     mapStore (container) {
       return makeMapStore(container.lodash.get)
+    },
+
+    clickOutside (container) {
+      return makeClickOutside()
     },
 
     jquery: function () {
