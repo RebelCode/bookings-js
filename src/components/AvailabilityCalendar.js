@@ -13,7 +13,10 @@ export default function (FullCalendar, moment) {
   return FullCalendar.extend({
     inject: {
       'availabilitiesCollection': 'availabilitiesCollection',
+
       'momentHelpers': 'momentHelpers',
+
+      'defaultCalendarView': 'defaultCalendarView',
 
       /**
        * @since [*next-version*]
@@ -63,7 +66,7 @@ export default function (FullCalendar, moment) {
       },
       defaultView: {
         default () {
-          return 'agendaWeek'
+          return this.defaultCalendarView === 'agendaDay' ? 'agendaWeek' : this.defaultCalendarView
         },
       },
       visibleTimezone: {

@@ -78,17 +78,20 @@ export function services (dependencies, document) {
         return item.id
       })
     },
-    'bookingStatusesColors': function () {
-      return {
-        in_cart: '#f6e58d', // hide
-        draft: '#dfe4ea',
-        pending: '#1e90ff',
-        approved: '#00d2d3',
-        scheduled: '#2ed573',
-        cancelled: '#eb4d4b',
-        completed: '#57606f',
-      }
+
+    'bookingStatusesColors' (container) {
+      return container.config.bookingStatusesColors
     },
+
+    'defaultCalendarView' (container) {
+      const availableViews = {
+        day: 'agendaDay',
+        week: 'agendaWeek',
+        month: 'month'
+      }
+      return availableViews[container.config.defaultCalendarView] || 'agendaWeek'
+    },
+
     components: function (container) {
       let components = {}
       /*

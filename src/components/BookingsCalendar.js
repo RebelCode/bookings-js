@@ -9,6 +9,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         from: 'translate'
       },
 
+      'defaultCalendarView': 'defaultCalendarView',
+
       /**
        * Function for creating datetime in timezone.
        *
@@ -36,6 +38,11 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       colorScheme: {
         type: String,
         default: 'status'
+      },
+      defaultView: {
+        default () {
+          return this.defaultCalendarView
+        },
       },
       header: {
         default () {
