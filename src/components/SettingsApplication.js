@@ -68,7 +68,16 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        *
        * @property {VueComponent} color-picker Color picker component.
        */
-      'color-picker': 'color-picker'
+      'color-picker': 'color-picker',
+
+      /**
+       * Notifications center for displaying notifications in UI.
+       *
+       * @since [*next-version*]
+       *
+       * @var {NotificationsCenter}
+       */
+      'notificationsCenter': 'notificationsCenter'
     },
 
     data () {
@@ -133,6 +142,22 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
       },
     },
 
+    props: {
+      /**
+       * @since [*next-version*]
+       *
+       * @property {string} successMessage Message on successful settings update.
+       */
+      successMessage: {},
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {string} errorMessage Message on error durings settings update.
+       */
+      errorMessage: {},
+    },
+
     methods: {
       /**
        * Store action for updating settings.
@@ -158,6 +183,11 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
           .then(() => {
             this.initialSettingsValues = JSON.parse(JSON.stringify(this.settingsState))
             this.isSaving = false
+            this.notificationsCenter.show(this.successMessage)
+          })
+          .catch(() => {
+            this.isSaving = false
+            this.notificationsCenter.error(this.errorMessage)
           })
       },
 
