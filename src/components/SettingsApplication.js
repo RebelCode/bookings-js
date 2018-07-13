@@ -141,7 +141,7 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        *
        * @method {Function} updateSettings
        */
-      ...mapActions([
+      ...mapActions(STORE_SETTINGS_KEY, [
         'updateSettings'
       ]),
 
@@ -154,8 +154,9 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        */
       submit () {
         this.isSaving = true
-        return this.updateSettings(this.settingsApi, this.settingsState)
+        return this.updateSettings({api: this.settingsApi, data: this.settingsState})
           .then(() => {
+            this.initialSettingsValues = JSON.parse(JSON.stringify(this.settingsState))
             this.isSaving = false
           })
       },
