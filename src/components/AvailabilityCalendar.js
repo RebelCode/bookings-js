@@ -18,6 +18,8 @@ export default function (FullCalendar, moment) {
 
       'defaultCalendarView': 'defaultCalendarView',
 
+      'weekStartsOnIndex': 'weekStartsOnIndex',
+
       /**
        * @since [*next-version*]
        *
@@ -77,6 +79,7 @@ export default function (FullCalendar, moment) {
         default () {
           let self = this
           return {
+            firstDay: this.weekStartsOnIndex,
             viewRender (view) {
               self.rangeStart = view.start
               self.rangeEnd = view.end

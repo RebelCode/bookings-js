@@ -9,7 +9,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         from: 'translate'
       },
 
-      'defaultCalendarView': 'defaultCalendarView',
+      'weekStartsOnIndex': 'weekStartsOnIndex',
 
       /**
        * Function for creating datetime in timezone.
@@ -41,7 +41,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
       },
       defaultView: {
         default () {
-          return this.defaultCalendarView
+          return 'agendaWeek'
         },
       },
       header: {
@@ -59,6 +59,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           const self = this
           return {
             eventLimit: true,
+            firstDay: this.weekStartsOnIndex,
             viewRender (view) {
               self.$emit('period-change', view.start, view.end)
             },

@@ -92,6 +92,22 @@ export function services (dependencies, document) {
       return availableViews[container.config.defaultCalendarView] || 'agendaWeek'
     },
 
+    'weekStartsOn' (container) {
+      return container.config.weekStartsOn || 'sunday'
+    },
+
+    'weekStartsOnIndex' (container) {
+      return {
+        'sunday': 0,
+        'monday': 1,
+        'tuesday': 2,
+        'wednesday': 3,
+        'thursday': 4,
+        'friday': 5,
+        'saturday': 6
+      }[container.weekStartsOn]
+    },
+
     components: function (container) {
       let components = {}
       /*
