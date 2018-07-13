@@ -28,17 +28,10 @@ export function services (dependencies, document) {
     },
 
     settingsValues (container) {
-      if (!container.config.settings) {
+      if (!container.state.settingsUi) {
         return {}
       }
-      return container.config.settings.values || {}
-    },
-
-    settingsKeys (container) {
-      if (!container.config.settings) {
-        return {}
-      }
-      return container.config.settings.fields || {}
+      return container.state.settingsUi.values || {}
     },
 
     state: function (container) {

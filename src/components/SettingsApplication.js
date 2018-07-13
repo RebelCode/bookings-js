@@ -22,9 +22,16 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
       /**
        * @since [*next-version*]
        *
-       * @property {{settings: object}} config Configuration of application.
+       * @property {{timezone: string}} config Configuration of application.
        */
       config: 'config',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {{settingsUi: object}} state State of application.
+       */
+      state: 'state',
 
       /**
        * @since [*next-version*]
@@ -122,8 +129,8 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        * @property {object} settingsConfig Configuration of settings UI.
        */
       settingsConfig () {
-        return this.config.settings
-      }
+        return this.state.settingsUi
+      },
     },
 
     methods: {
