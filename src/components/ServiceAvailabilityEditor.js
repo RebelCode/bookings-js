@@ -22,6 +22,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
        */
       'availabilityHelpers': 'availabilityHelpers',
 
+      'weekStartsOnIndex': 'weekStartsOnIndex',
+
       'pluralize': 'pluralize',
       'config': 'config',
 
@@ -245,16 +247,31 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
         let start = moment(this.model.start)
 
+        const defaultWeekDays = {
+          sunday: 'S', // @todo: FIX IN ALPHA
+          monday: this._('M'),
+          tuesday: this._('T'),
+          wednesday: this._('W'),
+          thursday: this._('T'),
+          friday: this._('F'),
+          saturday: 'S', // @todo: FIX IN ALPHA
+        }
+        let weeks = [];
+        let weekDays = Object.keys(defaultWeekDays)
+        const rotate = (array, times) => {
+          times = Math.abs(times)
+          while (times--) {
+            var temp = array.shift()
+            array.push(temp)
+          }
+        }
+        rotate(weekDays, this.weekStartsOnIndex)
+        for (let weekDay of weekDays) {
+          weeks[weekDay] = defaultWeekDays[weekDay]
+        }
+
         let repeatsOptions = {
-          weeks: {
-            monday: this._('M'),
-            tuesday: this._('T'),
-            wednesday: this._('W'),
-            thursday: this._('T'),
-            friday: this._('F'),
-            saturday: 'S', // @todo: FIX IN ALPHA
-            sunday: 'S', // @todo: FIX IN ALPHA
-          },
+          weeks,
           months: {
             day_of_month: start ? this._('Monthly on day %s', [start.format('D')]) : '',
             day_of_week: start ? this._('Monthly on the %s %s', [this.momentHelpers.weekdayInMonthNumber(start), start.format('dddd')]) : '',

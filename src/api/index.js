@@ -1,6 +1,7 @@
 import BookingsApi from './BookingsApi'
 import ClientsApi from './ClientsApi'
 import GeneralApiErrorHandler from './GeneralApiErrorHandler'
+import SettingsApi from './SettingsApi'
 
 /*
  * Exports instances to main container config.
@@ -18,6 +19,13 @@ export default function (dependencies) {
     },
     clientsApi (container) {
       return new ClientsApi(container.httpClient, container.state.endpointsConfig['clients'], container.requestCache)
+    },
+    settingsApi (container) {
+      let update = container.state.settingsUi ? container.state.settingsUi.updateEndpoint : {}
+      if (!update) {
+        update = {}
+      }
+      return new SettingsApi(container.httpClient, { update }, container.requestCache)
     },
     sessionsApi (container) {
       return new dependencies.bookingWizardComponents.SessionApi(

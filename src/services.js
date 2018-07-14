@@ -1,4 +1,4 @@
-import store from './store'
+import makeStoreObject from './store'
 import api from './api'
 import libs from './libs'
 import components from './components'
@@ -18,9 +18,22 @@ export function services (dependencies, document) {
     selectorList: function () {
       return []
     },
-    store: function (container) {
+
+    store (container) {
+      const store = makeStoreObject({
+        deepSet: container.lodash.set,
+        deepHas: container.lodash.has,
+      })
       return new container.vuex.Store(store)
     },
+
+    settingsValues (container) {
+      if (!container.state.settingsUi) {
+        return {}
+      }
+      return container.state.settingsUi.values || {}
+    },
+
     state: function (container) {
       return container.stateTransformer.transform(container['APP_STATE'], {
         timezone: container['APP_STATE'].timezone || container['APP_STATE'].config.timezone
@@ -65,17 +78,36 @@ export function services (dependencies, document) {
         return item.id
       })
     },
-    'bookingStatusesColors': function () {
-      return {
-        in_cart: '#f6e58d', // hide
-        draft: '#dfe4ea',
-        pending: '#1e90ff',
-        approved: '#00d2d3',
-        scheduled: '#2ed573',
-        cancelled: '#eb4d4b',
-        completed: '#57606f',
-      }
+
+    'bookingStatusesColors' (container) {
+      return container.config.bookingStatusesColors
     },
+
+    'defaultCalendarView' (container) {
+      const availableViews = {
+        day: 'agendaDay',
+        week: 'agendaWeek',
+        month: 'month'
+      }
+      return availableViews[container.config.defaultCalendarView] || 'agendaWeek'
+    },
+
+    'weekStartsOn' (container) {
+      return container.config.weekStartsOn || 'sunday'
+    },
+
+    'weekStartsOnIndex' (container) {
+      return {
+        'sunday': 0,
+        'monday': 1,
+        'tuesday': 2,
+        'wednesday': 3,
+        'thursday': 4,
+        'friday': 5,
+        'saturday': 6
+      }[container.weekStartsOn]
+    },
+
     components: function (container) {
       let components = {}
       /*

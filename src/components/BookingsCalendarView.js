@@ -4,6 +4,8 @@ export function CfBookingsCalendarView (AbstractBookingsView, { mapState, mapMut
       'bookings-calendar': 'bookings-calendar',
       'switcher': 'switcher',
 
+      'defaultCalendarView': 'defaultCalendarView',
+
       /**
        * Modal state injected from elsewhere.
        *
@@ -22,7 +24,7 @@ export function CfBookingsCalendarView (AbstractBookingsView, { mapState, mapMut
           'month': 'Month',
         },
 
-        calendarView: 'agendaWeek', // 'month', 'agendaDay'
+        calendarView: this.defaultCalendarView, // 'month', 'agendaDay'
         colorScheme: 'status', // OR 'service'
 
         start: null,
