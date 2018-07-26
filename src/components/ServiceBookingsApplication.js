@@ -34,7 +34,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
         },
 
         displayOptions: {
-          useCustomerTimezone: false
+          allowCustomerChangeTimezone: false
         },
       }
     },
@@ -67,14 +67,14 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
         }
       },
 
-      useCustomerTimezone: {
+      allowCustomerChangeTimezone: {
         get () {
-          return this.$store.state.app.displayOptions.useCustomerTimezone
+          return this.$store.state.app.displayOptions.allowCustomerChangeTimezone
         },
 
         set (value) {
           this.$store.commit('setDisplayOptions', {
-            key: 'useCustomerTimezone',
+            key: 'allowCustomerChangeTimezone',
             value
           })
         }
@@ -93,7 +93,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           },
           sessionLengths: this.sessions,
           displayOptions: {
-            useCustomerTimezone: this.useCustomerTimezone
+            allowCustomerChangeTimezone: this.allowCustomerChangeTimezone
           },
         })
       }
