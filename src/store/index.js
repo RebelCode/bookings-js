@@ -12,7 +12,7 @@ const state = {
     },
     sessionLengths: [],
     displayOptions: {
-      useCustomerTimezone: false
+      allowCustomerChangeTimezone: false
     },
 
     bookings: [],
