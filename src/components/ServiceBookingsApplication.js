@@ -34,7 +34,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
         },
 
         displayOptions: {
-          useCustomerTimezone: false
+          allowCustomerChangeTimezone: false
         },
       }
     },
