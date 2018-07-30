@@ -151,7 +151,7 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         const sessionLength = this.sessionTimeUnit * this.sessionDefault.sessionLength
 
         this.sessions.addItem({
-          id: this.sessions.getItems().length,
+          id: Math.random().toString(36).substring(7),
           sessionLength,
           price: this.sessionDefault.price
         })

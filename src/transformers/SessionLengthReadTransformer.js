@@ -13,6 +13,9 @@ export default class SessionLengthReadTransformer extends Transformer {
    */
   rules = {
     price: (model) => {
+      if (!model['id']) {
+        model['id'] = '_' + Math.random().toString(36).substring(7)
+      }
       model['price'] = model.price.amount
       return model
     }
