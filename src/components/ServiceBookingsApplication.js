@@ -133,4 +133,4 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       'timezone-select': 'timezone-select'
     }
   }
-};
+}

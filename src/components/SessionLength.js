@@ -62,7 +62,7 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
         }, (sessions) => {
           this.setSessionLengths(sessions)
         }, (item) => {
-          return item.id
+          return Number(item.sessionLength)
         })
       }
     },
@@ -146,15 +146,13 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
        * can keep adding new sessions.
        */
       addNewSession () {
-        if (!this.validate()) return;
+        const normalizedSession = this.normalizeSessionLength(this.sessionDefault)
 
-        const sessionLength = this.sessionTimeUnit * this.sessionDefault.sessionLength
+        if (!this.validate(normalizedSession)) return
 
-        this.sessions.addItem({
-          id: this.sessions.getItems().length,
-          sessionLength,
-          price: this.sessionDefault.price
-        })
+        this.sessions.addItem(Object.assign({}, {
+          id: this.sessions.getItems().length
+        }, normalizedSession))
 
         this.sessionDefault = {
           sessionLength: null,
@@ -163,17 +161,41 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
       },
 
       /**
+       * Normalize session length information by transforming session duration
+       * in selected time units to duration in seconds.
+       *
+       * @param {SessionLength} sessionLength Session length to normalize.
+       *
+       * @return {SessionLength} Normalized session length.
+       */
+      normalizeSessionLength (sessionLength) {
+        const sessionDuration = this.sessionTimeUnit * sessionLength.sessionLength
+        return {
+          sessionLength: sessionDuration,
+          price: sessionLength.price
+        }
+      },
+
+      /**
        * Client side validation. Session default fields must be greater
        * than 0 to pass this validation.
        *
+       * @param {SessionLength} sessionLength Session length to validate.
+       *
        * @return {boolean}
        */
-      validate () {
-        if (Number(this.sessionDefault.sessionLength) <= 0) {
+      validate (sessionLength) {
+        const hasSameSession = this.sessions.hasItem(sessionLength)
+        if (hasSameSession) {
+          this.validationError = this.$refs.sessionLength.dataset.uniqnessError
+          return false;
+        }
+
+        if (Number(sessionLength.sessionLength) <= 0) {
           this.validationError = this.$refs.sessionLength.dataset.validationError
           return false;
         }
-        else if (this.sessionDefault.price === null || !this.sessionDefault.price.length) {
+        else if (sessionLength.price === null || !sessionLength.price.length) {
           this.validationError = this.$refs.price.dataset.validationError
           return false;
         }
