@@ -18,12 +18,14 @@ export default class BookingReadTransformer extends Transformer {
      *
      * @return {object} Transformed model
      */
-    start: (model) => {
-      model['session'] = {
-        start: model.start,
-        end: model.end,
-        service: model.service.id,
-        resource: model.service.id
+    service: (model) => {
+      if (model.service) {
+        model['session'] = {
+          start: model.start,
+          end: model.end,
+          service: model.service.id,
+          resource: model.service.id
+        }
       }
       return model
     },
