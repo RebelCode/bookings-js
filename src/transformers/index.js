@@ -4,7 +4,6 @@ import AvailabilityReadTransformer from './AvilabilityReadTransformer'
 import StateTransformer from './StateTransformer'
 import SessionLengthReadTransformer from './SessionLengthReadTransformer'
 import BookingReadTransformer from './BookingReadTransformer'
-import SessionLengthStoreTransformer from './SessionLengthStoreTransformer'
 
 export default function (dependencies) {
   return {
@@ -22,9 +21,6 @@ export default function (dependencies) {
     },
     sessionLengthReadTransformer () {
       return new SessionLengthReadTransformer()
-    },
-    sessionLengthStoreTransformer () {
-      return new SessionLengthStoreTransformer()
     },
     sessionReadTransformer (container) {
       return new dependencies.bookingWizardComponents.SessionReadTransformer(container.moment)

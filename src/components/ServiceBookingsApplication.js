@@ -15,7 +15,6 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       'availability-calendar': 'availability-calendar',
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
       'availabilityStoreTransformer': 'availabilityStoreTransformer',
-      'sessionLengthStoreTransformer': 'sessionLengthStoreTransformer',
       'config': 'config',
       '_': {
         from: 'translate'
@@ -92,9 +91,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
               })
             })
           },
-          sessionLengths: this.sessions.map(item => {
-            return this.sessionLengthStoreTransformer.transform(Object.assign({}, item))
-          }),
+          sessionLengths: this.sessions,
           displayOptions: {
             allowCustomerChangeTimezone: this.allowCustomerChangeTimezone
           },

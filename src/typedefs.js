@@ -48,3 +48,14 @@
  *
  * @return {string} Rendered template content.
  */
+
+/**
+ * Represents available session length.
+ *
+ * @since [*next-version]
+ *
+ * @typedef {Object} SessionLength
+ *
+ * @property {number} sessionLength Session length in seconds.
+ * @property {number} price Session price.
+ */
