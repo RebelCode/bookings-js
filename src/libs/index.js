@@ -5,6 +5,7 @@ import AvailabilityHelpers from './AvailabilityHelpers'
 import NotificationsCenter from './NotificationsCenter'
 import makeMapStore from './makeMapStore'
 import { makeClickOutside } from './makeClickOutside'
+import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
 
 export default function (dependencies) {
   return {
@@ -40,8 +41,22 @@ export default function (dependencies) {
 
       return Vue
     },
+
     notificationsCenter (container) {
       return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
+    },
+
+    /**
+     * Map of available UI action pipe's names to instances.
+     *
+     * @since [*next-version*]
+     *
+     * @param container
+     *
+     * @return {Object.<string, UiActionsPipe>} Map of available UI action pipe's names to instances.
+     */
+    uiActionsPipes (container) {
+      return pipesServiceDefinition(container)
     },
 
     /**
@@ -84,6 +99,19 @@ export default function (dependencies) {
      */
     renderAvailabilityEventTemplate (container) {
       return container.makeTemplateRenderFunction('rc-availability-calendar-event')
+    },
+
+    /**
+     * Message box template renderer function.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Service container.
+     *
+     * @return {TemplateRenderFunction}
+     */
+    renderMessageBoxTemplate (container) {
+      return container.makeTemplateRenderFunction('rc-message-box')
     },
 
     /**

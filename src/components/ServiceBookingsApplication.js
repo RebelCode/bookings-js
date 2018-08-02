@@ -15,6 +15,14 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       'availability-calendar': 'availability-calendar',
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
       'availabilityStoreTransformer': 'availabilityStoreTransformer',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @var {Object.<string, UiActionsPipe>} uiActionsPipes Map of available UI action pipe's names to instances.
+       */
+      'uiActionsPipes': 'uiActionsPipes',
+
       'config': 'config',
       '_': {
         from: 'translate'
@@ -97,6 +105,26 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           },
         })
       }
+    },
+    watch: {
+      /**
+       * Watch for bookingsEnabled change, and if it is changed
+       * run `bookings_enabled_changed` UI actions pipe.
+       *
+       * @since [*next-version*]
+       */
+      bookingsEnabled: {
+        immediate: true,
+        handler (newValue, oldValue) {
+          if (!!newValue === !!oldValue) {
+            return
+          }
+          const uiActionsPipe = this.uiActionsPipes['bookings_enabled_changed']
+          if (uiActionsPipe) {
+            newValue ? uiActionsPipe.act() : uiActionsPipe.revert()
+          }
+        }
+      },
     },
     mounted () {
       if (!state) {
