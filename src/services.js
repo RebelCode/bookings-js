@@ -4,7 +4,7 @@ import libs from './libs'
 import components from './components'
 import transformers from './transformers'
 
-export function services (dependencies, document) {
+export function services (dependencies, applicationState, document) {
   const FunctionalToggleable = dependencies.stdLib.FunctionalToggleable
   const FunctionalArrayCollection = dependencies.stdLib.FunctionalArrayCollection
 
@@ -124,10 +124,10 @@ export function services (dependencies, document) {
       return components
     }
   }
-  const registeredComponents = components(dependencies)
-  const registeredApi = api(dependencies)
-  const registeredLibs = libs(dependencies)
-  const registeredTransformers = transformers(dependencies)
+  const registeredComponents = components(dependencies, applicationState)
+  const registeredApi = api(dependencies, applicationState)
+  const registeredLibs = libs(dependencies, applicationState)
+  const registeredTransformers = transformers(dependencies, applicationState)
 
   return {
     ...allServices,

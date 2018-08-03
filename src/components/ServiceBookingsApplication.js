@@ -19,9 +19,9 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
-       * @var {Object.<string, UiActionsPipe>} uiActionsPipes Map of available UI action pipe's names to instances.
+       * @property {UiActionsPipe} uiActionBookingsEnabledChanged UI action pipe for bookings enabled change..
        */
-      'uiActionsPipes': 'uiActionsPipes',
+      'uiActionBookingsEnabledChanged': 'uiActionBookingsEnabledChanged',
 
       'config': 'config',
       '_': {
@@ -116,13 +116,10 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       bookingsEnabled: {
         immediate: true,
         handler (newValue, oldValue) {
-          if (!!newValue === !!oldValue) {
+          if (!this.uiActionBookingsEnabledChanged || !!newValue === !!oldValue) {
             return
           }
-          const uiActionsPipe = this.uiActionsPipes['bookings_enabled_changed']
-          if (uiActionsPipe) {
-            newValue ? uiActionsPipe.act() : uiActionsPipe.revert()
-          }
+          newValue ? this.uiActionBookingsEnabledChanged.act() : this.uiActionBookingsEnabledChanged.revert()
         }
       },
     },

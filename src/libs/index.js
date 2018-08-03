@@ -7,7 +7,7 @@ import makeMapStore from './makeMapStore'
 import { makeClickOutside } from './makeClickOutside'
 import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
 
-export default function (dependencies) {
+export default function (dependencies, applicationState) {
   return {
     vuex: function (container) {
       let Vue = container.vue,
@@ -55,9 +55,7 @@ export default function (dependencies) {
      *
      * @return {Object.<string, UiActionsPipe>} Map of available UI action pipe's names to instances.
      */
-    uiActionsPipes (container) {
-      return pipesServiceDefinition(container)
-    },
+    ...pipesServiceDefinition(dependencies, applicationState),
 
     /**
      * Service definition for template render function factory.
