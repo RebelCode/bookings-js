@@ -19,7 +19,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
-       * @property {UiActionsPipe} uiActionBookingsEnabledChanged UI action pipe for bookings enabled change..
+       * @property {UiActionsPipe} uiActionBookingsEnabledChanged UI action pipe for bookings enabled change.
        */
       'uiActionBookingsEnabledChanged': 'uiActionBookingsEnabledChanged',
 
