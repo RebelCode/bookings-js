@@ -102,19 +102,6 @@ export default function (dependencies) {
     },
 
     /**
-     * Message box template renderer function.
-     *
-     * @since [*next-version*]
-     *
-     * @param {Container} container Service container.
-     *
-     * @return {TemplateRenderFunction}
-     */
-    renderMessageBoxTemplate (container) {
-      return container.makeTemplateRenderFunction('rc-message-box')
-    },
-
-    /**
      * Function for mapping store fields.
      *
      * @since [*next-version*]

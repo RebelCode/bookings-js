@@ -20,12 +20,7 @@ export default class UiActionsPipe {
    */
   act () {
     for (const action of this.actions) {
-      try {
-        action.act()
-      }
-      catch (e) {
-        console.error('Error occurred during acting pipe\'s action', action, e)
-      }
+      action.act()
     }
   }
 
@@ -36,12 +31,7 @@ export default class UiActionsPipe {
    */
   revert () {
     for (const action of this.actions) {
-      try {
-        action.revert()
-      }
-      catch (e) {
-        console.error('Error occurred during reverting pipe\'s action', action, e)
-      }
+      action.revert()
     }
   }
 }

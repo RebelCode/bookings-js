@@ -1,5 +1,5 @@
 import CheckboxClickAction from './CheckboxClickAction'
-import MessageAction from './MessageAction'
+import AddBlockAction from './AddBlockAction'
 import UiActionsPipe from './UiActionsPipe'
 
 /**
@@ -24,8 +24,9 @@ export default function (container) {
       if (config.action === 'checkboxClick') {
         actions.push(new CheckboxClickAction(container.jquery, config.arguments))
       }
-      else if (config.action === 'message') {
-        actions.push(new MessageAction(container.renderMessageBoxTemplate, container.document, config.arguments))
+      else if (config.action === 'addBlock') {
+        const renderBlockTemplate = container.makeTemplateRenderFunction(config.arguments.block)
+        actions.push(new AddBlockAction(renderBlockTemplate, container.document, config.arguments))
       }
     }
     uiActionPipes[pipe] = new UiActionsPipe(actions)
