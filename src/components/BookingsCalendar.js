@@ -132,7 +132,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
        * for the concrete calendar implementation.
        *
        * @param booking
-       * @return {{id: null, allDay: *, start: string, end: string, model: {} & any}}
+       *
+       * @return {{id: null, editable: boolean, title: string, start: string, end: string, clientName: string, model: {} & any}}
        */
       bookingToEvent (booking, colorScheme) {
         let model = Object.assign({}, booking)
