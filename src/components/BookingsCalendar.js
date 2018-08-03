@@ -140,7 +140,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
-          title: model.service.name,
+          title: model.service ? model.service.name : this._('Service not found.'),
           start: this.createDatetime(model.start, this.timezone),
           end: this.createDatetime(model.end, this.timezone),
 
