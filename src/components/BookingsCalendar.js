@@ -132,7 +132,8 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
        * for the concrete calendar implementation.
        *
        * @param booking
-       * @return {{id: null, allDay: *, start: string, end: string, model: {} & any}}
+       *
+       * @return {{id: null, editable: boolean, title: string, start: string, end: string, clientName: string, model: {} & any}}
        */
       bookingToEvent (booking, colorScheme) {
         let model = Object.assign({}, booking)
@@ -140,7 +141,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
-          title: model.service.name,
+          title: model.service ? model.service.name : this._('Service not found.'),
           start: this.createDatetime(model.start, this.timezone),
           end: this.createDatetime(model.end, this.timezone),
 
