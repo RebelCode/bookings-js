@@ -5,8 +5,10 @@ import AvailabilityHelpers from './AvailabilityHelpers'
 import NotificationsCenter from './NotificationsCenter'
 import makeMapStore from './makeMapStore'
 import { makeClickOutside } from './makeClickOutside'
+import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
+import actionFactoriesDefinitions from './uiActions/actionFactoriesDefinitions'
 
-export default function (dependencies) {
+export default function (dependencies, applicationState) {
   return {
     vuex: function (container) {
       let Vue = container.vue,
@@ -40,9 +42,24 @@ export default function (dependencies) {
 
       return Vue
     },
+
     notificationsCenter (container) {
       return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
+
+    /**
+     * Map of available UI action pipe's names to instances.
+     *
+     * @since [*next-version*]
+     */
+    ...pipesServiceDefinition(dependencies, applicationState),
+
+    /**
+     * Available action factories definitions.
+     *
+     * @since [*next-version*]
+     */
+    ...actionFactoriesDefinitions(),
 
     /**
      * Service definition for template render function factory.

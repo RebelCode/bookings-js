@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+### Added
+- UI action pipelines - configurable sets of UI actions, objects that are able to make and revert UI changes (click, add message box).
+- Running UI action pipeline on "Enable Bookings" change.
 
 ## [0.1.22] - 2018-07-12
 ### Changed
