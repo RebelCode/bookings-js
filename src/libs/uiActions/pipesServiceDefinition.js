@@ -20,17 +20,12 @@ export default function (dependencies, applicationState) {
   let uiActionPipes = []
   for (const pipe of Object.keys(uiActions)) {
     const actionsConfig = uiActions[pipe]
-    const pipeName = 'uiAction' + pipe.charAt(0).toUpperCase() + pipe.substr(1);
+    const pipeName = 'uiAction' + pipe.charAt(0).toUpperCase() + pipe.substr(1)
     uiActionPipes[pipeName] = container => {
       let actions = []
       for (const config of actionsConfig) {
-        if (config.action === 'checkboxClick') {
-          actions.push(new CheckboxClickAction(container.jquery, config.arguments))
-        }
-        else if (config.action === 'addBlock') {
-          const renderBlockTemplate = container.makeTemplateRenderFunction(config.arguments.block)
-          actions.push(new AddBlockAction(renderBlockTemplate, container.document, config.arguments))
-        }
+        const makeAction = container[config.action + 'UiActionFactory']
+        actions.push(makeAction(config.arguments))
       }
       return new UiActionsPipe(actions)
     }

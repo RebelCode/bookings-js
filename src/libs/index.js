@@ -6,6 +6,7 @@ import NotificationsCenter from './NotificationsCenter'
 import makeMapStore from './makeMapStore'
 import { makeClickOutside } from './makeClickOutside'
 import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
+import actionFactoriesDefinitions from './uiActions/actionFactoriesDefinitions'
 
 export default function (dependencies, applicationState) {
   return {
@@ -50,12 +51,15 @@ export default function (dependencies, applicationState) {
      * Map of available UI action pipe's names to instances.
      *
      * @since [*next-version*]
-     *
-     * @param container
-     *
-     * @return {Object.<string, UiActionsPipe>} Map of available UI action pipe's names to instances.
      */
     ...pipesServiceDefinition(dependencies, applicationState),
+
+    /**
+     * Available action factories definitions.
+     *
+     * @since [*next-version*]
+     */
+    ...actionFactoriesDefinitions(),
 
     /**
      * Service definition for template render function factory.
