@@ -19,6 +19,13 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
+       * @property {AvailabilityHelpers} availabilityHelpers Set of helper methods for availabilities.
+       */
+      'availabilityHelpers': 'availabilityHelpers',
+
+      /**
+       * @since [*next-version*]
+       *
        * @property {UiActionsPipe} uiActionBookingsEnabledChanged UI action pipe for bookings enabled change.
        */
       'uiActionBookingsEnabledChanged': 'uiActionBookingsEnabledChanged',
@@ -46,11 +53,68 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
         },
       }
     },
+    props: {
+      /**
+       * @since [*next-version*]
+       *
+       * @property sessionLengthsCountLimit {number} How many sessions allowed without showing limit warning message.
+       */
+      sessionLengthsCountLimit: {
+        default: 0,
+        type: Number
+      },
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property availabilityRepeatDaysLimit {number} Max allowed repeating days of availability without showing limit warning message.
+       */
+      availabilityRepeatDaysLimit: {
+        default: 0,
+        type: Number
+      },
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property sessionLengthsCountLimit {number} Exceeded limit warning message.
+       */
+      exceededLimitMessage: String,
+    },
     computed: {
       ...mapGetters({
         availabilities: 'availabilities',
         sessions: 'sessionLengths'
       }),
+
+      /**
+       * Should exceeded limit warning should be visible.
+       *
+       * @since [*next-version*]
+       *
+       * @return {boolean} Should exceeded limit warning should be visible.
+       */
+      isExceededLimitWarningVisible () {
+        return (!!this.sessions.length && this.sessions.length >= this.sessionLengthsCountLimit)
+          || (!!this.maxAvailabilityRepeatDays && this.maxAvailabilityRepeatDays >= this.availabilityRepeatDaysLimit)
+      },
+
+      /**
+       * Get maximum number of days for availability.
+       *
+       * @since [*next-version*]
+       *
+       * @return {number} Maximum number of days that availability is available.
+       */
+      maxAvailabilityRepeatDays () {
+        if (!this.availabilities.length) {
+          return 0
+        }
+        const availabilitiesDaysDurations = this.availabilities.map(availability => {
+          return this.availabilityHelpers.getRepeatDaysCount(availability)
+        })
+        return Math.max(...availabilitiesDaysDurations)
+      },
 
       /**
        * Timezone name for service.
