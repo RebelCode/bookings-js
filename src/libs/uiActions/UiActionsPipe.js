@@ -30,7 +30,8 @@ export default class UiActionsPipe {
    * @since [*next-version*]
    */
   revert () {
-    for (const action of this.actions) {
+    const reversedActions = [...this.actions].reverse()
+    for (const action of reversedActions) {
       action.revert()
     }
   }
