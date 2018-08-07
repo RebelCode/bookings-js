@@ -57,7 +57,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
-       * @property sessionLengthsCountLimit {number} How many sessions allowed without showing limit warning message.
+       * @property {number} sessionLengthsCountLimit How many sessions allowed without showing limit warning message.
        */
       sessionLengthsCountLimit: {
         default: 0,
@@ -67,19 +67,12 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
-       * @property availabilityRepeatDaysLimit {number} Max allowed repeating days of availability without showing limit warning message.
+       * @property {number} availabilityTotalDurationLimit Max allowed duration of the availability in days.
        */
-      availabilityRepeatDaysLimit: {
+      availabilityTotalDurationLimit: {
         default: 0,
         type: Number
       },
-
-      /**
-       * @since [*next-version*]
-       *
-       * @property sessionLengthsCountLimit {number} Exceeded limit warning message.
-       */
-      exceededLimitMessage: String,
     },
     computed: {
       ...mapGetters({
@@ -88,30 +81,26 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       }),
 
       /**
-       * Should exceeded limit warning should be visible.
-       *
        * @since [*next-version*]
        *
-       * @return {boolean} Should exceeded limit warning should be visible.
+       * @property {boolean} isPossibleComplexSetup Whether the current setup is complex and could be harmful for the server.
        */
-      isExceededLimitWarningVisible () {
+      isPossibleComplexSetup () {
         return (!!this.sessions.length && this.sessions.length >= this.sessionLengthsCountLimit)
-          || (!!this.maxAvailabilityRepeatDays && this.maxAvailabilityRepeatDays >= this.availabilityRepeatDaysLimit)
+          || (!!this.maxAvailabilitiesDuration && this.maxAvailabilitiesDuration >= this.availabilityRepeatDaysLimit)
       },
 
       /**
-       * Get maximum number of days for availability.
-       *
        * @since [*next-version*]
        *
-       * @return {number} Maximum number of days that availability is available.
+       * @property {number} maxAvailabilitiesDuration Maximum duration of all availabilities in days.
        */
-      maxAvailabilityRepeatDays () {
+      maxAvailabilitiesDuration () {
         if (!this.availabilities.length) {
           return 0
         }
         const availabilitiesDaysDurations = this.availabilities.map(availability => {
-          return this.availabilityHelpers.getRepeatDaysCount(availability)
+          return this.availabilityHelpers.getFullDuration(availability)
         })
         return Math.max(...availabilitiesDaysDurations)
       },

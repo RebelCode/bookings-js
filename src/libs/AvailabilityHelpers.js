@@ -38,15 +38,15 @@ export default class AvailabilityHelpers {
   }
 
   /**
-   * Get availability repeating days count.
+   * Get full duration of availability in days.
    *
    * @since [*next-version*]
    *
-   * @param {Availability} availability Availability for getting days number.
+   * @param {Availability} availability Availability for getting duration.
    *
-   * @return {number} Availability repeating days count.
+   * @return {number} Full duration of availability in days.
    */
-  getRepeatDaysCount (availability) {
+  getFullDuration (availability) {
     const startDate = this.moment(availability.start)
     startDate.set({
       hour: 0,
