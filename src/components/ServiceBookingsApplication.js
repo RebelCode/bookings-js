@@ -57,7 +57,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
-       * @property {number} sessionLengthsCountLimit How many sessions allowed without showing limit warning message.
+       * @property {number} sessionLengthsCountLimit How many session lengths allowed without showing limit warning message.
        */
       sessionLengthsCountLimit: {
         default: 0,
@@ -67,7 +67,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
-       * @property {number} availabilityTotalDurationLimit Max allowed duration of the availability in days.
+       * @property {number} availabilityTotalDurationLimit Max allowed total duration of the availability in days.
        */
       availabilityTotalDurationLimit: {
         default: 0,
@@ -87,13 +87,13 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
        */
       isPossibleComplexSetup () {
         return (!!this.sessions.length && this.sessions.length >= this.sessionLengthsCountLimit)
-          || (!!this.maxAvailabilitiesDuration && this.maxAvailabilitiesDuration >= this.availabilityRepeatDaysLimit)
+          || (!!this.maxAvailabilitiesDuration && this.maxAvailabilitiesDuration >= this.availabilityTotalDurationLimit)
       },
 
       /**
        * @since [*next-version*]
        *
-       * @property {number} maxAvailabilitiesDuration Maximum duration of all availabilities in days.
+       * @property {number} maxAvailabilitiesDuration Maximum total duration of all availabilities in days.
        */
       maxAvailabilitiesDuration () {
         if (!this.availabilities.length) {
