@@ -30,6 +30,13 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
        */
       'uiActionBookingsEnabledChanged': 'uiActionBookingsEnabledChanged',
 
+      /**
+       * @since [*next-version*]
+       *
+       * @property {Validator} complexSetupValidator Complex setup validator.
+       */
+      'complexSetupValidator': 'complexSetupValidator',
+
       'config': 'config',
       '_': {
         from: 'translate'
@@ -48,47 +55,23 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           tabsClass: 'tabs-content'
         },
 
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ValidationResult|null} lastComplexSetupValidationResult The last result of complex setup validation.
+         */
+        lastComplexSetupValidationResult: null,
+
         displayOptions: {
           allowCustomerChangeTimezone: false
-        },
+        }
       }
-    },
-    props: {
-      /**
-       * @since [*next-version*]
-       *
-       * @property {number} sessionLengthsCountLimit How many session lengths allowed without showing limit warning message.
-       */
-      sessionLengthsCountLimit: {
-        default: 0,
-        type: Number
-      },
-
-      /**
-       * @since [*next-version*]
-       *
-       * @property {number} availabilityTotalDurationLimit Max allowed total duration of the availability in days.
-       */
-      availabilityTotalDurationLimit: {
-        default: 0,
-        type: Number
-      },
     },
     computed: {
       ...mapGetters({
         availabilities: 'availabilities',
         sessions: 'sessionLengths'
       }),
-
-      /**
-       * @since [*next-version*]
-       *
-       * @property {boolean} isPossibleComplexSetup Whether the current setup is complex and could be harmful for the server.
-       */
-      isPossibleComplexSetup () {
-        return (!!this.sessions.length && this.sessions.length >= this.sessionLengthsCountLimit)
-          || (!!this.maxAvailabilitiesDuration && this.maxAvailabilitiesDuration >= this.availabilityTotalDurationLimit)
-      },
 
       /**
        * @since [*next-version*]
@@ -175,6 +158,15 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           newValue ? this.uiActionBookingsEnabledChanged.act() : this.uiActionBookingsEnabledChanged.revert()
         }
       },
+
+      /**
+       * Watch for `bookingOptionsFormData` change and emit validation event.
+       *
+       * @since [*next-version*]
+       */
+      bookingOptionsFormData () {
+        this.$emit('validate')
+      }
     },
     mounted () {
       if (!state) {
@@ -182,6 +174,15 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       }
 
       this.setInitialState(state)
+
+      /*
+       * Run validation on `validate` event.
+       */
+      this.$on('validate', () => {
+        this.complexSetupValidator.validate(this).then(validationResult => {
+          this.lastComplexSetupValidationResult = validationResult
+        })
+      })
     },
     methods: {
       ...mapMutations([
