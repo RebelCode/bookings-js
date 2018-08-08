@@ -7,7 +7,7 @@ import makeMapStore from './makeMapStore'
 import { makeClickOutside } from './makeClickOutside'
 import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
 import actionFactoriesDefinitions from './uiActions/actionFactoriesDefinitions'
-import ValidatorFactory from './validation/ValidatorFactory'
+import validationServiceDefinition from './validation/services'
 
 export default function (dependencies, applicationState) {
   return {
@@ -44,13 +44,6 @@ export default function (dependencies, applicationState) {
       return Vue
     },
 
-    validatorFactory () {
-      return new ValidatorFactory(dependencies.validate.Rules, (field, rule, args) => {
-        const dictionary = dependencies.validate.Validator.dictionary
-        return dictionary.getFieldMessage(dictionary.locale, field, rule, [field, args])
-      })
-    },
-
     notificationsCenter (container) {
       return new NotificationsCenter(container.vue.toasted.show, container.vue.toasted.error)
     },
@@ -61,6 +54,13 @@ export default function (dependencies, applicationState) {
      * @since [*next-version*]
      */
     ...pipesServiceDefinition(dependencies, applicationState),
+
+    /**
+     * Validation services definitions.
+     *
+     * @since [*next-version*]
+     */
+    ...validationServiceDefinition(dependencies, applicationState),
 
     /**
      * Available action factories definitions.
