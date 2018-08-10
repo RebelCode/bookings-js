@@ -14,11 +14,25 @@ export default function (dependencies) {
     rangeCache (container) {
       return new dependencies.bookingWizardComponents.RangeCache(container.moment, dependencies.lodash.differenceWith, dependencies.lodash.isEqual)
     },
+    /**
+     * Instance of authorized HTTP client.
+     *
+     * @since [*next-version*]
+     *
+     * @return {HttpClient}
+     */
+    authorizedHttpClient (container) {
+      return container.httpClient.create({
+        headers: {
+          'X-WP-Nonce': container.state.wp_rest_nonce
+        }
+      })
+    },
     bookingsApi (container) {
-      return new BookingsApi(container.httpClient, container.state.endpointsConfig['bookings'], container.requestCache, container.bookingReadTransformer)
+      return new BookingsApi(container.authorizedHttpClient, container.state.endpointsConfig['bookings'], container.requestCache, container.bookingReadTransformer)
     },
     clientsApi (container) {
-      return new ClientsApi(container.httpClient, container.state.endpointsConfig['clients'], container.requestCache)
+      return new ClientsApi(container.authorizedHttpClient, container.state.endpointsConfig['clients'], container.requestCache)
     },
     settingsApi (container) {
       let update = container.state.settingsUi ? container.state.settingsUi.updateEndpoint : {}
@@ -29,7 +43,7 @@ export default function (dependencies) {
     },
     sessionsApi (container) {
       return new dependencies.bookingWizardComponents.SessionApi(
-        container.httpClient,
+        container.authorizedHttpClient,
         container.state.endpointsConfig ? container.state.endpointsConfig['sessions'] : {},
         container.requestCache,
         container.rangeCache,
