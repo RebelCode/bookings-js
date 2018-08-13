@@ -165,7 +165,7 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
        * @since [*next-version*]
        */
       bookingOptionsFormData () {
-        this.$emit('validate')
+        this.$emit('data-change')
       }
     },
     mounted () {
@@ -176,9 +176,9 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       this.setInitialState(state)
 
       /*
-       * Run validation on `validate` event.
+       * Run validation when data changed.
        */
-      this.$on('validate', () => {
+      this.$on('data-change', () => {
         this.complexSetupValidator.validate(this).then(validationResult => {
           this.lastComplexSetupValidationResult = validationResult
         })

@@ -29,7 +29,7 @@ export default class ValidationResult {
    *
    * @return {boolean} Whether this field has validation error.
    */
-  hasError (field) {
+  hasErrors (field) {
     return !!this.errorsBag[field]
   }
 
@@ -42,7 +42,7 @@ export default class ValidationResult {
    *
    * @return {string[]} Errors messages for field.
    */
-  getError (field) {
+  getErrors (field) {
     return this.errorsBag[field]
   }
 
@@ -53,7 +53,7 @@ export default class ValidationResult {
    *
    * @return {Object.<string, string[]>} List of fields and corresponding errors (if there are some).
    */
-  allErrors () {
+  getAllErrors () {
     return this.errorsBag
   }
 }
