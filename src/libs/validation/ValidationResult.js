@@ -13,7 +13,7 @@ export default class ValidationResult {
    * @since [*next-version*]
    *
    * @param {boolean} valid Is validation successful.
-   * @param {Object.<string, string[]>} errorsBag Map of field names to corresponding errors (if there are some).
+   * @param {Object.<string, string[]>} errorsBag Map of field names to lists of corresponding errors (if there are some).
    */
   constructor (valid, errorsBag) {
     this.valid = valid
