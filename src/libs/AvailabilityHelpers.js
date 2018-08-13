@@ -36,4 +36,40 @@ export default class AvailabilityHelpers {
     const end = this.moment(availability.end)
     return end.isSameOrBefore(nextDayStart)
   }
+
+  /**
+   * Get full duration of availability in days.
+   *
+   * @since [*next-version*]
+   *
+   * @param {Availability} availability Availability for getting duration.
+   *
+   * @return {number} Full duration of availability in days.
+   */
+  getFullDuration (availability) {
+    const startDate = this.moment(availability.start)
+    startDate.set({
+      hour: 0,
+      minute: 0,
+      second: 0
+    })
+
+    let endDate = this.moment(availability.end)
+    if (availability.repeat) {
+      if (availability.repeatUntil === 'period') {
+        endDate = this.moment(startDate)
+          .add(availability.repeatUntilPeriod, availability.repeatUnit)
+      }
+      else if (availability.repeatUntil === 'date') {
+        endDate = this.moment(availability.repeatUntilDate)
+      }
+    }
+    endDate.set({
+      hour: 0,
+      minute: 0,
+      second: 0
+    })
+
+    return Math.abs(startDate.diff(endDate, 'days'))
+  }
 }

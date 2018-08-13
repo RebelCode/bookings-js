@@ -7,6 +7,7 @@ import makeMapStore from './makeMapStore'
 import { makeClickOutside } from './makeClickOutside'
 import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
 import actionFactoriesDefinitions from './uiActions/actionFactoriesDefinitions'
+import validationServiceDefinition from './validation/services'
 
 export default function (dependencies, applicationState) {
   return {
@@ -53,6 +54,13 @@ export default function (dependencies, applicationState) {
      * @since [*next-version*]
      */
     ...pipesServiceDefinition(dependencies, applicationState),
+
+    /**
+     * Validation services definitions.
+     *
+     * @since [*next-version*]
+     */
+    ...validationServiceDefinition(dependencies, applicationState),
 
     /**
      * Available action factories definitions.

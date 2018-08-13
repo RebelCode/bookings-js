@@ -19,9 +19,23 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       /**
        * @since [*next-version*]
        *
+       * @property {AvailabilityHelpers} availabilityHelpers Set of helper methods for availabilities.
+       */
+      'availabilityHelpers': 'availabilityHelpers',
+
+      /**
+       * @since [*next-version*]
+       *
        * @property {UiActionsPipe} uiActionBookingsEnabledChanged UI action pipe for bookings enabled change.
        */
       'uiActionBookingsEnabledChanged': 'uiActionBookingsEnabledChanged',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {Validator} complexSetupValidator Complex setup validator.
+       */
+      'complexSetupValidator': 'complexSetupValidator',
 
       'config': 'config',
       '_': {
@@ -41,9 +55,16 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           tabsClass: 'tabs-content'
         },
 
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ValidationResult|null} lastComplexSetupValidationResult The last result of complex setup validation.
+         */
+        lastComplexSetupValidationResult: null,
+
         displayOptions: {
           allowCustomerChangeTimezone: false
-        },
+        }
       }
     },
     computed: {
@@ -51,6 +72,21 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
         availabilities: 'availabilities',
         sessions: 'sessionLengths'
       }),
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {number} maxAvailabilitiesDuration Maximum total duration of all availabilities in days.
+       */
+      maxAvailabilitiesDuration () {
+        if (!this.availabilities.length) {
+          return 0
+        }
+        const availabilitiesDaysDurations = this.availabilities.map(availability => {
+          return this.availabilityHelpers.getFullDuration(availability)
+        })
+        return Math.max(...availabilitiesDaysDurations)
+      },
 
       /**
        * Timezone name for service.
@@ -122,6 +158,15 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
           newValue ? this.uiActionBookingsEnabledChanged.act() : this.uiActionBookingsEnabledChanged.revert()
         }
       },
+
+      /**
+       * Watch for `bookingOptionsFormData` change and emit validation event.
+       *
+       * @since [*next-version*]
+       */
+      bookingOptionsFormData () {
+        this.$emit('data-change')
+      }
     },
     mounted () {
       if (!state) {
@@ -129,6 +174,15 @@ export function CfServiceBookingsApplication (state, store, { mapState, mapGette
       }
 
       this.setInitialState(state)
+
+      /*
+       * Run validation when data changed.
+       */
+      this.$on('data-change', () => {
+        this.complexSetupValidator.validate(this).then(validationResult => {
+          this.lastComplexSetupValidationResult = validationResult
+        })
+      })
     },
     methods: {
       ...mapMutations([
