@@ -104,6 +104,27 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           this.model.end = newValue
         }
       },
+
+      /**
+       * Watch for isAllDay flag change and subtract one day from real end datetime when
+       * this flag is turned off, and add one day of it is turned on.
+       *
+       * @since [*next-version*]
+       *
+       * @param {boolean} newValue New isAllDay value.
+       */
+      'model.isAllDay': function (newValue) {
+        if (this.seedLock) return
+
+        const tzFree = this.config.formats.datetime.tzFree
+        if (newValue) {
+          this.model.end = moment(this.model.end).endOf('day').add(1, 'second').format(tzFree)
+        }
+        else {
+          this.model.end = moment(this.model.end).subtract(1, 'second').format(tzFree)
+        }
+      },
+
       /**
        * Watch by any availability change and fix repeat period if it is out
        * of range (smaller that availability duration, or bigger than allowed for repeat unit).
@@ -115,6 +136,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
           this.normalizeRepeatPeriod()
         }
       },
+
       /**
        * Change default values when repeats changes.
        */
@@ -157,6 +179,32 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       }),
 
       /**
+       * Formatted model's end datetime for UI. It will display day before
+       * real model's end datetime if all day is enabled.
+       *
+       * @since [*next-version*]
+       *
+       * @property {string}
+       */
+      visibleEnd: {
+        get () {
+          const ends = moment(this.model.end)
+          if (this.model.isAllDay) {
+            ends.subtract(1, 'day')
+          }
+          return ends.format(this.config.formats.datetime.tzFree)
+        },
+
+        set (value) {
+          const ends = moment(value)
+          if (this.model.isAllDay) {
+            ends.endOf('day').add(1, 'second')
+          }
+          this.model.end = ends.format(this.config.formats.datetime.tzFree)
+        }
+      },
+
+      /**
        * Repeat until date casted to Date type
        *
        * @property {Date}
@@ -183,7 +231,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         if (!this.model.start || !this.model.end) {
           return 1
         }
-        return moment(this.model.end).diff(moment(this.model.start), this.model.repeatUnit) + 1
+        return Math.ceil(moment(this.model.end).diff(moment(this.model.start), this.model.repeatUnit, true))
       },
 
       excludeDatesModels () {

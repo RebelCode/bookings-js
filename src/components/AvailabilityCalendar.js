@@ -372,8 +372,8 @@ export default function (FullCalendar, moment) {
       getAvailabilityDaysDuration (availability) {
         return this.getCachedAvailabilityDuration(availability, 'days', item => {
           let start = moment(item.start).startOf('day')
-          let end = moment(item.end).endOf('day').add(1, 'second')
-          return Math.abs(start.diff(end, 'days'))
+          let end = moment(item.end)
+          return Math.ceil(Math.abs(start.diff(end, 'days', true)))
         })
       },
 
@@ -516,16 +516,11 @@ export default function (FullCalendar, moment) {
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
           eventEnd = moment.utc(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
 
-        if (model.isAllDay) {
-          eventEnd = moment(eventEnd).endOf('day').add(1, 'second')
-        }
-
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
           start: eventStart,
           end: eventEnd,
-          allDay: model.isAllDay,
           model
         }, _color ? {
           color: _color,
@@ -546,10 +541,6 @@ export default function (FullCalendar, moment) {
 
         if (params) {
           let {start, end, allDay} = params
-
-          if (allDay) {
-            end = moment(end).subtract(1, 'second')
-          }
 
           event = Object.assign({}, event, {
             start: start.format(),
@@ -580,7 +571,11 @@ export default function (FullCalendar, moment) {
           class: 'button-floating',
           on: {
             click () {
-              self.eventCreated()
+              self.eventCreated({
+                start: moment().add(1, 'day').startOf('day'),
+                end: moment().add(2, 'day').endOf('day'),
+                allDay: true,
+              })
             }
           }
         }, ['+'])
