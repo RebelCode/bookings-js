@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+### Changed
+- Availability model's end time now normalized before sending to server (if `all day` is true, new day's start time will be sent).
+
 ## [0.1.24] - 2018-08-13
 ### Added
 - UI action pipelines - configurable sets of UI actions, objects that are able to make and revert UI changes (click, add message box).
