@@ -9,7 +9,11 @@ let config = {
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
-          sourcemap: false
+          sourcemap: false,
+          compress: {
+            warnings: false,
+            drop_console: true
+          },
         }),
     ],
     module: {
