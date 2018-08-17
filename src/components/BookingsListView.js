@@ -41,7 +41,7 @@ export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) 
          * @property {string[]} Array of component's fields that will be used for bookings search.
          */
         requestParams: [
-          'page', 'month', 'service', 'search', 'status'
+          'page', 'month', 'service', 'search', 'status', 'numItems'
         ],
 
         actions: [
@@ -72,12 +72,26 @@ export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) 
       }
     },
 
+    props: {
+      /**
+       * Number of items per one page.
+       *
+       * @since [*next-version*]
+       *
+       * @var {number} numItems
+       */
+      numItems: {
+        type: Number,
+        default: 20
+      }
+    },
+
     computed: {
       pagesCount () {
         if (!this.bookingsCount) {
           return 1
         }
-        return Math.ceil(this.bookingsCount / 10)
+        return Math.ceil(this.bookingsCount / this.numItems)
       },
       ...mapState('bookings', [
         'timezone'
