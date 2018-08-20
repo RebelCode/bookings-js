@@ -5,7 +5,6 @@ export default {
         return api.bookingReadTransformer.transform(item)
       }))
       commit('setBookingsStatuses', response.data.statuses)
-      commit('setBookingsCount', response.data.count)
     })
   },
 

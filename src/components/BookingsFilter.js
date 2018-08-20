@@ -42,6 +42,7 @@ export function CfBookingsFilter ({ mapState, mapMutations }, FunctionalCollecti
             }
             resultStatuses[selectedStatuses].count += Number(this.statuses[key])
           })
+          this.setBookingsCount(resultStatuses[this.status].count)
           return resultStatuses
         }, (statuses) => {
           this.setBookingsStatuses(statuses)
@@ -96,7 +97,8 @@ export function CfBookingsFilter ({ mapState, mapMutations }, FunctionalCollecti
     },
     methods: {
       ...mapMutations('bookings', [
-        'setBookingsStatuses'
+        'setBookingsStatuses',
+        'setBookingsCount',
       ]),
 
       /**
