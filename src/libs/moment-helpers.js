@@ -88,7 +88,7 @@ export function momentHelpers (moment, formats) {
         1: 'second',
         2: 'third',
         3: 'fourth',
-        4: 'last',
+        4: 'fifth',
       }[this.weekdayInMonth(date, 'number')]
     },
 

@@ -516,10 +516,17 @@ export default function (FullCalendar, moment) {
         let eventStart = day.format('YYYY-MM-DD') + 'T' + availabilityStartTime,
           eventEnd = moment.utc(eventStart).add(availabilityDuration, 'seconds').format('YYYY-MM-DD\THH:mm:ss')
 
+        /*
+         * Availability is rendered as all day when "all day" flag explicitly checked in the availability editor,
+         * or when availability's start and end time is midnight on different days.
+         */
+        let allDay = model.isAllDay || (moment(eventStart).format('HH:mm:ss') === '00:00:00' && moment(eventEnd).format('HH:mm:ss') === '00:00:00')
+
         return Object.assign({}, {
           id: model.id,
           editable: false, // disable dragging and resizing
           start: eventStart,
+          allDay,
           end: eventEnd,
           model
         }, _color ? {

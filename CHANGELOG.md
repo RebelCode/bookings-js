@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+## [0.1.26] - 2018-08-27
+### Changed
+- For monthly repeating on week day now using "fifth" word instead of "last" to not confuse users.
+
+### Fixed
+- Correctly rendering all day availabilities using `allDay` flag of FullCalendar's event.
+
+## [0.1.25] - 2018-08-24
 ### Changed
 - Availability model's end time now normalized before sending to server (if `all day` is true, new day's start time will be sent).
 
