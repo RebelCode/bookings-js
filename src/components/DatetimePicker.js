@@ -62,7 +62,8 @@ export function CfDatetimePicker (DatetimePicker, moment, format) {
 
           datetime.set({
             hour: newValue.HH,
-            minute: newValue.mm
+            minute: newValue.mm,
+            second: 0
           })
 
           this.$emit('input', datetime.format(this.dataFormat))
