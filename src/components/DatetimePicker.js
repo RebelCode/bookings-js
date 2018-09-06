@@ -77,7 +77,7 @@ export function CfDatetimePicker (DatetimePicker, moment, format) {
         get () {
           if (!this.value) return null
 
-          return moment(this.value).format('YYYY-MM-DD')
+          return moment(this.value).startOf('day').toDate()
         },
 
         set (newValue) {
