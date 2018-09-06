@@ -81,8 +81,8 @@ export default function (FullCalendar, moment) {
           return {
             firstDay: this.weekStartsOnIndex,
             viewRender (view) {
-              self.rangeStart = self.momentHelpers.normalizeDateStart(view.start)
-              self.rangeEnd = self.momentHelpers.normalizeDateStart(view.end)
+              self.rangeStart = self.momentHelpers.normalizeDate(view.start)
+              self.rangeEnd = self.momentHelpers.normalizeDate(view.end)
               self.renderRepeatedAvailabilities()
             },
             selectAllow (selectInfo) {

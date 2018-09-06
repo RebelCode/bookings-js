@@ -50,14 +50,14 @@ export function momentHelpers (moment, formats) {
     },
 
     /**
-     * Normalize date start of moment object without time information to work in
+     * Normalizes moment object without time information to work in
      * the same way across different timezones.
      *
      * @since [*next-version*]
      *
      * @param {moment} value Value that holds only date information and should be normalized.
      */
-    normalizeDateStart (value) {
+    normalizeDate (value) {
       const tz = moment.tz.guess()
       return this.switchToTimezone(moment.utc(value), tz)
     },
