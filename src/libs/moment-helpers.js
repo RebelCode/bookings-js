@@ -50,19 +50,6 @@ export function momentHelpers (moment, formats) {
     },
 
     /**
-     * Normalizes moment object without time information to work in
-     * the same way across different timezones.
-     *
-     * @since [*next-version*]
-     *
-     * @param {moment} value Value that holds only date information and should be normalized.
-     */
-    normalizeDate (value) {
-      const tz = moment.tz.guess()
-      return this.switchToTimezone(moment.utc(value), tz)
-    },
-
-    /**
      * Get label for timezone.
      * 
      * @param {string} tz String representing of timezone to display for humans in UI, including UTC+${offset}

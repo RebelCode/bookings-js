@@ -81,8 +81,18 @@ export default function (FullCalendar, moment) {
           return {
             firstDay: this.weekStartsOnIndex,
             viewRender (view) {
-              self.rangeStart = self.momentHelpers.normalizeDate(view.start)
-              self.rangeEnd = self.momentHelpers.normalizeDate(view.end)
+              /*
+               * Switch start and end to not extended moment object.
+               *
+               * `view.start` and `view.end` are instances of moment that is extended by FullCalendar.
+               * They wrapped in `moment` constructor to behave like a normal moment object, not
+               * like "Ambiguously-timed Moments".
+               *
+               * @see https://github.com/RebelCode/bookings-js/pull/79/files#r215881944
+               */
+              self.rangeStart = moment(view.start.format())
+              self.rangeEnd = moment(view.end.format())
+
               self.renderRepeatedAvailabilities()
             },
             selectAllow (selectInfo) {
