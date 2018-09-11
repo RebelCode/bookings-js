@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+## [0.1.27] - 2019-09-11
+### Fixed
+- Fixed wrong timezone behavior in availability calendar when client timezone is on west from Greenwich (has negative offset).
+
 ## [0.1.26] - 2018-08-27
 ### Changed
 - For monthly repeating on week day now using "fifth" word instead of "last" to not confuse users.
