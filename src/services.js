@@ -120,7 +120,6 @@ export function services (dependencies, applicationState, document) {
       }).map(key => {
         components[key] = container[key]
       })
-      console.info(components)
       return components
     }
   }

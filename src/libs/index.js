@@ -36,7 +36,7 @@ export default function (dependencies, applicationState) {
         }
       })
 
-      Vue.use(dependencies.toasted.default, {
+      Vue.use(dependencies.toasted, {
         position: 'top-center',
         duration: 4000
       })
@@ -132,7 +132,7 @@ export default function (dependencies, applicationState) {
       return dependencies.jquery
     },
     lodash: function () {
-      return dependencies.lodash.noConflict()
+      return dependencies.lodash
     },
     momentHelpers: function (container) {
       return momentHelpers(container.moment, container.config.formats.datetime)

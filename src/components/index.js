@@ -45,10 +45,10 @@ export default function (dependencies) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep, 'generatedEvents')
     },
     wpListTable: function (container) {
-      return container.vue.extend(dependencies.wpListTable.ListTable)
+      return container.vue.extend(dependencies.wpListTable)
     },
     vueselect: function (container) {
-      return CfRcSelect(container.vue.extend(dependencies.vueselect.VueSelect))
+      return CfRcSelect(container.vue.extend(dependencies.vueselect))
     },
     'availability-calendar': function (container) {
       return CfAvailabilityCalendar(container.calendar, container.moment)
