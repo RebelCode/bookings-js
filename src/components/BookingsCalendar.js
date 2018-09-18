@@ -190,14 +190,6 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           element.addClass(`rc-service-event rc-service-event--${event.model.status}`)
         }
 
-        console.info(this.renderBookingsEventTemplate({
-          title: event.title || this._('New booking'),
-          clientName: event.clientName || '',
-          action: event.title ? this._('Click for more details') : this._('Release to create booking'),
-          start: event.start.format('HH:mm'),
-          end: event.end.format('HH:mm')
-        }))
-
         element.find('.fc-content')
           .addClass(`rc-event`)
           .html(this.renderBookingsEventTemplate({
