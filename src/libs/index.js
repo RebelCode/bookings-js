@@ -150,6 +150,22 @@ export default function (dependencies, applicationState) {
     createDatetime: function (container) {
       return (value, timezone) => container.momentHelpers.switchToTimezone(value, timezone || 'UTC')
     },
+
+    /**
+     * Function for making same datetimes in local timezone.
+     *
+     * @since [*next-version*]
+     *
+     * @param {Container} container Application container.
+     *
+     * @return {Function}
+     */
+    createSameLocalDatetime: function (container) {
+      return function (value) {
+        return container.momentHelpers.createInTimezone(value, this.timezone)
+      }
+    },
+
     sha1: function () {
       return dependencies.sha1
     },
