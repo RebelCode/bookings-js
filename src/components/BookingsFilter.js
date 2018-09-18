@@ -38,7 +38,7 @@ export function CfBookingsFilter ({ mapState, mapMutations }, FunctionalCollecti
             resultStatuses[key] = {
               id: key,
               title: this.appStatuses[key],
-              count: this.statuses[key]
+              count: Number(this.statuses[key])
             }
             resultStatuses[selectedStatuses].count += Number(this.statuses[key])
           })

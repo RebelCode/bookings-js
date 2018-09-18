@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+## [0.2.0] - 2018-09-18
+### Changed
+- All application styles now located and shipped with this package. 
+
 ## [0.1.27] - 2019-09-11
 ### Fixed
 - Fixed wrong timezone behavior in availability calendar when client timezone is on west from Greenwich (has negative offset).
