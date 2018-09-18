@@ -6,13 +6,50 @@ var VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 let config = {
   context: __dirname,
-
+  entry: './src/app.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'app.min.js',
+    libraryTarget: 'umd'
+  },
   devtool: debug ? 'inline-sourcemap' : false,
+  module: {
+    rules: [
+      {
+        test: /\.(scss|sass)$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {loader: 'css-loader', options: {minimize: true}},
+            'fast-sass-loader'
+          ]
+        })
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /(node_modules|bower_components)/,
+      }
+    ]
+  },
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.common.js',
+      '@rebelcode/std-lib': '@rebelcode/std-lib/dist/std-lib.umd.js',
+    },
+  },
   plugins: debug ? [
     new ExtractTextPlugin('styles.css'),
     new VueLoaderPlugin()
   ] : [
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin({ // define where to save the file
+      filename: 'app.min.css',
+      allChunks: true
+    }),
     new VueLoaderPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new webpack.optimize.OccurrenceOrderPlugin(),
@@ -25,39 +62,10 @@ let config = {
         drop_console: true
       },
     }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
   ],
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /(node_modules|bower_components)/,
-      },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        })
-      }
-    ]
-  },
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.common.js',
-      '@rebelcode/std-lib': '@rebelcode/std-lib/dist/std-lib.umd.js',
-    },
-  },
-  entry: './src/app.js',
-  output: {
-    path: __dirname + '/dist/js',
-    filename: 'app.min.js',
-    libraryTarget: 'umd'
-  }
 }
 
 module.exports = config

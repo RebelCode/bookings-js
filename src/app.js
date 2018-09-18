@@ -1,3 +1,5 @@
+require('./../styles/app.scss')
+
 const get = require('lodash/get')
 const has = require('lodash/has')
 const set = require('lodash/set')
@@ -71,7 +73,6 @@ const dependencies = {
 
   vueColor: {Sketch}
 }
-
 
 import { services } from './services'
 

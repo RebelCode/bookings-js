@@ -1,0 +1,102 @@
+@import "sessions";
+@import "page";
+@import "settings";
+
+.tabs-content {
+  padding: .5rem;
+
+  p.info {
+    //margin-bottom: 2rem;
+  }
+}
+
+.horizontal-tabs {
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+
+  margin: 12px -12px 0 -12px;
+  display: flex;
+
+  @include breakpoint(mobile) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.horizontal-tabs__item {
+  border-right: 1px solid #e5e5e5;
+  padding: 8px 22px;
+  cursor: pointer;
+
+  @include breakpoint(mobile) {
+    flex-shrink: 0;
+  }
+}
+.horizontal-tabs__item._active {
+  font-weight: bold;
+  background-color: #f1f1f1;
+  cursor: default;
+}
+
+.flex-row {
+  display: flex;
+}
+
+.input-with-placeholder {
+  display: inline-block;
+  position: relative;
+  span {
+    position: absolute;
+    left: 8px;
+    top: 5px;
+    opacity: .8;
+
+    pointer-events: none;
+    user-select: none;
+
+    @include breakpoint(mobile) {
+      left: 9px;
+      top: 13px;
+      font-size: 16px;
+    }
+  }
+  input {
+    padding-left: 16px;
+    @include breakpoint(mobile) {
+      padding-left: 21px;
+    }
+  }
+}
+@include breakpoint(mobile) {
+  .loading-container .search-box--bookings {
+    display: none;
+  }
+}
+
+.search-box--bookings {
+  @include breakpoint(mobile) {
+    width: calc(100% - 12px) !important;
+    input[type="search"] {
+      margin: 0 0 8px 0 !important;
+    }
+  }
+}
+
+.eddbk-inputs {
+  $placeholder-color: $light-gray;
+  input, textarea {
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: $placeholder-color;
+      opacity: 1; /* Firefox */
+    }
+
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: $placeholder-color;
+    }
+
+    &::-ms-input-placeholder { /* Microsoft Edge */
+      color: $placeholder-color;
+    }
+  }
+}
