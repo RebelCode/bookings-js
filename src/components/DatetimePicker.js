@@ -82,11 +82,12 @@ export function CfDatetimePicker (DatetimePicker, moment, format) {
 
         set (newValue) {
           const value = moment(this.value || moment())
+          newValue = moment(newValue)
 
           value.set({
-            year: newValue.getFullYear(),
-            month: newValue.getMonth(),
-            date: newValue.getUTCDate(),
+            year: newValue.year(),
+            month: newValue.month(),
+            date: newValue.date(),
             second: 0
           })
 
