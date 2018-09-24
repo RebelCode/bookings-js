@@ -1,6 +1,6 @@
 {
   "name": "@rebelcode/bookings-js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Booking plugin frontend application",
   "main": "dist/js/app.min.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "@rebelcode/booking-wizard-components": "^0.1.9",
+    "@rebelcode/booking-wizard-components": "^0.1.11",
     "@rebelcode/std-lib": "^0.1.5",
     "@rebelcode/ui-framework": "^0.1.2",
     "@rebelcode/vc-calendar": "^0.1.2",
