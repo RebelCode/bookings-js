@@ -51,7 +51,9 @@ export function CfColorPicker (clickOutside) {
     methods: {
       selectColor () {
         this.$emit('input', this.color.hex)
-        this.closePicker()
+        this.$nextTick(() => {
+          this.closePicker()
+        })
       },
 
       openPicker () {

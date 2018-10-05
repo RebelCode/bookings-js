@@ -6,9 +6,9 @@
                             :defaultValue="defaults.general.title"
             />
             <div class="wizard-steps">
-                <div class="wizard-steps__item" :class="{'wizard-steps__item--active': screen === 'service'}" @click="screen = 'service'"></div>
-                <div class="wizard-steps__item" :class="{'wizard-steps__item--active': screen === 'session'}" @click="screen = 'session'"></div>
-                <div class="wizard-steps__item" :class="{'wizard-steps__item--active': screen === 'confirmation'}" @click="screen = 'confirmation'"></div>
+                <div class="wizard-steps__item" :style="wizardStyle" :class="{'wizard-steps__item--active': screen === 'service'}" @click="screen = 'service'"></div>
+                <div class="wizard-steps__item" :style="wizardStyle" :class="{'wizard-steps__item--active': screen === 'session'}" @click="screen = 'session'"></div>
+                <div class="wizard-steps__item" :style="wizardStyle" :class="{'wizard-steps__item--active': screen === 'confirmation'}" @click="screen = 'confirmation'"></div>
             </div>
         </div>
         <div class="wizard-editor__body">
@@ -139,7 +139,7 @@
             <div class="wizard-editor__button">
                 <editable-input v-model="overrides.general.buttons.back" :defaultValue="defaults.general.buttons.back"/>
             </div>
-            <div class="wizard-editor__button wizard-editor__button--primary">
+            <div class="wizard-editor__button wizard-editor__button--primary" :style="wizardStyle">
                 <editable-input v-model="overrides.general.buttons.next" :defaultValue="defaults.general.buttons.next" v-if="screen !== 'confirmation'"/>
                 <editable-input v-model="overrides.general.buttons.book" :defaultValue="defaults.general.buttons.book" v-else/>
             </div>
@@ -219,10 +219,16 @@
         overrides: null,
       }
     },
+
     props: {
       defaults: {},
       value: {},
+      color: {
+        type: String,
+        default: '#0b92da'
+      }
     },
+
     watch: {
       value: {
         deep: true,
@@ -256,6 +262,15 @@
         }
       }
     },
+
+    computed: {
+      wizardStyle () {
+        return {
+          'background-color': this.color
+        }
+      }
+    },
+
     components: {
       'editable-input': 'editable-input'
     }
