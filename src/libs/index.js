@@ -8,6 +8,7 @@ import { makeClickOutside } from './makeClickOutside'
 import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
 import actionFactoriesDefinitions from './uiActions/actionFactoriesDefinitions'
 import validationServiceDefinition from './validation/services'
+import { makeDeepObjectDifference } from './makeDeepObjectDifference'
 
 export default function (dependencies, applicationState) {
   return {
@@ -164,6 +165,14 @@ export default function (dependencies, applicationState) {
       return function (value) {
         return container.momentHelpers.createInTimezone(value, this.timezone)
       }
+    },
+
+    deepObjectDifference (container) {
+      return makeDeepObjectDifference(container.lodash.transform, container.lodash.isEqual, container.lodash.isObject)
+    },
+
+    defaultsDeep (container) {
+      return container.lodash.defaultsDeep
     },
 
     sha1: function () {

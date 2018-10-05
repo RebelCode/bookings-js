@@ -38,12 +38,13 @@ let config = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.common.js',
+      'vue$': 'vue/dist/vue.esm.js',
       '@rebelcode/std-lib': '@rebelcode/std-lib/dist/std-lib.umd.js',
     },
+    extensions: ['*', '.js', '.vue', '.json']
   },
   plugins: debug ? [
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin('app.min.css'),
     new VueLoaderPlugin()
   ] : [
     new ExtractTextPlugin({ // define where to save the file
