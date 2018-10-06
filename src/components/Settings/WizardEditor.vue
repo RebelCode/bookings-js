@@ -6,9 +6,12 @@
                             :defaultValue="defaults.general.title"
             />
             <div class="wizard-steps">
-                <div class="wizard-steps__item" :style="wizardStyle" :class="{'wizard-steps__item--active': screen === 'service'}" @click="screen = 'service'"></div>
-                <div class="wizard-steps__item" :style="wizardStyle" :class="{'wizard-steps__item--active': screen === 'session'}" @click="screen = 'session'"></div>
-                <div class="wizard-steps__item" :style="wizardStyle" :class="{'wizard-steps__item--active': screen === 'confirmation'}" @click="screen = 'confirmation'"></div>
+                <div class="wizard-steps__item"
+                     v-for="availableScreen of allScreens"
+                     :style="availableScreen === screen ? wizardStyle : {}"
+                     :class="{'wizard-steps__item--active': screen === availableScreen}"
+                     @click="screen = availableScreen"
+                ></div>
             </div>
         </div>
         <div class="wizard-editor__body">
@@ -214,6 +217,15 @@
          * @since [*next-version*]
          */
         screen: 'service',
+
+        /**
+         * List of all available screens.
+         *
+         * @since [*next-version*]
+         */
+        allScreens: [
+          'service', 'session', 'confirmation'
+        ],
 
         isSeeding: false,
         overrides: null,
