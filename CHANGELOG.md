@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+## [0.2.3] - 2018-10-08
+### Added
+- Wizard labels editor.
+
+### Changed
+- Settings pages is divided on two separate tabs, one for general settings and the other one for wizard's customizations.
+
 ## [0.2.2] - 2018-09-24
 ### Fixed
 - Wrong datetime picker behavior when selecting dates (sometimes it highlighted wrong dates).
