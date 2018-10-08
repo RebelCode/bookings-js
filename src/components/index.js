@@ -21,6 +21,8 @@ import { CfAbstractBookingsView } from './AbstractBookingsView'
 import CfTimezoneSelect from './TimezoneSelect'
 import { CfSettingsApplication } from './SettingsApplication'
 import { CfColorPicker } from './ColorPicker'
+import WizardEditor from './Settings/WizardEditor.vue'
+import EditableInput from './Settings/EditableInput.vue'
 
 /*
  * Exports instances to main container config.
@@ -40,9 +42,15 @@ export default function (dependencies) {
     'settings-application' (container) {
       return CfSettingsApplication(container.store, container.vuex, container.mapStore, container.settingsValues)
     },
+    'wizard-editor' () {
+      return WizardEditor
+    },
+    'editable-input' () {
+      return EditableInput
+    },
 
     calendar: function (container) {
-      return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.lodash.defaultsDeep, 'generatedEvents')
+      return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.defaultsDeep, 'generatedEvents')
     },
     wpListTable: function (container) {
       return container.vue.extend(dependencies.wpListTable)

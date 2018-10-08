@@ -71,6 +71,13 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
       'color-picker': 'color-picker',
 
       /**
+       * @since [*next-version*]
+       *
+       * @property {VueComponent} wizard-editor Wizard editor component.
+       */
+      'wizard-editor': 'wizard-editor',
+
+      /**
        * Notifications center for displaying notifications in UI.
        *
        * @since [*next-version*]
@@ -218,6 +225,7 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
 
     components: {
       'color-picker': 'color-picker',
+      'wizard-editor': 'wizard-editor',
       switcher: 'switcher',
       tabs: 'tabs',
       tab: 'tab'

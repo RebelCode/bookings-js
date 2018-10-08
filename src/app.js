@@ -7,6 +7,8 @@ const defaultsDeep = require('lodash/defaultsDeep')
 const debounce = require('lodash/debounce')
 const differenceWith = require('lodash/differenceWith')
 const isEqual = require('lodash/isEqual')
+const transform = require('lodash/transform')
+const isObject = require('lodash/isObject')
 
 import axios from 'axios'
 import { extendMoment } from 'moment-range'
@@ -49,7 +51,7 @@ const dependencies = {
   validate,
   toasted,
   jquery,
-  lodash: {has, get, set, defaultsDeep, debounce, differenceWith, isEqual},
+  lodash: {has, get, set, defaultsDeep, debounce, differenceWith, isEqual, transform, isObject},
   humanizeDuration,
   textFormatter,
   stdLib,
