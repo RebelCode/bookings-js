@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return [
         '#eddbk-bookings-page',
         '#eddbk-service-page',
+        '#eddbk-services-page',
         '#eddbk-bookings-screen-options',
         '#eddbk-settings-page'
       ]

@@ -21,8 +21,11 @@ import { CfAbstractBookingsView } from './AbstractBookingsView'
 import CfTimezoneSelect from './TimezoneSelect'
 import { CfSettingsApplication } from './SettingsApplication'
 import { CfColorPicker } from './ColorPicker'
-import WizardEditor from './Settings/WizardEditor.vue'
-import EditableInput from './Settings/EditableInput.vue'
+import WizardEditor from './settings/WizardEditor.vue'
+import EditableInput from './settings/EditableInput.vue'
+import Services from './pages/Services.vue'
+import ServicesPage from './pages/ServicesPage'
+import VSwitch from './ui/VSwitch.vue'
 
 /*
  * Exports instances to main container config.
@@ -47,6 +50,18 @@ export default function (dependencies) {
     },
     'editable-input' () {
       return EditableInput
+    },
+
+    'services-page' () {
+      return ServicesPage()
+    },
+
+    'services' () {
+      return Services
+    },
+
+    'v-switch' () {
+      return VSwitch
     },
 
     calendar: function (container) {

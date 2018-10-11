@@ -77,6 +77,8 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
        */
       'wizard-editor': 'wizard-editor',
 
+      'services': 'services',
+
       /**
        * Notifications center for displaying notifications in UI.
        *
@@ -226,6 +228,7 @@ export function CfSettingsApplication (store, { mapActions }, mapStore, settings
     components: {
       'color-picker': 'color-picker',
       'wizard-editor': 'wizard-editor',
+      'services': 'services',
       switcher: 'switcher',
       tabs: 'tabs',
       tab: 'tab'
