@@ -26,20 +26,26 @@
         type: String,
         required: true
       },
-      model: {
+      value: {
         type: Boolean
       }
     },
 
     data () {
       return {
-        source: this.model
+        source: this.value
+      }
+    },
+
+    watch: {
+      value (newValue) {
+        this.source = newValue
       }
     },
 
     methods: {
       modelChanged () {
-        this.$emit('changed', this.source)
+        this.$emit('input', this.source)
       }
     }
   }

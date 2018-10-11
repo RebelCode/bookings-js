@@ -2,6 +2,7 @@ import bookings from './bookings'
 import bookingOptions from './booking-options'
 import ui from './ui'
 import settings from './settings'
+import services from './services'
 
 const state = {
   app: {
@@ -78,7 +79,8 @@ export default function ({deepHas, deepSet}) {
       bookings,
       bookingOptions,
       ui,
-      settings
+      settings,
+      services
     },
     state,
     getters,

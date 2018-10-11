@@ -23,7 +23,7 @@ import { CfSettingsApplication } from './SettingsApplication'
 import { CfColorPicker } from './ColorPicker'
 import WizardEditor from './settings/WizardEditor.vue'
 import EditableInput from './settings/EditableInput.vue'
-import Services from './pages/Services.vue'
+import Services from './pages/Services'
 import ServicesPage from './pages/ServicesPage'
 import VSwitch from './ui/VSwitch.vue'
 
@@ -59,8 +59,8 @@ export default function (dependencies) {
      *
      * @return {object|VueComponent}
      */
-    'services-page' () {
-      return ServicesPage()
+    'services-page' (container) {
+      return ServicesPage(container.store, container.vuex, container.mapStore)
     },
 
     /**
@@ -70,8 +70,9 @@ export default function (dependencies) {
      *
      * @return {object|VueComponent}
      */
-    'services' () {
-      return Services
+    'services' (container) {
+      console.info('Services(container.mapStore)', Services(container.mapStore))
+      return Services(container.mapStore)
     },
 
     /**
@@ -82,6 +83,7 @@ export default function (dependencies) {
      * @return {object|VueComponent}
      */
     'v-switch' () {
+      console.info('VSwitch', VSwitch)
       return VSwitch
     },
 

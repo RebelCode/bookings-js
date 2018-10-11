@@ -2,6 +2,7 @@ import BookingsApi from './BookingsApi'
 import ClientsApi from './ClientsApi'
 import GeneralApiErrorHandler from './GeneralApiErrorHandler'
 import SettingsApi from './SettingsApi'
+import ServicesApi from './ServicesApi'
 
 /*
  * Exports instances to main container config.
@@ -30,6 +31,9 @@ export default function (dependencies) {
     },
     bookingsApi (container) {
       return new BookingsApi(container.authorizedHttpClient, container.state.endpointsConfig['bookings'], container.requestCache, container.bookingReadTransformer)
+    },
+    servicesApi (container) {
+      return new ServicesApi(container.authorizedHttpClient, container.state.endpointsConfig['services'], container.requestCache)
     },
     clientsApi (container) {
       return new ClientsApi(container.authorizedHttpClient, container.state.endpointsConfig['clients'], container.requestCache)

@@ -66,6 +66,7 @@
     "vue": "^2.5.17",
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler-loader": "^1.0.4",
     "webpack": "^3.10.0",
     "webpack-bundle-analyzer": "^3.0.2"
   },
