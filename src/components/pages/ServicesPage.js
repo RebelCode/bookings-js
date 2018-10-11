@@ -13,9 +13,6 @@ export default function () {
         from: 'translate'
       }
     },
-    created () {
-      console.info('component created...')
-    },
     components: {
       'services': 'services'
     }

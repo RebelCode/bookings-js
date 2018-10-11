@@ -13,6 +13,13 @@
 </template>
 
 <script>
+  /**
+   * Switcher component for switching states. Look like switcher with sliding button.
+   *
+   * @since [*next-version*]
+   *
+   * @var {object}
+   */
   export default {
     props: {
       id: {

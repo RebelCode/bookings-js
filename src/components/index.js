@@ -52,14 +52,35 @@ export default function (dependencies) {
       return EditableInput
     },
 
+    /**
+     * The page for managing services.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
     'services-page' () {
       return ServicesPage()
     },
 
+    /**
+     * Component for displaying services list.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
     'services' () {
       return Services
     },
 
+    /**
+     * State switching component.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
     'v-switch' () {
       return VSwitch
     },
