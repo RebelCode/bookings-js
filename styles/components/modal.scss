@@ -24,6 +24,12 @@
     background-color: $white;
     border-radius: $radius;
 
+    &--no-content-padding {
+      .modal__content {
+        padding: 0;
+      }
+    }
+
     &--wide {
       max-width: 50rem;
     }

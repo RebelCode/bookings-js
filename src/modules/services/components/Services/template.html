@@ -1,7 +1,7 @@
 <div class="rich-rows">
     <div class="loading-container" v-if="isLoadingList" style="margin-top: 1rem"></div>
 
-    <div class="rich-row" v-for="service of list">
+    <div class="rich-row" :class="{'loading-container': service.isSaving}" v-for="service of list">
         <div class="rich-row__column mobile-collapsed">
             <v-switch :id="'' + service.id" v-model="good"/>
         </div>
@@ -20,9 +20,10 @@
         <div class="rich-row__column rich-row__actions">
             <v-switch id="key" class="mobile-only"></v-switch>
             <div class="button-group">
-                <div class="button">Edit</div>
+                <div class="button" @click="$emit('edit', service)">Edit</div>
                 <div class="button button-icon">
-                    <span class="dashicons dashicons-arrow-down"></span>
+                    <span class="dashicons dashicons-trash" @click="$emit('delete', service)"></span>
+                    <!--<span class="dashicons dashicons-arrow-down"></span>-->
                 </div>
             </div>
         </div>

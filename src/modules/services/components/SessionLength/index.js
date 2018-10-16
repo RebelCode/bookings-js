@@ -1,8 +1,8 @@
-export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
-  const mapState = Vuex.mapState
-  const mapMutations = Vuex.mapMutations
+import template from './template.html'
 
-  return Vue.extend({
+export default function CfSessionLength ({ mapState, mapMutations }, FunctionalArrayCollection) {
+  return {
+    ...template,
     inject: {
       '_': {
         from: 'translate'
@@ -58,15 +58,18 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
          * @var {FunctionalArrayCollection}
          */
         sessions: new FunctionalArrayCollection(() => {
-          return this.storeSessions
+          return JSON.parse(JSON.stringify(this.value)).sort((a, b) => {
+            return a.sessionLength - b.sessionLength
+          })
         }, (sessions) => {
-          this.setSessionLengths(sessions)
+          this.$emit('input', sessions)
         }, (item) => {
           return Number(item.sessionLength)
         })
       }
     },
     props: {
+      value: {},
       /**
        * @since [*next-version*]
        *
@@ -98,11 +101,6 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
       }
     },
     computed: {
-      ...mapState({
-        storeSessions: state => state.app.sessionLengths.sort((a, b) => {
-          return a.sessionLength - b.sessionLength
-        })
-      }),
       /**
        * Max possible value of session length (less then day).
        *
@@ -207,5 +205,5 @@ export default function CfSessionLength (Vue, Vuex, FunctionalArrayCollection) {
     components: {
       repeater: 'repeater'
     }
-  })
+  }
 }

@@ -1,4 +1,3 @@
-import CfSessionLength from './SessionLength'
 import CfModal from './Modal'
 import CfAbstractEntityModalEditor from './AbstractEntityModalEditor'
 import CfServiceAvailabilityEditor from './ServiceAvailabilityEditor'
@@ -23,8 +22,12 @@ import { CfSettingsApplication } from './SettingsApplication'
 import { CfColorPicker } from './ColorPicker'
 import WizardEditor from './settings/WizardEditor.vue'
 import EditableInput from './settings/EditableInput.vue'
-import Services from './pages/Services'
-import ServicesPage from './pages/ServicesPage'
+
+import { page as ServicesPage } from './../modules/services'
+import Services from './../modules/services/components/Services'
+import ServicesEditor from './../modules/services/components/ServiceEditor'
+import CfSessionLength from './../modules/services/components/SessionLength'
+
 import VSwitch from './ui/VSwitch.vue'
 
 /*
@@ -73,6 +76,14 @@ export default function (dependencies) {
     'services' (container) {
       console.info('Services(container.mapStore)', Services(container.mapStore))
       return Services(container.mapStore)
+    },
+
+    'service-editor' (container) {
+      return new ServicesEditor(container['abstract-entity-modal-editor'], container.vuex)
+    },
+
+    'session-length' (container) {
+      return new CfSessionLength(container.vuex, dependencies.stdLib.FunctionalArrayCollection)
     },
 
     /**
@@ -222,9 +233,6 @@ export default function (dependencies) {
     },
     'bool-switcher': function (container) {
       return CfBoolSwitcher(container.switcher)
-    },
-    'session-length': function (container) {
-      return new CfSessionLength(container.vue, container.vuex, dependencies.stdLib.FunctionalArrayCollection)
     },
 
     'abstract-entity-modal-editor': function (container) {

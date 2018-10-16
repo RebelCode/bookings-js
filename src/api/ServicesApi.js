@@ -38,4 +38,21 @@ export default class ServicesApi extends Api {
       params
     })
   }
+
+  /**
+   * Delete a service from a server.
+   *
+   * @since [*next-version*]
+   *
+   * @param {{id: Number}} model Service object that will be deleted.
+   *
+   * @return {Promise<any>}
+   */
+  delete (model) {
+    const deleteConfig = this.config['delete']
+    return this.http.request({
+      method: deleteConfig.method,
+      url: `${deleteConfig.endpoint}${model.id}`
+    })
+  }
 }
