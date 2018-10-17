@@ -17,10 +17,12 @@ export default class ServicesApi extends Api {
    * @param {Object<string, {method: String, endpoint: String}>} config
    * @param {RequestCache} cache Requests caching implementation.
    * @param {ServiceReadTransformer} serviceReadTransformer Transformer applied to a service entity.
+   * @param {ServiceStoreTransformer} serviceStoreTransformer Transformer applied to a service entity before saving.
    */
-  constructor (httpClient, config, cache, serviceReadTransformer) {
+  constructor (httpClient, config, cache, serviceReadTransformer, serviceStoreTransformer) {
     super(httpClient, config, cache)
     this.serviceReadTransformer = serviceReadTransformer
+    this.serviceStoreTransformer = serviceStoreTransformer
   }
 
   /**
@@ -46,11 +48,12 @@ export default class ServicesApi extends Api {
    *
    * @since [*next-version*]
    *
-   * @param {{id: Number}} model Updated service object.
+   * @param {{id: Number, timezone: String}} model Updated service object.
    *
    * @return {Promise<any>}
    */
   update (model) {
+    model = this.serviceStoreTransformer.transform(model, {timezone: model.timezone})
     const updateConfig = this.config['update']
     return this.http.request({
       method: updateConfig.method,

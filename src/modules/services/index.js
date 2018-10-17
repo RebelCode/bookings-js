@@ -12,12 +12,16 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
     store,
     inject: {
       'services': 'services',
+
       'api': {
         from: 'servicesApi'
       },
+
       '_': {
         from: 'translate'
       },
+
+      'config': 'config',
 
       /**
        * Modal state injected from elsewhere.
@@ -52,6 +56,7 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
       ]),
 
       ...mapActions('services', {
+        dispatchUpdate: 'update',
         dispatchDelete: 'delete',
         dispatchFetch: 'fetch'
       }),
@@ -89,8 +94,22 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
        */
       fetchServices () {
         this.isLoadingList = true
-        this.dispatchFetch({api: this.api, params: this.buildParams()}).then(() => {
+        this.dispatchFetch({
+          api: this.api,
+          params: this.buildParams(),
+          transformOptions: { timezone: this.config.timezone }
+        }).then(() => {
           this.isLoadingList = false
+        })
+      },
+
+      /**
+       *
+       */
+      saveService (model) {
+        this.$set(model, 'isSaving', true)
+        this.dispatchUpdate({ api: this.api, model }).then(() => {
+          this.$set(model, 'isSaving', false)
         })
       },
 

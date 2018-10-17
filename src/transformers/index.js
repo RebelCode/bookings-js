@@ -4,6 +4,7 @@ import AvailabilityReadTransformer from './AvilabilityReadTransformer'
 import ServiceReadTransformer from './ServiceReadTransformer'
 import SessionLengthReadTransformer from './SessionLengthReadTransformer'
 import BookingReadTransformer from './BookingReadTransformer'
+import ServiceStoreTransformer from './ServiceStoreTransformer'
 
 export default function (dependencies) {
   return {
@@ -27,6 +28,9 @@ export default function (dependencies) {
     },
     serviceReadTransformer (container) {
       return new ServiceReadTransformer(container.availabilityReadTransformer, container.sessionLengthReadTransformer)
+    },
+    serviceStoreTransformer (container) {
+      return new ServiceStoreTransformer(container.availabilityStoreTransformer)
     },
     transformDatetimeForUi (container) {
       /**

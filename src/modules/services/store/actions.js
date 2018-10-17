@@ -7,15 +7,19 @@ export default {
    * @param commit
    * @param api
    * @param params
+   * @param transformOptions
    *
    * @return {PromiseLike<T> | Promise<T>}
    */
-  fetch ({ commit }, { api, params }) {
+  fetch ({ commit }, { api, params, transformOptions }) {
     return api.fetch(params).then((response) => {
       commit('set', {
         key: 'services.list',
         value: response.data.items.map(item => {
-          return api.serviceReadTransformer.transform(item)
+          const options = Object.assign({}, transformOptions, {
+            timezone: item.timezone
+          })
+          return api.serviceReadTransformer.transform(item, options)
         })
       }, {
         root: true
@@ -47,7 +51,7 @@ export default {
    *
    * @param {Function} commit Local's module commit Vuex method.
    * @param {ServicesApi} api The services API.
-   * @param {{id: number,...}} model The model holding new values.
+   * @param {{id: number, timezone: string, ...}} model The model holding new values.
    *
    * @return {Promise<any>} Promise holding the server's response data.
    */

@@ -15,7 +15,10 @@ export default function (mapStore) {
     },
     data () {
       return {
-        good: true
+        statusesTransitionMap: {
+          publish: 'draft',
+          draft: 'publish'
+        }
       }
     },
     methods: {
@@ -46,6 +49,11 @@ export default function (mapStore) {
         }
         const last = sessions.length - 1
         return sessions[0].price.formatted.replace('.00', '') + ' - ' + sessions[last].price.formatted.replace('.00', '')
+      },
+
+      switchServiceStatus (service) {
+        service.status = this.statusesTransitionMap[service.status]
+        this.$emit('save', service)
       }
     },
     components: {
