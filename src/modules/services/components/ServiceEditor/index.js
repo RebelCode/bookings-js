@@ -1,5 +1,15 @@
 import template from './template.html'
 
+/**
+ * The service modal editor.
+ *
+ * @param AbstractEntityModalEditor
+ * @param mapState
+ * @param mapMutations
+ * @param mapActions
+ *
+ * @return {*}
+ */
 export default function (AbstractEntityModalEditor, { mapState, mapMutations, mapActions }) {
   return AbstractEntityModalEditor.extend({
     ...template,
@@ -117,6 +127,14 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         }
       }
     },
+    mounted () {
+      /*
+       * Switch tab to the first on fields seed.
+       */
+      this.$on('seed', () => {
+        this.activeTab = 0
+      })
+    },
     methods: {
       ...mapMutations('bookingOptions', [
         'setAvailabilityEditorState'
@@ -127,11 +145,25 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         dispatchUpdate: 'update'
       }),
 
+      /**
+       * Open the availability editor with given availability.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} availability
+       */
       openAvailabilityEditor (availability = {}) {
         this.setAvailabilityEditorState(availability)
         this.availabilityEditorStateToggleable.setState(true)
       },
 
+      /**
+       * Save the service that is being edited.
+       *
+       * @since [*next-version*]
+       *
+       * @return {Promise<T>} The promise that holds server's response data.
+       */
       save () {
         const dispatchSaveMethod = this.model.id ? 'dispatchUpdate' : 'dispatchCreate'
         this.isSaving = true

@@ -1,5 +1,14 @@
 import template from './template.html'
 
+/**
+ * The services list component.
+ *
+ * @since [*next-version*]
+ *
+ * @param mapStore
+ *
+ * @return {*}
+ */
 export default function (mapStore) {
   return {
     ...template,
@@ -35,6 +44,13 @@ export default function (mapStore) {
         return this.getDurationPreview(service.sessionLengthsStored) + ' · ' + this.getPricePreview(service.sessionLengthsStored)
       },
 
+      /**
+       * Get sessions duration preview.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object[]} sessions List of available session lengths.
+       */
       getDurationPreview (sessions) {
         if (sessions.length === 1) {
           return this.humanizeDuration(sessions[0].sessionLength * 1000)
@@ -43,6 +59,13 @@ export default function (mapStore) {
         return this.humanizeDuration(sessions[0].sessionLength * 1000) + ' - ' + this.humanizeDuration(sessions[last].sessionLength * 1000)
       },
 
+      /**
+       * Get sessions price preview.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object[]} sessions List of available session lengths.
+       */
       getPricePreview (sessions) {
         if (sessions.length === 1) {
           return sessions[0].price.formatted.replace('.00', '')
@@ -51,6 +74,13 @@ export default function (mapStore) {
         return sessions[0].price.formatted.replace('.00', '') + ' - ' + sessions[last].price.formatted.replace('.00', '')
       },
 
+      /**
+       * Switch service's status.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} service
+       */
       switchServiceStatus (service) {
         service.status = this.statusesTransitionMap[service.status]
         this.$emit('save', service)
