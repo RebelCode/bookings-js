@@ -1,17 +1,17 @@
 <div>
-    <service-availability-editor :collection.sync="model.availabilities"></service-availability-editor>
+    <service-availability-editor :collection.sync="model.availabilities.rules"></service-availability-editor>
     <modal @close="closeModal"
            modal-body-class="modal__body--wide  modal__body--no-content-padding"
            :active="modalState.isOn()"
     >
         <div slot="header">
-            New Service
-            <!--{{ model.id ? 'Edit Booking | ID. ' + model.id  : 'Add a New Booking' }}-->
-            <div :class="['modal__close modal--right', isDoubleConfirming ? 'disabled' : '']" v-if="!closeConfirming" @click="closeModal">&times;</div>
-            <!--<div class="modal__header-buttons modal&#45;&#45;right" v-else>-->
-            <!--<input type="button" class="button button-dark-solid" value="Close" @click="forceCloseModal">-->
-            <!--<input type="button" class="button" value="Continue Editing" @click="continueEditing">-->
-            <!--</div>-->
+            <!--New Service-->
+            {{ model.id ? 'Edit Service | ID. ' + model.id  : 'New Service' }}
+            <div :class="['modal__close modal--right', isDoubleConfirming ? 'disabled' : '']" v-if="!closeConfirming" @click="closeModal()">&times;</div>
+            <div class="modal__header-buttons modal--right" v-else>
+                <input type="button" class="button button-dark-solid" value="Close" @click="forceCloseModal">
+                <input type="button" class="button" value="Continue Editing" @click="continueEditing">
+            </div>
         </div>
 
         <div slot="body" :class="[isDoubleConfirming ? 'disabled' : '']">
@@ -62,7 +62,7 @@
         <a href="https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained/#overlapping-day-availabilities" target="_blank">Click here to learn more.</a>
     </span>
                             </div>
-                            <div class="alert alert-warning" v-if="!model.availabilities.length">
+                            <div class="alert alert-warning" v-if="!model.availabilities.rules.length">
                                 <span class="dashicons dashicons-info"></span>
                                 <span>
         There is no availability set for this service. Please add at least one available date and time in order to start accepting bookings for this service.
@@ -75,7 +75,7 @@
                                 </label>
                             </div>
 
-                            <availability-calendar :availabilities="model.availabilities"
+                            <availability-calendar :availabilities="model.availabilities.rules"
                                                    class="rc-calendar rc-calendar--availability"
                                                    @availability-click="openAvailabilityEditor"
                                                    :overlapping-availabilities.sync="overlappingAvailabilities"
@@ -112,8 +112,12 @@
             <div class="footer-confirm"><!---->
                 <div class="footer-confirm__message __right __alert"></div>
                 <div class="footer-confirm__buttons">
-                    <input type="button" value="Cancel" class="button">
-                    <input type="button" value="Save" class="button button-primary">
+                    <button class="button button-primary"
+                            :class="{'loading-button': isSaving}"
+                            @click="save"
+                    >
+                        {{ model.id ? 'Save Changes' : 'Create Service' }}
+                    </button>
                 </div>
             </div>
         </div>

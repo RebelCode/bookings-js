@@ -52,7 +52,8 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
       ]),
 
       ...mapActions('services', {
-        dispatchDelete: 'delete'
+        dispatchDelete: 'delete',
+        dispatchFetch: 'fetch'
       }),
 
       /**
@@ -71,6 +72,9 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
        *
        */
       deleteService (model) {
+        if (!confirm(this._('Are you sure you want to delete this service?'))) {
+          return
+        }
         this.$set(model, 'isSaving', true)
         this.dispatchDelete({ api: this.api, model }).then(() => {
           this.$set(model, 'isSaving', false)
@@ -85,9 +89,7 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
        */
       fetchServices () {
         this.isLoadingList = true
-        this.api.fetch(this.buildParams()).then(response => {
-          this.list = response.data.items
-        }).then(() => {
+        this.dispatchFetch({api: this.api, params: this.buildParams()}).then(() => {
           this.isLoadingList = false
         })
       },

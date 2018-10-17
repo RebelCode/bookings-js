@@ -1,5 +1,61 @@
 export default {
   /**
+   * Fetch the list of services.
+   *
+   * @since [*next-version*]
+   *
+   * @param commit
+   * @param api
+   * @param params
+   *
+   * @return {PromiseLike<T> | Promise<T>}
+   */
+  fetch ({ commit }, { api, params }) {
+    return api.fetch(params).then((response) => {
+      commit('set', {
+        key: 'services.list',
+        value: response.data.items.map(item => {
+          return api.serviceReadTransformer.transform(item)
+        })
+      }, {
+        root: true
+      })
+    })
+  },
+
+  /**
+   * Create the service.
+   *
+   * @since [*next-version*]
+   *
+   * @param {Function} commit Local's module commit Vuex method.
+   * @param {ServicesApi} api The services API.
+   * @param {{id: number,...}} model The model holding new values.
+   *
+   * @return {Promise<any>} Promise holding the server's response data.
+   */
+  create ({ commit }, { api, model }) {
+    // @todo
+    alert('To be implemented.')
+    return Promise.resolve()
+  },
+
+  /**
+   * Update the service.
+   *
+   * @since [*next-version*]
+   *
+   * @param {Function} commit Local's module commit Vuex method.
+   * @param {ServicesApi} api The services API.
+   * @param {{id: number,...}} model The model holding new values.
+   *
+   * @return {Promise<any>} Promise holding the server's response data.
+   */
+  update ({ commit }, { api, model }) {
+    return api.update(model)
+  },
+
+  /**
    * Seed service editor by passed model.
    *
    * @since [*next-version*]

@@ -36,7 +36,9 @@ export default {
   one: {
     id: null,
     timezone: 'UTC+0',
-    availabilities: [],
+    availabilities: {
+      rules: []
+    },
     sessionLengths: [],
     displayOptions: {
       allowCustomerChangeTimezone: false

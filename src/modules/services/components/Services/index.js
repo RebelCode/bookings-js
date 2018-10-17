@@ -29,7 +29,7 @@ export default function (mapStore) {
        * @return {string}
        */
       getSessionsPreview (service) {
-        return this.getDurationPreview(service.sessionLengths) + ' · ' + this.getPricePreview(service.sessionLengths)
+        return this.getDurationPreview(service.sessionLengthsStored) + ' · ' + this.getPricePreview(service.sessionLengthsStored)
       },
 
       getDurationPreview (sessions) {

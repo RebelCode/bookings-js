@@ -5,7 +5,7 @@ import { Api } from '@rebelcode/std-lib'
  *
  * @since [*next-version*]
  *
- * @class BookingsApi
+ * @class ServicesApi
  */
 export default class ServicesApi extends Api {
   /**
@@ -16,9 +16,11 @@ export default class ServicesApi extends Api {
    * @param {HttpClient} httpClient Http promise-based client
    * @param {Object<string, {method: String, endpoint: String}>} config
    * @param {RequestCache} cache Requests caching implementation.
+   * @param {ServiceReadTransformer} serviceReadTransformer Transformer applied to a service entity.
    */
-  constructor (httpClient, config, cache) {
+  constructor (httpClient, config, cache, serviceReadTransformer) {
     super(httpClient, config, cache)
+    this.serviceReadTransformer = serviceReadTransformer
   }
 
   /**
@@ -36,6 +38,24 @@ export default class ServicesApi extends Api {
       method: fetchConfig.method,
       url: fetchConfig.endpoint,
       params
+    })
+  }
+
+  /**
+   * Update the service.
+   *
+   * @since [*next-version*]
+   *
+   * @param {{id: Number}} model Updated service object.
+   *
+   * @return {Promise<any>}
+   */
+  update (model) {
+    const updateConfig = this.config['update']
+    return this.http.request({
+      method: updateConfig.method,
+      url: `${updateConfig.endpoint}${model.id}`,
+      data: this.prepareParams(model)
     })
   }
 

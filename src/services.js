@@ -35,9 +35,7 @@ export function services (dependencies, applicationState, document) {
     },
 
     state: function (container) {
-      return container.stateTransformer.transform(container['APP_STATE'], {
-        timezone: container['APP_STATE'].timezone || container['APP_STATE'].config.timezone
-      })
+      return container['APP_STATE']
     },
     config: function (container) {
       return container['APP_STATE'].config || {}

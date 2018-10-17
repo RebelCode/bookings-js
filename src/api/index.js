@@ -33,7 +33,7 @@ export default function (dependencies) {
       return new BookingsApi(container.authorizedHttpClient, container.state.endpointsConfig['bookings'], container.requestCache, container.bookingReadTransformer)
     },
     servicesApi (container) {
-      return new ServicesApi(container.authorizedHttpClient, container.state.endpointsConfig['services'], container.requestCache)
+      return new ServicesApi(container.authorizedHttpClient, container.state.endpointsConfig['services'], container.requestCache, container.serviceReadTransformer)
     },
     clientsApi (container) {
       return new ClientsApi(container.authorizedHttpClient, container.state.endpointsConfig['clients'], container.requestCache)

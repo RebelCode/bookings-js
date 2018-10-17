@@ -1,6 +1,6 @@
 import template from './template.html'
 
-export default function (AbstractEntityModalEditor, { mapState, mapMutations }) {
+export default function (AbstractEntityModalEditor, { mapState, mapMutations, mapActions }) {
   return AbstractEntityModalEditor.extend({
     ...template,
     inject: {
@@ -11,6 +11,10 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations }) 
        */
       modalState: {
         from: 'serviceEditorState'
+      },
+
+      'api': {
+        from: 'servicesApi'
       },
 
       '_': {
@@ -33,6 +37,10 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations }) 
     },
     data () {
       return {
+        isCreateConfirming: false,
+
+        isSaving: false,
+
         overlappingAvailabilities: false,
 
         activeTab: 0,
@@ -54,7 +62,9 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations }) 
         model: {
           id: null,
           timezone: 'UTC+0',
-          availabilities: [],
+          availabilities: {
+            rules: []
+          },
           sessionLengths: [],
           displayOptions: {
             allowCustomerChangeTimezone: false
@@ -64,7 +74,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations }) 
     },
     computed: {
       ...mapState('services', {
-        entityModel: 'one'
+        entityModel: 'one',
+        entitiesCollection: 'list'
       })
     },
     methods: {
@@ -72,9 +83,24 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations }) 
         'setAvailabilityEditorState'
       ]),
 
+      ...mapActions('services', {
+        dispatchCreate: 'create',
+        dispatchUpdate: 'update'
+      }),
+
       openAvailabilityEditor (availability = {}) {
         this.setAvailabilityEditorState(availability)
         this.availabilityEditorStateToggleable.setState(true)
+      },
+
+      save () {
+        const dispatchSaveMethod = this.model.id ? 'dispatchUpdate' : 'dispatchCreate'
+        this.isSaving = true
+        return this[dispatchSaveMethod]({api: this.api, model: this.model}).then(() => {
+          this.isSaving = false
+          this.$emit('saved')
+          this.forceCloseModal()
+        })
       }
     },
     components: {
