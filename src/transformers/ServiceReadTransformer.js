@@ -24,8 +24,8 @@ export default class ServiceReadTransformer extends Transformer {
    * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
-    availabilities: (model, { timezone }) => {
-      model.availabilities['rules'] = model.availabilities.rules.map(availability => {
+    availability: (model, { timezone }) => {
+      model.availability['rules'] = model.availability.rules.map(availability => {
         return this.availabilityReadTransformer.transform(availability, { timezone })
       })
       return model

@@ -53,7 +53,7 @@ export default class ServicesApi extends Api {
    * @return {Promise<any>}
    */
   update (model) {
-    model = this.serviceStoreTransformer.transform(model, {timezone: model.timezone})
+    model = this.serviceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.timezone})
     const updateConfig = this.config['update']
     return this.http.request({
       method: updateConfig.method,

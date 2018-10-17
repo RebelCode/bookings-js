@@ -36,7 +36,7 @@ export default {
   one: {
     id: null,
     timezone: 'UTC+0',
-    availabilities: {
+    availability: {
       rules: []
     },
     sessionLengths: [],

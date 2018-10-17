@@ -1,5 +1,5 @@
 <div>
-    <service-availability-editor :collection.sync="model.availabilities.rules"></service-availability-editor>
+    <service-availability-editor :collection.sync="model.availability.rules"></service-availability-editor>
     <modal @close="closeModal"
            modal-body-class="modal__body--wide  modal__body--no-content-padding"
            :active="modalState.isOn()"
@@ -62,7 +62,7 @@
         <a href="https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained/#overlapping-day-availabilities" target="_blank">Click here to learn more.</a>
     </span>
                             </div>
-                            <div class="alert alert-warning" v-if="!model.availabilities.rules.length">
+                            <div class="alert alert-warning" v-if="!model.availability.rules.length">
                                 <span class="dashicons dashicons-info"></span>
                                 <span>
         There is no availability set for this service. Please add at least one available date and time in order to start accepting bookings for this service.
@@ -75,7 +75,7 @@
                                 </label>
                             </div>
 
-                            <availability-calendar :availabilities="model.availabilities.rules"
+                            <availability-calendar :availabilities="model.availability.rules"
                                                    class="rc-calendar rc-calendar--availability"
                                                    @availability-click="openAvailabilityEditor"
                                                    :overlapping-availabilities.sync="overlappingAvailabilities"

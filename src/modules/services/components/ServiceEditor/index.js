@@ -62,7 +62,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         model: {
           id: null,
           timezone: 'UTC+0',
-          availabilities: {
+          availability: {
             rules: []
           },
           sessionLengths: [],

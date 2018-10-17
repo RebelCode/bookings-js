@@ -22,8 +22,8 @@ export default class ServiceStoreTransformer extends Transformer {
    * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
-    availabilities: (model, { timezone }) => {
-      model.availabilities['rules'] = model.availabilities.rules.map(item => {
+    availability: (model, { timezone }) => {
+      model.availability['rules'] = model.availability.rules.map(item => {
         return this.availabilityStoreTransformer.transform(Object.assign({}, item), {timezone})
       })
       return model
