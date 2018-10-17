@@ -17,13 +17,10 @@
         <div slot="body" :class="[isDoubleConfirming ? 'disabled' : '']">
             <div class="row">
                 <div class="col-12 columns">
-                    <!--<div>-->
-                        <!--<code>{{ model }}</code>-->
-                    <!--</div>-->
-                    <div class="alert alert-warning mt-12"
+                    <div class="alert alert-warning" style="margin: 1rem"
                          v-if="lastComplexSetupValidationResult
                     && !lastComplexSetupValidationResult.valid
-                    && (lastComplexSetupValidationResult.hasErrors('sessions') || lastComplexSetupValidationResult.hasErrors('maxAvailabilitiesDuration'))"
+                    && (lastComplexSetupValidationResult.hasErrors('model.sessionLengths') || lastComplexSetupValidationResult.hasErrors('maxAvailabilitiesDuration'))"
                     >
                         <span class="dashicons dashicons-info"></span>
                         <div class="pl-4 pr-4">

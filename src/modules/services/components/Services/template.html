@@ -1,6 +1,4 @@
-<div class="rich-rows">
-    <div class="loading-container" v-if="isLoadingList" style="margin-top: 1rem"></div>
-
+<div class="rich-rows" :class="{'loading-container': isLoadingList}">
     <div class="rich-row" :class="{'loading-container': service.isSaving}" v-for="service of list">
         <div class="rich-row__column mobile-collapsed">
             <v-switch :id="'' + service.id" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>
@@ -18,7 +16,7 @@
             {{ getSessionsPreview(service) }}
         </div>
         <div class="rich-row__column rich-row__actions">
-            <v-switch id="key" class="mobile-only"></v-switch>
+            <v-switch :id="'' + service.id" class="mobile-only" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>
             <div class="button-group">
                 <div class="button" @click="$emit('edit', service)">Edit</div>
                 <div class="button button-icon">

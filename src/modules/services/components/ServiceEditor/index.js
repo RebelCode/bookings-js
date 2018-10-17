@@ -21,6 +21,20 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         from: 'translate'
       },
 
+      /**
+       * @since [*next-version*]
+       *
+       * @property {Validator} complexSetupValidator Complex setup validator.
+       */
+      'complexSetupValidator': 'complexSetupValidator',
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {AvailabilityHelpers} availabilityHelpers Set of helper methods for availabilities.
+       */
+      'availabilityHelpers': 'availabilityHelpers',
+
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
 
       'repeater': 'repeater',
@@ -76,7 +90,32 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       ...mapState('services', {
         entityModel: 'one',
         entitiesCollection: 'list'
-      })
+      }),
+
+      /**
+       * @since [*next-version*]
+       *
+       * @property {number} maxAvailabilitiesDuration Maximum total duration of all availabilities in days.
+       */
+      maxAvailabilitiesDuration () {
+        if (!this.model.availability.rules.length) {
+          return 0
+        }
+        const availabilitiesDaysDurations = this.model.availability.rules.map(availability => {
+          return this.availabilityHelpers.getFullDuration(availability)
+        })
+        return Math.max(...availabilitiesDaysDurations)
+      },
+    },
+    watch: {
+      model: {
+        deep: true,
+        handler () {
+          this.complexSetupValidator.validate(this).then(validationResult => {
+            this.lastComplexSetupValidationResult = validationResult
+          })
+        }
+      }
     },
     methods: {
       ...mapMutations('bookingOptions', [

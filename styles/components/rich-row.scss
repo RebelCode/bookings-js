@@ -17,6 +17,9 @@
     @include breakpoint(mobile) {
       padding-top: 0;
     }
+    &.loading-container {
+      min-height: 5rem;
+    }
   }
 
   position: relative;

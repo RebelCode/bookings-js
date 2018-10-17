@@ -41,6 +41,11 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
       'service-editor': 'service-editor',
       'service-availability-editor': 'service-availability-editor',
     },
+    data () {
+      return {
+        search: ''
+      }
+    },
     computed: {
       ...mapStore('services', [
         'list',
@@ -121,7 +126,11 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
        * @return {object}
        */
       buildParams () {
-        return {}
+        const params = {}
+        if (this.search) {
+          params['s'] = this.search
+        }
+        return params
       }
     }
   }

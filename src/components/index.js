@@ -12,7 +12,6 @@ import CfRcSelect from './RcSelect'
 import { CfBookingsCalendarView } from './BookingsCalendarView'
 import { CfDatetimePicker } from './DatetimePicker'
 import { CfBookingsListView } from './BookingsListView'
-import { CfServiceBookingsApplication } from './ServiceBookingsApplication'
 import { CfBookingsApplication } from './BookingsApplication'
 import { CfVueTimepicker } from './VueTimepicker'
 import { CfBookingsFilter } from './BookingsFilter'
@@ -38,9 +37,7 @@ export default function (dependencies) {
     'timezone-select': function (container) {
       return CfTimezoneSelect()
     },
-    'service-bookings-application': function (container) {
-      return CfServiceBookingsApplication(container.state, container.store, container.vuex)
-    },
+
     'bookings-application': function (container) {
       return CfBookingsApplication(container.state, container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
@@ -48,9 +45,11 @@ export default function (dependencies) {
     'settings-application' (container) {
       return CfSettingsApplication(container.store, container.vuex, container.mapStore, container.settingsValues)
     },
+
     'wizard-editor' () {
       return WizardEditor
     },
+
     'editable-input' () {
       return EditableInput
     },
