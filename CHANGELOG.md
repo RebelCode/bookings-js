@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
 ### Added
-- Added new separate services page for managing them as bookings.
+- Added a new page for managing services, similar to the bookings page.
 - Added service editor in the modal.
 
 ### Removed
