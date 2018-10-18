@@ -30,6 +30,10 @@ let config = {
         loader: 'vue-loader',
       },
       {
+        test: /\.html$/,
+        loader: 'vue-template-compiler-loader'
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /(node_modules|bower_components)/,

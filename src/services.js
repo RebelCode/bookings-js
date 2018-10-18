@@ -35,9 +35,7 @@ export function services (dependencies, applicationState, document) {
     },
 
     state: function (container) {
-      return container.stateTransformer.transform(container['APP_STATE'], {
-        timezone: container['APP_STATE'].timezone || container['APP_STATE'].config.timezone
-      })
+      return container['APP_STATE']
     },
     config: function (container) {
       return container['APP_STATE'].config || {}
@@ -54,6 +52,16 @@ export function services (dependencies, applicationState, document) {
         container.store.commit('ui/setBookingModalVisibility', newVisibility)
       }, () => {
         return container.store.state.ui.bookingModalVisible
+      })
+    },
+    serviceEditorState: function (container) {
+      return new FunctionalToggleable((newVisibility) => {
+        container.store.commit('set', {
+          key: 'services.isModalVisible',
+          value: newVisibility
+        })
+      }, () => {
+        return container.store.state.services.isModalVisible
       })
     },
     availabilitiesCollection (container) {

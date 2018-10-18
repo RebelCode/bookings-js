@@ -1,4 +1,3 @@
-import CfSessionLength from './SessionLength'
 import CfModal from './Modal'
 import CfAbstractEntityModalEditor from './AbstractEntityModalEditor'
 import CfServiceAvailabilityEditor from './ServiceAvailabilityEditor'
@@ -13,7 +12,6 @@ import CfRcSelect from './RcSelect'
 import { CfBookingsCalendarView } from './BookingsCalendarView'
 import { CfDatetimePicker } from './DatetimePicker'
 import { CfBookingsListView } from './BookingsListView'
-import { CfServiceBookingsApplication } from './ServiceBookingsApplication'
 import { CfBookingsApplication } from './BookingsApplication'
 import { CfVueTimepicker } from './VueTimepicker'
 import { CfBookingsFilter } from './BookingsFilter'
@@ -21,8 +19,15 @@ import { CfAbstractBookingsView } from './AbstractBookingsView'
 import CfTimezoneSelect from './TimezoneSelect'
 import { CfSettingsApplication } from './SettingsApplication'
 import { CfColorPicker } from './ColorPicker'
-import WizardEditor from './Settings/WizardEditor.vue'
-import EditableInput from './Settings/EditableInput.vue'
+import WizardEditor from './settings/WizardEditor.vue'
+import EditableInput from './settings/EditableInput.vue'
+
+import { page as ServicesPage } from './../modules/services'
+import Services from './../modules/services/components/Services'
+import ServicesEditor from './../modules/services/components/ServiceEditor'
+import CfSessionLength from './../modules/services/components/SessionLength'
+
+import VSwitch from './ui/VSwitch.vue'
 
 /*
  * Exports instances to main container config.
@@ -32,9 +37,7 @@ export default function (dependencies) {
     'timezone-select': function (container) {
       return CfTimezoneSelect()
     },
-    'service-bookings-application': function (container) {
-      return CfServiceBookingsApplication(container.state, container.store, container.vuex)
-    },
+
     'bookings-application': function (container) {
       return CfBookingsApplication(container.state, container.store, container.vuex, container.vue, dependencies.stdLib.FunctionalArrayCollection)
     },
@@ -42,11 +45,56 @@ export default function (dependencies) {
     'settings-application' (container) {
       return CfSettingsApplication(container.store, container.vuex, container.mapStore, container.settingsValues)
     },
+
     'wizard-editor' () {
       return WizardEditor
     },
+
     'editable-input' () {
       return EditableInput
+    },
+
+    /**
+     * The page for managing services.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
+    'services-page' (container) {
+      return ServicesPage(container.store, container.vuex, container.mapStore)
+    },
+
+    /**
+     * Component for displaying services list.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
+    'services' (container) {
+      console.info('Services(container.mapStore)', Services(container.mapStore))
+      return Services(container.mapStore)
+    },
+
+    'service-editor' (container) {
+      return new ServicesEditor(container['abstract-entity-modal-editor'], container.vuex)
+    },
+
+    'session-length' (container) {
+      return new CfSessionLength(container.vuex, dependencies.stdLib.FunctionalArrayCollection)
+    },
+
+    /**
+     * State switching component.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
+    'v-switch' () {
+      console.info('VSwitch', VSwitch)
+      return VSwitch
     },
 
     calendar: function (container) {
@@ -184,9 +232,6 @@ export default function (dependencies) {
     },
     'bool-switcher': function (container) {
       return CfBoolSwitcher(container.switcher)
-    },
-    'session-length': function (container) {
-      return new CfSessionLength(container.vue, container.vuex, dependencies.stdLib.FunctionalArrayCollection)
     },
 
     'abstract-entity-modal-editor': function (container) {

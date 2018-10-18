@@ -1,4 +1,5 @@
 import ValidationResult from './ValidationResult'
+import deepGet from 'lodash/get'
 
 /**
  * Validates data and gives list of errors if data is not valid.
@@ -40,7 +41,7 @@ export default class Validator {
         const field = validationConfig.field
         const rule = this.rules[validationConfig.rule]
         const value = Array.isArray(validationConfig.value) ? validationConfig.value : [validationConfig.value]
-        const result = rule(data[field], value)
+        const result = rule(deepGet(data, field), value)
 
         if (!result && !errorsBag[field]) {
           errorsBag[field] = []

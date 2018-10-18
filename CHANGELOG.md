@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+### Added
+- Added a new page for managing services, similar to the bookings page.
+- Added service editor in the modal.
+
+### Removed
+- Removed the partial metabox application for editing and creating a service.
+
 ## [0.2.3] - 2018-10-08
 ### Added
 - Wizard labels editor.

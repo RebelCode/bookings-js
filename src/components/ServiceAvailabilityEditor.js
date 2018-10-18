@@ -12,6 +12,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
   }
 
   return AbstractEntityModalEditor.extend({
+    template: '#service-availability-editor-template',
     inject: {
       'momentHelpers': 'momentHelpers',
 
@@ -33,16 +34,6 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
 
       '_': {
         from: 'translate'
-      },
-
-      /**
-       * Editing entity items collection. Used to remove editing
-       * items from it when user confirm deletion.
-       *
-       * @var {FunctionalArrayCollection}
-       */
-      entitiesCollection: {
-        from: 'availabilitiesCollection'
       },
 
       modal: 'modal',
@@ -168,6 +159,9 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         }
       },
     },
+    props: {
+      collection: {}
+    },
     computed: {
       ...mapState({
         timezone (state) {
@@ -177,6 +171,22 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       ...mapState('bookingOptions', {
         entityModel: state => state.serviceAvailabilityModel
       }),
+
+      /**
+       * Editing entity items collection. Used to remove editing
+       * items from it when user confirm deletion.
+       *
+       * @var {FunctionalArrayCollection}
+       */
+      entitiesCollection () {
+        return new FunctionalArrayCollection(() => {
+          return this.collection
+        }, (newValue) => {
+          this.$emit('update:collection', newValue)
+        }, (item) => {
+          return item.id
+        })
+      },
 
       /**
        * Formatted model's end datetime for UI. It will display day before

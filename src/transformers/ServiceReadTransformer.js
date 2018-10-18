@@ -1,13 +1,13 @@
 import { Transformer } from '@rebelcode/std-lib'
 
 /**
- * Transformer that applied to state before any state interaction in UI.
+ * Transformer that applied to the service before any interactions in the UI.
  *
- * @class StateTransformer
+ * @class SessionLengthReadTransformer
  */
-export default class StateTransformer extends Transformer {
+export default class ServiceReadTransformer extends Transformer {
   /**
-   * StateTransformer constructor.
+   * ServiceReadTransformer constructor.
    *
    * @param {AvailabilityReadTransformer} availabilityReadTransformer Transformer for changing availability to using in UI.
    * @param {SessionLengthReadTransformer} sessionLengthReadTransformer Transforms session length data to use it in the UI.
@@ -24,13 +24,15 @@ export default class StateTransformer extends Transformer {
    * @property {Object.<string, TransformerRuleCallback>} rules
    */
   rules = {
-    availabilities: (model, { timezone }) => {
-      model.availabilities['rules'] = model.availabilities.rules.map(availability => {
+    availability: (model, { timezone }) => {
+      model.availability['rules'] = model.availability.rules.map(availability => {
         return this.availabilityReadTransformer.transform(availability, { timezone })
       })
       return model
     },
+
     sessionLengths: (model) => {
+      model['sessionLengthsStored'] = model.sessionLengths
       model['sessionLengths'] = model.sessionLengths.map(sessionLength => {
         return this.sessionLengthReadTransformer.transform(sessionLength)
       })
