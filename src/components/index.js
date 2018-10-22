@@ -28,6 +28,7 @@ import ServicesEditor from './../modules/services/components/ServiceEditor'
 import CfSessionLength from './../modules/services/components/SessionLength'
 
 import VSwitch from './ui/VSwitch.vue'
+import ImageSelector from './ui/ImageSelector.vue'
 
 /*
  * Exports instances to main container config.
@@ -93,8 +94,11 @@ export default function (dependencies) {
      * @return {object|VueComponent}
      */
     'v-switch' () {
-      console.info('VSwitch', VSwitch)
       return VSwitch
+    },
+
+    'v-image-selector' () {
+      return ImageSelector
     },
 
     calendar: function (container) {
