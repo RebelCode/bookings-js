@@ -51,6 +51,12 @@ $breakpoint-large: 68em; // 960px
   position: relative;
   width: 104%;
   margin: 0 -2%;
+
+  &--condensed {
+    max-width: 32rem;
+    margin: 0 auto;
+    padding-top: 1rem;
+  }
 }
 
 .row [class^="col"] {
