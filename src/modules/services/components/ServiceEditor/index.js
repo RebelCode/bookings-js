@@ -52,6 +52,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'tab': 'tab',
       'modal': 'modal',
       'session-length': 'session-length',
+      'v-image-selector': 'v-image-selector',
       'service-availability-editor': 'service-availability-editor',
       'switcher': 'switcher',
       'bool-switcher': 'bool-switcher',
@@ -85,7 +86,11 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
 
         model: {
           id: null,
+          name: null,
+          description: null,
           timezone: 'UTC+0',
+          imageId: null,
+          imageSrc: null,
           availability: {
             rules: []
           },
@@ -101,6 +106,24 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         entityModel: 'one',
         entitiesCollection: 'list'
       }),
+
+      /**
+       * Service's image model.
+       *
+       * @since [*next-version*]
+       */
+      serviceImage: {
+        get () {
+          return {
+            id: this.model.imageId,
+            url: this.model.imageSrc,
+          }
+        },
+        set (value) {
+          this.model.imageId = value.id
+          this.model.imageSrc = value.url
+        }
+      },
 
       /**
        * @since [*next-version*]
@@ -185,7 +208,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'bool-switcher': 'bool-switcher',
       'selection-list': 'selection-list',
       'service-availability-editor': 'service-availability-editor',
-      'timezone-select': 'timezone-select'
+      'timezone-select': 'timezone-select',
+      'v-image-selector': 'v-image-selector',
     }
   })
 }

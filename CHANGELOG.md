@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added a new page for managing services, similar to the bookings page.
 - Added service editor in the modal.
+- Added image selection component.
 
 ### Removed
 - Removed the partial metabox application for editing and creating a service.

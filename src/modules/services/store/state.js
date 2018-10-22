@@ -35,6 +35,8 @@ export default {
    */
   one: {
     id: null,
+    name: null,
+    description: null,
     timezone: 'UTC+0',
     availability: {
       rules: []
