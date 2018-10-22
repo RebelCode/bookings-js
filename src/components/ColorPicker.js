@@ -41,7 +41,27 @@ export function CfColorPicker (clickOutside) {
     },
 
     props: {
-      value: {}
+      value: {},
+
+      /**
+       * Placeholder for the input.
+       *
+       * @since [*next-version*]
+       */
+      placeholder: {
+        default: 'Select color'
+      },
+
+      /**
+       * Whether this color can be empty or not.
+       *
+       * @since [*next-version*]
+       *
+       * @var {bool} cleanable
+       */
+      isCleanable: {
+        default: false
+      }
     },
 
     created () {
@@ -49,6 +69,10 @@ export function CfColorPicker (clickOutside) {
     },
 
     methods: {
+      removeColor () {
+        this.$emit('input', null)
+      },
+
       selectColor () {
         this.$emit('input', this.color.hex)
         this.$nextTick(() => {

@@ -53,6 +53,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'modal': 'modal',
       'session-length': 'session-length',
       'v-image-selector': 'v-image-selector',
+      'color-picker': 'color-picker',
       'service-availability-editor': 'service-availability-editor',
       'switcher': 'switcher',
       'bool-switcher': 'bool-switcher',
@@ -91,6 +92,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           timezone: 'UTC+0',
           imageId: null,
           imageSrc: null,
+          color: null,
           availability: {
             rules: []
           },
@@ -210,6 +212,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'service-availability-editor': 'service-availability-editor',
       'timezone-select': 'timezone-select',
       'v-image-selector': 'v-image-selector',
+      'color-picker': 'color-picker'
     }
   })
 }

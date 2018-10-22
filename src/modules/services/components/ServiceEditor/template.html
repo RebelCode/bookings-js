@@ -42,10 +42,22 @@
                                     </div>
                                 </div>
                                 <div class="col-9 columns">
-                                    <div class="form-row form-row--vertical">
-                                        <div class="form-row__label">Name</div>
-                                        <div class="form-row__input">
-                                            <input type="text" class="form-control--wide" v-model="model.name">
+                                    <div class="row">
+                                        <div class="col-8 columns">
+                                            <div class="form-row form-row--vertical">
+                                                <div class="form-row__label">Name</div>
+                                                <div class="form-row__input">
+                                                    <input type="text" class="form-control--wide" v-model="model.name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 columns">
+                                            <div class="form-row form-row--vertical">
+                                                <div class="form-row__label">Color</div>
+                                                <div class="form-row__input">
+                                                    <color-picker class="eddbk-color-picker--full-width" :is-cleanable="true" v-model="model.color"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-row form-row--vertical">
