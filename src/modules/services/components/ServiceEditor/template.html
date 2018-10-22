@@ -32,6 +32,28 @@
                         </div>
                     </div>
                     <tabs :options="tabsConfig" v-model="activeTab">
+                        <tab title="Information">
+                            <div style="padding: 1rem 0">
+                                <div class="form-row">
+                                    <div class="form-row__label">Photo</div>
+                                    <div class="form-row__input">
+                                        <v-image-selector v-model="serviceImage"></v-image-selector>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-row__label">Title</div>
+                                    <div class="form-row__input">
+                                        <input type="text" v-model="model.name">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-row__label">Description</div>
+                                    <div class="form-row__input">
+                                        <textarea v-model="model.description" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
                         <tab title="Session Length">
                             <session-length v-model="model.sessionLengths"/>
                         </tab>
