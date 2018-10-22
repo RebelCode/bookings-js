@@ -39,9 +39,7 @@ export default {
    * @return {Promise<any>} Promise holding the server's response data.
    */
   create ({ commit }, { api, model }) {
-    // @todo
-    alert('To be implemented.')
-    return Promise.resolve()
+    return api.create(model)
   },
 
   /**
