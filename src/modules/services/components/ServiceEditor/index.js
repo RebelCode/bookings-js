@@ -89,8 +89,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           name: null,
           description: null,
           timezone: 'UTC+0',
-          imageId: 59,
-          imageSrc: 'http://scotchbox.local/app/uploads/2018/10/Знімок-екрана-2018-10-19-о-15.20.26.png',
+          imageId: null,
+          imageSrc: null,
           availability: {
             rules: []
           },
