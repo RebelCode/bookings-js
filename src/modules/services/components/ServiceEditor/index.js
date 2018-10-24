@@ -47,6 +47,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
 
       'availabilities': 'availabilities',
 
+      'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
+
       'repeater': 'repeater',
       'tabs': 'tabs',
       'tab': 'tab',

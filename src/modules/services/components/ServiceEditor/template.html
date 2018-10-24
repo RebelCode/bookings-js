@@ -2,7 +2,7 @@
        modal-body-class="modal__body--wide  modal__body--no-content-padding"
        :active="modalState.isOn()"
 >
-    <div slot="header">
+    <div slot="header" :class="{disabled: availabilityEditorStateToggleable.isOn()}">
         <!--New Service-->
         {{ model.id ? 'Edit Service | ID. ' + model.id  : 'New Service' }}
         <div :class="['modal__close modal--right', isDoubleConfirming ? 'disabled' : '']" v-if="!closeConfirming" @click="closeModal()">&times;</div>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                <tabs :options="tabsConfig" v-model="activeTab">
+                <tabs :options="tabsConfig" v-model="activeTab" :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()">
                     <tab title="Information">
                         <div class="row row--condensed">
                             <div class="col-3 columns">
@@ -99,7 +99,7 @@
         </div>
     </div>
 
-    <div slot="footer">
+    <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn()}">
         <div class="footer-confirm"><!---->
             <div class="footer-confirm__message __right __alert"></div>
             <div class="footer-confirm__buttons">

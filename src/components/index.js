@@ -22,6 +22,7 @@ import { CfSettingsApplication } from './SettingsApplication'
 import { CfColorPicker } from './ColorPicker'
 import WizardEditor from './settings/WizardEditor.vue'
 import EditableInput from './settings/EditableInput.vue'
+import CfTabs from './Tabs'
 
 import { page as ServicesPage } from './../modules/services'
 import Services from './../modules/services/components/Services'
@@ -223,7 +224,7 @@ export default function (dependencies) {
       return CfVueTimepicker(container.vue.options.components['vue-timepicker'])
     },
     tabs: function (container) {
-      return new dependencies.tabs.CfTabs(container.vue)
+      return CfTabs(new dependencies.tabs.CfTabs(container.vue))
     },
     tab: function (container) {
       return new dependencies.tabs.CfTab(container.vue)
