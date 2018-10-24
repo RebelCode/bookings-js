@@ -45,7 +45,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
        */
       'availabilityHelpers': 'availabilityHelpers',
 
-      'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
+      'availabilities': 'availabilities',
 
       'repeater': 'repeater',
       'tabs': 'tabs',
@@ -54,20 +54,15 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'session-length': 'session-length',
       'v-image-selector': 'v-image-selector',
       'color-picker': 'color-picker',
-      'service-availability-editor': 'service-availability-editor',
       'switcher': 'switcher',
       'bool-switcher': 'bool-switcher',
       'selection-list': 'selection-list',
-      'timezone-select': 'timezone-select',
-      'availability-calendar': 'availability-calendar',
     },
     data () {
       return {
         isCreateConfirming: false,
 
         isSaving: false,
-
-        overlappingAvailabilities: false,
 
         activeTab: 0,
 
@@ -161,26 +156,10 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       })
     },
     methods: {
-      ...mapMutations('bookingOptions', [
-        'setAvailabilityEditorState'
-      ]),
-
       ...mapActions('services', {
         dispatchCreate: 'create',
         dispatchUpdate: 'update'
       }),
-
-      /**
-       * Open the availability editor with given availability.
-       *
-       * @since [*next-version*]
-       *
-       * @param {object} availability
-       */
-      openAvailabilityEditor (availability = {}) {
-        this.setAvailabilityEditorState(availability)
-        this.availabilityEditorStateToggleable.setState(true)
-      },
 
       /**
        * Save the service that is being edited.
@@ -205,12 +184,10 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       tab: 'tab',
       modal: 'modal',
       switcher: 'switcher',
-      'availability-calendar': 'availability-calendar',
+      'availabilities': 'availabilities',
       'session-length': 'session-length',
       'bool-switcher': 'bool-switcher',
       'selection-list': 'selection-list',
-      'service-availability-editor': 'service-availability-editor',
-      'timezone-select': 'timezone-select',
       'v-image-selector': 'v-image-selector',
       'color-picker': 'color-picker'
     }

@@ -47,6 +47,16 @@ $breakpoint-large: 68em; // 960px
   }
 }
 
+.columns-no-right {
+  margin-right: 0 !important;
+  &.col-5 {
+    width: 41.66667%;
+  }
+}
+.columns-no-left {
+  margin-left: 0 !important;
+}
+
 .row {
   position: relative;
   width: 104%;

@@ -36,7 +36,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         from: 'translate'
       },
 
-      modal: 'modal',
+      'inline-editor': 'inline-editor',
       repeater: 'repeater',
       datepicker: 'datepicker',
       'datetime-picker': 'datetime-picker',
@@ -439,7 +439,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     },
     components: {
       repeater: 'repeater',
-      modal: 'modal',
+      'inline-editor': 'inline-editor',
       datepicker: 'datepicker',
       'datetime-picker': 'datetime-picker',
       'time-picker': 'time-picker',

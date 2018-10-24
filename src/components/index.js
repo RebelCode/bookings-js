@@ -1,4 +1,5 @@
 import CfModal from './Modal'
+import CfInlineEditor from './InlineEditor'
 import CfAbstractEntityModalEditor from './AbstractEntityModalEditor'
 import CfServiceAvailabilityEditor from './ServiceAvailabilityEditor'
 import CfBookingEditor from './BookingEditor'
@@ -26,6 +27,7 @@ import { page as ServicesPage } from './../modules/services'
 import Services from './../modules/services/components/Services'
 import ServicesEditor from './../modules/services/components/ServiceEditor'
 import CfSessionLength from './../modules/services/components/SessionLength'
+import CfAvailabilities from './../modules/services/components/Availabilities'
 
 import VSwitch from './ui/VSwitch.vue'
 import ImageSelector from './ui/ImageSelector.vue'
@@ -84,6 +86,10 @@ export default function (dependencies) {
 
     'session-length' (container) {
       return new CfSessionLength(container.vuex, dependencies.stdLib.FunctionalArrayCollection)
+    },
+
+    'availabilities' (container) {
+      return CfAvailabilities(container.vuex)
     },
 
     /**
@@ -224,6 +230,9 @@ export default function (dependencies) {
     },
     modal: function (container) {
       return CfModal(container['abstract-dialog'])
+    },
+    'inline-editor' (container) {
+      return CfInlineEditor(container['abstract-dialog'])
     },
     'abstract-dialog': function (container) {
       return CfAbstractDialog(container.vue)

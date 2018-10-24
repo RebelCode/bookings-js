@@ -1,159 +1,115 @@
-<div>
-    <service-availability-editor :collection.sync="model.availability.rules"></service-availability-editor>
-    <modal @close="closeModal"
-           modal-body-class="modal__body--wide  modal__body--no-content-padding"
-           :active="modalState.isOn()"
-    >
-        <div slot="header">
-            <!--New Service-->
-            {{ model.id ? 'Edit Service | ID. ' + model.id  : 'New Service' }}
-            <div :class="['modal__close modal--right', isDoubleConfirming ? 'disabled' : '']" v-if="!closeConfirming" @click="closeModal()">&times;</div>
-            <div class="modal__header-buttons modal--right" v-else>
-                <input type="button" class="button button-dark-solid" value="Close" @click="forceCloseModal">
-                <input type="button" class="button" value="Continue Editing" @click="continueEditing">
-            </div>
+<modal @close="closeModal"
+       modal-body-class="modal__body--wide  modal__body--no-content-padding"
+       :active="modalState.isOn()"
+>
+    <div slot="header">
+        <!--New Service-->
+        {{ model.id ? 'Edit Service | ID. ' + model.id  : 'New Service' }}
+        <div :class="['modal__close modal--right', isDoubleConfirming ? 'disabled' : '']" v-if="!closeConfirming" @click="closeModal()">&times;</div>
+        <div class="modal__header-buttons modal--right" v-else>
+            <input type="button" class="button button-dark-solid" value="Close" @click="forceCloseModal">
+            <input type="button" class="button" value="Continue Editing" @click="continueEditing">
         </div>
+    </div>
 
-        <div slot="body" :class="[isDoubleConfirming ? 'disabled' : '']">
-            <div class="row">
-                <div class="col-12 columns">
-                    <div class="alert alert-warning" style="margin: 1rem"
-                         v-if="lastComplexSetupValidationResult
+    <div slot="body" :class="[isDoubleConfirming ? 'disabled' : '']">
+        <div class="row">
+            <div class="col-12 columns">
+                <div class="alert alert-warning" style="margin: 1rem"
+                     v-if="lastComplexSetupValidationResult
                     && !lastComplexSetupValidationResult.valid
                     && (lastComplexSetupValidationResult.hasErrors('model.sessionLengths') || lastComplexSetupValidationResult.hasErrors('maxAvailabilitiesDuration'))"
-                    >
-                        <span class="dashicons dashicons-info"></span>
-                        <div class="pl-4 pr-4">
-                            <div><strong>{{ _('Possible complex setup') }}</strong></div>
-                            <div class="mt-4">
-                                {{ _('It could be slow to save this Service with the current bookings setup. In some rare cases, the site may time out. To learn more, please') }}
-                                <a href="https://docs.eddbookings.com/article/402-complex-bookings-setups" target="_blank">{{ _('click here') }}</a>.
-                            </div>
+                >
+                    <span class="dashicons dashicons-info"></span>
+                    <div class="pl-4 pr-4">
+                        <div><strong>{{ _('Possible complex setup') }}</strong></div>
+                        <div class="mt-4">
+                            {{ _('It could be slow to save this Service with the current bookings setup. In some rare cases, the site may time out. To learn more, please') }}
+                            <a href="https://docs.eddbookings.com/article/402-complex-bookings-setups" target="_blank">{{ _('click here') }}</a>.
                         </div>
                     </div>
-                    <tabs :options="tabsConfig" v-model="activeTab">
-                        <tab title="Information">
-                            <div class="row row--condensed">
-                                <div class="col-3 columns">
-                                    <div class="form-row form-row--vertical">
-                                        <div class="form-row__input">
-                                            <v-image-selector v-model="serviceImage"></v-image-selector>
-                                        </div>
+                </div>
+                <tabs :options="tabsConfig" v-model="activeTab">
+                    <tab title="Information">
+                        <div class="row row--condensed">
+                            <div class="col-3 columns">
+                                <div class="form-row form-row--vertical">
+                                    <div class="form-row__input">
+                                        <v-image-selector v-model="serviceImage"></v-image-selector>
                                     </div>
                                 </div>
-                                <div class="col-9 columns">
-                                    <div class="row">
-                                        <div class="col-8 columns">
-                                            <div class="form-row form-row--vertical">
-                                                <div class="form-row__label">Name</div>
-                                                <div class="form-row__input">
-                                                    <input type="text" class="form-control--wide" v-model="model.name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4 columns">
-                                            <div class="form-row form-row--vertical">
-                                                <div class="form-row__label">Color</div>
-                                                <div class="form-row__input">
-                                                    <color-picker class="eddbk-color-picker--full-width" :is-cleanable="true" v-model="model.color"/>
-                                                </div>
+                            </div>
+                            <div class="col-9 columns">
+                                <div class="row">
+                                    <div class="col-8 columns">
+                                        <div class="form-row form-row--vertical">
+                                            <div class="form-row__label">Name</div>
+                                            <div class="form-row__input">
+                                                <input type="text" class="form-control--wide" v-model="model.name">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-row form-row--vertical">
-                                        <div class="form-row__label">Description</div>
-                                        <div class="form-row__input">
-                                            <textarea class="form-control--wide" v-model="model.description" rows="3"></textarea>
+                                    <div class="col-4 columns">
+                                        <div class="form-row form-row--vertical">
+                                            <div class="form-row__label">Color</div>
+                                            <div class="form-row__input">
+                                                <color-picker class="eddbk-color-picker--full-width" :is-cleanable="true" v-model="model.color"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </tab>
-                        <tab title="Session Length">
-                            <session-length v-model="model.sessionLengths"/>
-                        </tab>
-                        <tab title="Availability">
-                            <p class="info mobile-collapsed">
-                                Click on any time or day in the calendar bellow to start adding your available
-                                times for this service. You may set recurring availabilities to save time,
-                                exclude dates where the availability does not apply, and much more.
-                                <a href="https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained" target="_blank">Learn more.</a>
-                            </p>
-
-                            <p class="info mobile-only">
-                                Tap on the blue plus button on the bottom right of the calendar to set a new availability. You may set recurring
-                                availabilities to save time, exclude dates where the availability does not apply, and much more.
-                                <a href="https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained" target="_blank">Learn more.</a>
-                            </p>
-                            <p class="info mobile-only">
-                                Scroll sideways on the calendar to view more.
-                            </p>
-
-                            <div class="alert alert-warning" v-if="overlappingAvailabilities">
-                                <span class="dashicons dashicons-info"></span>
-                                <span>
-        There are at least two availabilities for this service that overlap. Only one of these availabilities will be available to your clients in the booking wizard. We recommend removing one of them.
-        <a href="https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained/#overlapping-day-availabilities" target="_blank">Click here to learn more.</a>
-    </span>
-                            </div>
-                            <div class="alert alert-warning" v-if="!model.availability.rules.length">
-                                <span class="dashicons dashicons-info"></span>
-                                <span>
-        There is no availability set for this service. Please add at least one available date and time in order to start accepting bookings for this service.
-    </span>
-                            </div>
-
-                            <div style="margin-bottom: 12px">
-                                <label for="eddbk-timezone-select">
-                                    Service timezone: <timezone-select id="eddbk-timezone-select" v-model="model.timezone"></timezone-select>
-                                </label>
-                            </div>
-
-                            <availability-calendar :availabilities="model.availability.rules"
-                                                   class="rc-calendar rc-calendar--availability"
-                                                   @availability-click="openAvailabilityEditor"
-                                                   :overlapping-availabilities.sync="overlappingAvailabilities"
-                                                   :visible-timezone="model.timezone"
-                            ></availability-calendar>
-                        </tab>
-                        <tab title="Display Options">
-                            <div class="wide-form">
-                                <div class="wide-form__header">
-                                    {{ _('Calendar and timezone options') }}
-                                </div>
-                                <div class="wide-form__row">
-                                    <div class="wide-form__label" style="width: 100%;max-width: 600px">
-                                        {{ _("Allow clients to change timezone in the booking wizard") }}
-                                    </div>
-                                    <div class="wide-form__input">
-                                        <bool-switcher v-model="model.displayOptions.allowCustomerChangeTimezone"></bool-switcher>
+                                <div class="form-row form-row--vertical">
+                                    <div class="form-row__label">Description</div>
+                                    <div class="form-row__input">
+                                        <textarea class="form-control--wide" v-model="model.description" rows="3"></textarea>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="wide-form">
-                                <div class="wide-form__header">
-                                    {{ _('More options coming soon') }}
+                        </div>
+                    </tab>
+                    <tab title="Session Length">
+                        <session-length v-model="model.sessionLengths"/>
+                    </tab>
+                    <tab title="Availability">
+                        <availabilities v-model="model.availability.rules" :timezone.sync="model.timezone"/>
+                    </tab>
+                    <tab title="Display Options">
+                        <div class="wide-form">
+                            <div class="wide-form__header">
+                                {{ _('Calendar and timezone options') }}
+                            </div>
+                            <div class="wide-form__row">
+                                <div class="wide-form__label" style="width: 100%;max-width: 600px">
+                                    {{ _("Allow clients to change timezone in the booking wizard") }}
+                                </div>
+                                <div class="wide-form__input">
+                                    <bool-switcher v-model="model.displayOptions.allowCustomerChangeTimezone"></bool-switcher>
                                 </div>
                             </div>
-                        </tab>
-                    </tabs>
-                </div>
-            </div>
-        </div>
+                        </div>
 
-        <div slot="footer">
-            <div class="footer-confirm"><!---->
-                <div class="footer-confirm__message __right __alert"></div>
-                <div class="footer-confirm__buttons">
-                    <button class="button button-primary"
-                            :class="{'loading-button': isSaving}"
-                            @click="save"
-                    >
-                        {{ model.id ? 'Save Changes' : 'Create Service' }}
-                    </button>
-                </div>
+                        <div class="wide-form">
+                            <div class="wide-form__header">
+                                {{ _('More options coming soon') }}
+                            </div>
+                        </div>
+                    </tab>
+                </tabs>
             </div>
         </div>
-    </modal>
-</div>
+    </div>
+
+    <div slot="footer">
+        <div class="footer-confirm"><!---->
+            <div class="footer-confirm__message __right __alert"></div>
+            <div class="footer-confirm__buttons">
+                <button class="button button-primary"
+                        :class="{'loading-button': isSaving}"
+                        @click="save"
+                >
+                    {{ model.id ? 'Save Changes' : 'Create Service' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</modal>
