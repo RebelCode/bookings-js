@@ -1,9 +1,9 @@
 <div :style="{position: 'relative', overflow: isTransitioning ? 'hidden' : 'unset'}">
     <transition name="page-transition"
-                @before-enter="setTransitioning('before-enter', true)"
-                @before-leave="setTransitioning('before-leave', true)"
-                @after-enter="setTransitioning('after-enter', false)"
-                @after-leave="setTransitioning('after-leave', false)"
+                @before-enter="setTransitioning(true)"
+                @before-leave="setTransitioning(true)"
+                @after-enter="setTransitioning(false)"
+                @after-leave="setTransitioning(false)"
     >
         <div v-show="!availabilityEditorStateToggleable.isOn()">
             <p class="info mobile-collapsed">
@@ -84,5 +84,5 @@
             </div>
         </div>
     </transition>
-    <service-availability-editor :collection.sync="valueProxy"/>
+    <service-availability-editor :entities-collection="entitiesCollection"/>
 </div>

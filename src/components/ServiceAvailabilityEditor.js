@@ -160,7 +160,14 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
     },
     props: {
-      collection: {}
+      /**
+       * Collection of availabilities.
+       *
+       * @since [next-version]
+       *
+       * @var {FunctionalCollection} entitiesCollection
+       */
+      entitiesCollection: {}
     },
     computed: {
       ...mapState({
@@ -171,22 +178,6 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       ...mapState('bookingOptions', {
         entityModel: state => state.serviceAvailabilityModel
       }),
-
-      /**
-       * Editing entity items collection. Used to remove editing
-       * items from it when user confirm deletion.
-       *
-       * @var {FunctionalArrayCollection}
-       */
-      entitiesCollection () {
-        return new FunctionalArrayCollection(() => {
-          return this.collection
-        }, (newValue) => {
-          this.$emit('update:collection', newValue)
-        }, (item) => {
-          return item.id
-        })
-      },
 
       /**
        * Formatted model's end datetime for UI. It will display day before

@@ -1,3 +1,4 @@
+import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 import template from './template.html'
 
 export default function ({ mapMutations }, dateFormats) {
@@ -33,6 +34,7 @@ export default function ({ mapMutations }, dateFormats) {
           this.$emit('input', value)
         }
       },
+
       timezoneProxy: {
         get () {
           return this.timezone
@@ -40,18 +42,45 @@ export default function ({ mapMutations }, dateFormats) {
         set (value) {
           this.$emit('update:timezone', value)
         }
-      }
+      },
+
+      /**
+       * Editing entity items collection. Used to remove editing
+       * items from it when user confirm deletion.
+       *
+       * @var {FunctionalArrayCollection}
+       */
+      entitiesCollection () {
+        return new FunctionalArrayCollection(() => {
+          return this.valueProxy
+        }, (newValue) => {
+          this.valueProxy = newValue
+        }, (item) => {
+          return item.id
+        })
+      },
     },
     methods: {
       ...mapMutations('bookingOptions', [
         'setAvailabilityEditorState'
       ]),
 
-      setTransitioning (type, value) {
-        console.info({type})
+      /**
+       * Set transitioning status for the screen.
+       *
+       * @since [*next-version*]
+       *
+       * @param value
+       */
+      setTransitioning (value) {
         this.isTransitioning = value
       },
 
+      /**
+       * Create new availability rule.
+       *
+       * @since [*next-version*]
+       */
       addRule () {
         this.openAvailabilityEditor({
           start: this.moment().add(1, 'day').startOf('day'),
@@ -60,15 +89,29 @@ export default function ({ mapMutations }, dateFormats) {
         })
       },
 
+      /**
+       * Open availability rule for editing.
+       *
+       * @since [*next-version*]
+       *
+       * @param {Availability} availability
+       */
       editRule (availability) {
         this.openAvailabilityEditor(availability)
       },
 
+      /**
+       * Remove availability rule.
+       *
+       * @since [*next-version*]
+       *
+       * @param {Availability} availability
+       */
       removeRule (availability) {
         if (!confirm(this._('Are you sure you want to delete this availability? There is no undo option.'))) {
           return
         }
-
+        this.entitiesCollection.removeItem(availability)
       },
 
       /**
