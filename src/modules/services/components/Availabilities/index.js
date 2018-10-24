@@ -47,6 +47,19 @@ export default function ({ mapMutations }, dateFormats) {
         'setAvailabilityEditorState'
       ]),
 
+      setTransitioning (type, value) {
+        console.info({type})
+        this.isTransitioning = value
+      },
+
+      addRule () {
+        this.openAvailabilityEditor({
+          start: this.moment().add(1, 'day').startOf('day'),
+          end: this.moment().add(2, 'day').endOf('day'),
+          allDay: true,
+        })
+      },
+
       editRule (availability) {
         this.openAvailabilityEditor(availability)
       },

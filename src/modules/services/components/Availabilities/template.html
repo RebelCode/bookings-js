@@ -1,5 +1,10 @@
 <div :style="{position: 'relative', overflow: isTransitioning ? 'hidden' : 'unset'}">
-    <transition name="page-transition" @beforeEnter="isTransitioning=true" @afterLeave="isTransitioning=false">
+    <transition name="page-transition"
+                @before-enter="setTransitioning('before-enter', true)"
+                @before-leave="setTransitioning('before-leave', true)"
+                @after-enter="setTransitioning('after-enter', false)"
+                @after-leave="setTransitioning('after-leave', false)"
+    >
         <div v-show="!availabilityEditorStateToggleable.isOn()">
             <p class="info mobile-collapsed">
                 Click on any time or day in the calendar bellow to start adding your available
@@ -40,7 +45,7 @@
                 <div class="col-5 columns columns-no-right">
                     <div class="rich-rows rich-rows--no-padding">
                         <div class="availabilities-cta">
-                            <div class="rich-row rich-row--cta" @click="openAvailabilityEditor">
+                            <div class="rich-row rich-row--cta" @click="addRule">
                                 Create new availability rule
                             </div>
                         </div>
