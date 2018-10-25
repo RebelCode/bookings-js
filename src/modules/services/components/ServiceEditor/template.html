@@ -29,7 +29,11 @@
                         </div>
                     </div>
                 </div>
-                <tabs :options="tabsConfig" v-model="activeTab" :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()">
+                <tabs :options="tabsConfig"
+                      v-model="activeTab"
+                      :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()"
+                      :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionLengths.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
+                >
                     <tab title="Information">
                         <div class="row row--condensed">
                             <div class="col-3 columns">
@@ -42,10 +46,10 @@
                             <div class="col-9 columns">
                                 <div class="row">
                                     <div class="col-8 columns">
-                                        <div class="form-row form-row--vertical">
-                                            <div class="form-row__label">Name</div>
+                                        <div class="form-row form-row--vertical" :class="lastValidationResult.hasErrors('name') ? 'form-row--with-error' : ''">
+                                            <div class="form-row__label">Name *</div>
                                             <div class="form-row__input">
-                                                <input type="text" class="form-control--wide" v-model="model.name">
+                                                <input type="text" class="form-control--wide" v-model="model.name" @input="lastValidationResult.removeErrors('name')">
                                             </div>
                                         </div>
                                     </div>
@@ -68,10 +72,13 @@
                         </div>
                     </tab>
                     <tab title="Session Length">
-                        <session-length v-model="model.sessionLengths"/>
+                        <session-length v-model="model.sessionLengths" :is-validation-error="lastValidationResult.hasErrors('sessionLengths.length')"/>
                     </tab>
                     <tab title="Availability">
-                        <availabilities v-model="model.availability.rules" :timezone.sync="model.timezone"/>
+                        <availabilities v-model="model.availability.rules"
+                                        :timezone.sync="model.timezone"
+                                        :is-validation-error="lastValidationResult.hasErrors('availability.rules.length')"
+                        />
                     </tab>
                     <tab title="Display Options">
                         <div class="wide-form">
@@ -101,13 +108,22 @@
 
     <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn()}">
         <div class="footer-confirm"><!---->
-            <div class="footer-confirm__message __right __alert"></div>
+            <div class="footer-confirm__message __right __alert">
+                {{ !lastValidationResult.valid ? _('There was a problem with your service. The errors have been highlighted above.') : '' }}
+            </div>
             <div class="footer-confirm__buttons">
-                <button class="button button-primary"
-                        :class="{'loading-button': isSaving}"
-                        @click="save"
+                <button class="button button-default"
+                        @click="saveDraft()"
+                        :class="{'loading-button': isSavingDraft}"
+                        v-if="model.status === 'draft'"
                 >
-                    {{ model.id ? 'Save Changes' : 'Create Service' }}
+                    {{ model.id ? 'Save Draft' : 'Create Draft' }}
+                </button>
+                <button class="button button-primary"
+                        :class="{'loading-button': isSavingPublished}"
+                        @click="save()"
+                >
+                    {{ model.id && model.status !== 'draft' ? 'Save Changes' : 'Publish Service' }}
                 </button>
             </div>
         </div>

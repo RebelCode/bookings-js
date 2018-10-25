@@ -52,8 +52,7 @@ export default class Validator {
         }
       })
 
-      let result = !Object.keys(errorsBag).length
-      resolve(new ValidationResult(result, errorsBag))
+      resolve(new ValidationResult(errorsBag))
     })
   }
 }

@@ -23,7 +23,8 @@ export default function ({ mapMutations }, dateFormats) {
     },
     props: {
       value: {},
-      timezone: {}
+      timezone: {},
+      isValidationError: {},
     },
     computed: {
       valueProxy: {
