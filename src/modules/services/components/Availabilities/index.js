@@ -1,7 +1,7 @@
 import { FunctionalArrayCollection } from '@rebelcode/std-lib'
 import template from './template.html'
 
-export default function ({ mapMutations }, dateFormats) {
+export default function ({ mapMutations }) {
   return {
     ...template,
     inject: {
@@ -9,6 +9,7 @@ export default function ({ mapMutations }, dateFormats) {
         from: 'translate'
       },
       'moment': 'moment',
+      'pluralize': 'pluralize',
       'config': 'config',
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
       'availability-calendar': 'availability-calendar',
@@ -136,18 +137,46 @@ export default function ({ mapMutations }, dateFormats) {
           from: this._('From %s', [
             this.moment(availability.start).format('MMM D')
           ]),
-          for: availability.repeatUntil === 'period' ? this._('for %s %s', [
-            availability.repeatUntilPeriod,
-            availability.repeatUnit,
+          for: availability.repeatUntil === 'period' ? this._('for %s', [
+            this.getPeriodDescription(availability.repeatUnit, availability.repeatUntilPeriod)
           ]) : this._('till %s', [
             this.moment(availability.repeatUntilDate).format('MMM D')
           ]),
-          repeatDescription: availability.repeat ? 'Mon - Fri' : null,
-          frequency: availability.repeat ? this._('every %s %s', [
-            availability.repeatPeriod,
-            availability.repeatUnit
+          // repeatDescription: availability.repeat ? 'Mon - Fri' : null,
+          frequency: availability.repeat ? this._('Every %s', [
+            this.getPeriodDescription(availability.repeatUnit, availability.repeatPeriod)
           ]) : null
         }
+      },
+
+      getPeriodDescription (period, duration) {
+        const periodSingular = this.getRepeatPeriodSingular(period)
+        duration = Number(duration)
+
+        if (duration === 1) {
+          return periodSingular
+        }
+
+        return this._('%d %s', [
+          duration,
+          this.pluralize(this._(periodSingular), duration)
+        ])
+      },
+
+      /**
+       * Get singular form of the repeat period.
+       *
+       * @param {string} period
+       *
+       * @return {string}
+       */
+      getRepeatPeriodSingular (period) {
+        return {
+          days: 'day',
+          weeks: 'week',
+          months: 'month',
+          years: 'year'
+        }[period]
       }
     },
     components: {

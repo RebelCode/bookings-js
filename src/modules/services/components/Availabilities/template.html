@@ -62,9 +62,11 @@
                                     </div>
                                 </div>
                                 <div class="rich-row__column rich-row__column--4">
-                                    {{ getInfo(availability).repeatDescription }}
-                                    <div class="rich-row__header" v-if="getInfo(availability).frequency">
+                                    <template v-if="getInfo(availability).frequency">
                                         {{ getInfo(availability).frequency }}
+                                    </template>
+                                    <div class="rich-row__header">
+                                        {{ getInfo(availability).repeatDescription }}
                                     </div>
                                 </div>
                                 <div class="rich-row__column rich-row__actions">

@@ -96,11 +96,12 @@
     }
 
     .rich-row__column {
+      padding: 0 .25rem !important;
       &:first-child {
-        padding-left: 0;
+        padding-left: 0 !important;
       }
       &:last-child {
-        padding-right: 0;
+        padding-right: 0 !important;
       }
     }
   }
