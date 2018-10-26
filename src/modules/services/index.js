@@ -63,6 +63,8 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
       return {
         search: '',
 
+        isInitialFetchResults: false,
+
         /**
          * @since [*next-version*]
          *
@@ -133,6 +135,7 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
           transformOptions: { timezone: this.config.timezone }
         }).then(() => {
           this.isLoadingList = false
+          this.isInitialFetchResults = !this.search
         }).catch(error => this.servicesApiErrorHandler.handle(error))
       },
 

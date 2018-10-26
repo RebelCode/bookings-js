@@ -214,6 +214,10 @@
   text-align: center;
   padding: 5rem 12rem;
 
+  @include breakpoint(mobile) {
+    padding: 2rem 1rem;
+  }
+
   &--smaller {
     padding: 2rem;
   }

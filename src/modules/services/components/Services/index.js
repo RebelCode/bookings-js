@@ -14,7 +14,10 @@ export default function (mapStore) {
     ...template,
     inject: {
       'v-switch': 'v-switch',
-      'humanizeDuration': 'humanizeDuration'
+      'humanizeDuration': 'humanizeDuration',
+      '_': {
+        from: 'translate'
+      }
     },
     computed: {
       ...mapStore('services', [
@@ -29,6 +32,11 @@ export default function (mapStore) {
           draft: 'publish'
         }
       }
+    },
+    props: {
+      isInitialFetchResults: {
+        default: false
+      },
     },
     methods: {
       /**
