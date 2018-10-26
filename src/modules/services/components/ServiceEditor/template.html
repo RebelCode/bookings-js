@@ -13,97 +13,93 @@
     </div>
 
     <div slot="body" :class="[isDoubleConfirming ? 'disabled' : '']">
-        <div class="row">
-            <div class="col-12 columns">
-                <div class="alert alert-warning" style="margin: 1rem"
-                     v-if="lastComplexSetupValidationResult
+        <div class="alert alert-warning" style="margin: 1rem"
+             v-if="lastComplexSetupValidationResult
                     && !lastComplexSetupValidationResult.valid
                     && (lastComplexSetupValidationResult.hasErrors('model.sessionLengths') || lastComplexSetupValidationResult.hasErrors('maxAvailabilitiesDuration'))"
-                >
-                    <span class="dashicons dashicons-info"></span>
-                    <div class="pl-4 pr-4">
-                        <div><strong>{{ _('Possible complex setup') }}</strong></div>
-                        <div class="mt-4">
-                            {{ _('It could be slow to save this Service with the current bookings setup. In some rare cases, the site may time out. To learn more, please') }}
-                            <a href="https://docs.eddbookings.com/article/402-complex-bookings-setups" target="_blank">{{ _('click here') }}</a>.
+        >
+            <span class="dashicons dashicons-info"></span>
+            <div class="pl-4 pr-4">
+                <div><strong>{{ _('Possible complex setup') }}</strong></div>
+                <div class="mt-4">
+                    {{ _('It could be slow to save this Service with the current bookings setup. In some rare cases, the site may time out. To learn more, please') }}
+                    <a href="https://docs.eddbookings.com/article/402-complex-bookings-setups" target="_blank">{{ _('click here') }}</a>.
+                </div>
+            </div>
+        </div>
+        <tabs :options="tabsConfig"
+              v-model="activeTab"
+              :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()"
+              :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionLengths.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
+        >
+            <tab title="Information">
+                <div class="row row--condensed">
+                    <div class="col-3 columns">
+                        <div class="form-row form-row--vertical">
+                            <div class="form-row__input">
+                                <v-image-selector v-model="serviceImage"></v-image-selector>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9 columns">
+                        <div class="row">
+                            <div class="col-8 columns">
+                                <div class="form-row form-row--vertical" :class="lastValidationResult.hasErrors('name') ? 'form-row--with-error' : ''">
+                                    <div class="form-row__label">Name *</div>
+                                    <div class="form-row__input">
+                                        <input type="text" class="form-control--wide" v-model="model.name" @input="lastValidationResult.removeErrors('name')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 columns">
+                                <div class="form-row form-row--vertical">
+                                    <div class="form-row__label">Color</div>
+                                    <div class="form-row__input">
+                                        <color-picker class="eddbk-color-picker--full-width" :is-cleanable="true" v-model="model.color"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row form-row--vertical">
+                            <div class="form-row__label">Description</div>
+                            <div class="form-row__input">
+                                <textarea class="form-control--wide" v-model="model.description" rows="3"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <tabs :options="tabsConfig"
-                      v-model="activeTab"
-                      :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()"
-                      :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionLengths.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
-                >
-                    <tab title="Information">
-                        <div class="row row--condensed">
-                            <div class="col-3 columns">
-                                <div class="form-row form-row--vertical">
-                                    <div class="form-row__input">
-                                        <v-image-selector v-model="serviceImage"></v-image-selector>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-9 columns">
-                                <div class="row">
-                                    <div class="col-8 columns">
-                                        <div class="form-row form-row--vertical" :class="lastValidationResult.hasErrors('name') ? 'form-row--with-error' : ''">
-                                            <div class="form-row__label">Name *</div>
-                                            <div class="form-row__input">
-                                                <input type="text" class="form-control--wide" v-model="model.name" @input="lastValidationResult.removeErrors('name')">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 columns">
-                                        <div class="form-row form-row--vertical">
-                                            <div class="form-row__label">Color</div>
-                                            <div class="form-row__input">
-                                                <color-picker class="eddbk-color-picker--full-width" :is-cleanable="true" v-model="model.color"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row form-row--vertical">
-                                    <div class="form-row__label">Description</div>
-                                    <div class="form-row__input">
-                                        <textarea class="form-control--wide" v-model="model.description" rows="3"></textarea>
-                                    </div>
-                                </div>
-                            </div>
+            </tab>
+            <tab title="Session Lengths">
+                <session-length v-model="model.sessionLengths" :is-validation-error="lastValidationResult.hasErrors('sessionLengths.length')"/>
+            </tab>
+            <tab title="Availability">
+                <availabilities v-model="model.availability.rules"
+                                :timezone.sync="model.timezone"
+                                :is-validation-error="lastValidationResult.hasErrors('availability.rules.length')"
+                />
+            </tab>
+            <tab title="Display Options">
+                <div class="wide-form">
+                    <div class="wide-form__header">
+                        {{ _('Calendar and timezone options') }}
+                    </div>
+                    <div class="wide-form__row">
+                        <div class="wide-form__label" style="width: 100%;max-width: 600px">
+                            {{ _("Allow clients to change timezone in the booking wizard") }}
                         </div>
-                    </tab>
-                    <tab title="Session Lengths">
-                        <session-length v-model="model.sessionLengths" :is-validation-error="lastValidationResult.hasErrors('sessionLengths.length')"/>
-                    </tab>
-                    <tab title="Availability">
-                        <availabilities v-model="model.availability.rules"
-                                        :timezone.sync="model.timezone"
-                                        :is-validation-error="lastValidationResult.hasErrors('availability.rules.length')"
-                        />
-                    </tab>
-                    <tab title="Display Options">
-                        <div class="wide-form">
-                            <div class="wide-form__header">
-                                {{ _('Calendar and timezone options') }}
-                            </div>
-                            <div class="wide-form__row">
-                                <div class="wide-form__label" style="width: 100%;max-width: 600px">
-                                    {{ _("Allow clients to change timezone in the booking wizard") }}
-                                </div>
-                                <div class="wide-form__input">
-                                    <bool-switcher v-model="model.displayOptions.allowCustomerChangeTimezone"></bool-switcher>
-                                </div>
-                            </div>
+                        <div class="wide-form__input">
+                            <bool-switcher v-model="model.displayOptions.allowCustomerChangeTimezone"></bool-switcher>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="wide-form">
-                            <div class="wide-form__header">
-                                {{ _('More options coming soon') }}
-                            </div>
-                        </div>
-                    </tab>
-                </tabs>
-            </div>
-        </div>
+                <div class="wide-form">
+                    <div class="wide-form__header">
+                        {{ _('More options coming soon') }}
+                    </div>
+                </div>
+            </tab>
+        </tabs>
     </div>
 
     <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn()}">

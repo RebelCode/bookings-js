@@ -47,14 +47,25 @@ $breakpoint-large: 68em; // 960px
   }
 }
 
-.columns-no-right {
-  margin-right: 0 !important;
-  &.col-5 {
-    width: 41.66667%;
+.row {
+  .columns.columns-no-right {
+    margin-right: 0;
+    @include breakpoint(mobile) {
+      margin-right: 2%;
+    }
+    &.col-5 {
+      width: 41.66667%;
+      @include breakpoint(mobile) {
+        width: 96%;
+      }
+    }
   }
-}
-.columns-no-left {
-  margin-left: 0 !important;
+  .columns.columns-no-left {
+    margin-left: 0;
+    @include breakpoint(mobile) {
+      margin-left: 2%;
+    }
+  }
 }
 
 .row {
@@ -66,6 +77,10 @@ $breakpoint-large: 68em; // 960px
     max-width: 32rem;
     margin: 0 auto;
     padding-top: 1rem;
+
+    @include breakpoint(mobile) {
+      margin: 0 -2%;
+    }
   }
 }
 
