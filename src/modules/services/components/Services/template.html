@@ -5,7 +5,7 @@
         </div>
         <div class="rich-row__column rich-row__wide-anchor">
             <div class="rich-row__title">
-                <span class="service-item-color" style="background-color: #bbbbbb"></span>
+                <span class="service-item-color" :style="{'background-color': service.color || '#bbb'}"></span>
                 {{ service.name }}
             </div>
         </div>
