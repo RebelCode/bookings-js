@@ -52,6 +52,15 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
 
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
 
+      /**
+       * API Errors Handler factory function.
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function}
+       */
+      'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
+
       'repeater': 'repeater',
       'tabs': 'tabs',
       'tab': 'tab',
@@ -65,6 +74,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
     },
     data () {
       return {
+        errorMessage: null,
+
         isCreateConfirming: false,
 
         isSavingDraft: false,
@@ -123,7 +134,17 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           displayOptions: {
             allowCustomerChangeTimezone: false
           }
-        }
+        },
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} servicesApiErrorHandler Handles error responses for the services API.
+         */
+        servicesApiErrorHandler: this.apiErrorHandlerFactory((error) => {
+          this.setSaving(false)
+          this.errorMessage = error
+        }),
       }
     },
     computed: {
@@ -169,6 +190,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       model: {
         deep: true,
         handler () {
+          this.errorMessage = null
           this.complexSetupValidator.validate(this).then(validationResult => {
             this.lastComplexSetupValidationResult = validationResult
           })
@@ -247,7 +269,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
             this.$emit('saved')
             this.forceCloseModal()
           })
-        })
+        }).catch(error => this.servicesApiErrorHandler.handle(error))
       },
 
       /**

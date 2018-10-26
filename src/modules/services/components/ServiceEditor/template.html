@@ -71,7 +71,7 @@
                             </div>
                         </div>
                     </tab>
-                    <tab title="Session Length">
+                    <tab title="Session Lengths">
                         <session-length v-model="model.sessionLengths" :is-validation-error="lastValidationResult.hasErrors('sessionLengths.length')"/>
                     </tab>
                     <tab title="Availability">
@@ -109,7 +109,10 @@
     <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn()}">
         <div class="footer-confirm"><!---->
             <div class="footer-confirm__message __right __alert">
-                {{ !lastValidationResult.valid ? _('There was a problem with your service. The errors have been highlighted above.') : '' }}
+                <template v-if="errorMessage">{{ errorMessage }}</template>
+                <template v-if="!lastValidationResult.valid">
+                    {{ _('There was a problem with your service. The errors have been highlighted above.') }}
+                </template>
             </div>
             <div class="footer-confirm__buttons">
                 <button class="button button-default"

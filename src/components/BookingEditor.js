@@ -353,7 +353,6 @@ export default function CfBookingEditor (AbstractEntityModalEditor, {mapState, m
         })
       },
 
-
       /**
        * Save booking.
        */
