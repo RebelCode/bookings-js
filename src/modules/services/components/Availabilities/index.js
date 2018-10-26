@@ -14,7 +14,6 @@ export default function ({ mapMutations }) {
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
       'availability-calendar': 'availability-calendar',
       'service-availability-editor': 'service-availability-editor',
-      'timezone-select': 'timezone-select',
     },
     data () {
       return {
@@ -181,7 +180,6 @@ export default function ({ mapMutations }) {
     },
     components: {
       'availability-calendar': 'availability-calendar',
-      'timezone-select': 'timezone-select',
       'service-availability-editor': 'service-availability-editor',
     }
   }

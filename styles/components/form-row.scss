@@ -112,7 +112,6 @@
     font-weight: 600;
     flex-shrink: 0;
     width: 120px;
-    padding-top: 4px;
 
     &--no-top {
       padding-top: 0;
@@ -175,6 +174,10 @@
 .wide-form {
   padding: .5rem 0;
 
+  &:first-child {
+    padding-top: 0;
+  }
+
   &__header {
     font-weight: 600;
     padding-bottom: .45rem;
@@ -183,6 +186,11 @@
   &__row {
     padding: .4rem 0;
     display: flex;
+
+    @include breakpoint(mobile) {
+      display: block;
+      margin-bottom: 1rem;
+    }
   }
 
   &__label {
@@ -190,6 +198,10 @@
     padding-right: .5rem;
     width: 60%;
     max-width: 400px;
+  }
+
+  &__input {
+    min-width: 14rem;
   }
 }
 

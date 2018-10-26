@@ -70,6 +70,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'color-picker': 'color-picker',
       'switcher': 'switcher',
       'bool-switcher': 'bool-switcher',
+      'timezone-select': 'timezone-select',
       'selection-list': 'selection-list',
     },
     data () {
@@ -88,6 +89,14 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           switcherItemClass: 'horizontal-tabs__item',
           switcherActiveItemClass: '_active',
           tabsClass: 'tabs-content'
+        },
+
+        helpTabsMap: {
+          // availability tab
+          2: {
+            link: 'https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained',
+            title: 'Learn more about availability rules'
+          }
         },
 
         rules: {
@@ -152,6 +161,20 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         entityModel: 'one',
         entitiesCollection: 'list'
       }),
+
+      /**
+       * Link to the docs.
+       *
+       * @since [*next-version*]
+       *
+       * @return {object}
+       */
+      helpLink () {
+        if (this.errorMessage || !this.lastValidationResult.valid || !this.helpTabsMap[this.activeTab]) {
+          return false
+        }
+        return this.helpTabsMap[this.activeTab]
+      },
 
       /**
        * Service's image model.
@@ -305,6 +328,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       'availabilities': 'availabilities',
       'session-length': 'session-length',
       'bool-switcher': 'bool-switcher',
+      'timezone-select': 'timezone-select',
       'selection-list': 'selection-list',
       'v-image-selector': 'v-image-selector',
       'color-picker': 'color-picker'

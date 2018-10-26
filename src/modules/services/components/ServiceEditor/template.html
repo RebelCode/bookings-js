@@ -91,6 +91,14 @@
                             <bool-switcher v-model="model.displayOptions.allowCustomerChangeTimezone"></bool-switcher>
                         </div>
                     </div>
+                    <div class="wide-form__row">
+                        <div class="wide-form__label" style="width: 100%;max-width: 600px">
+                            {{ _("Service timezone") }}
+                        </div>
+                        <div class="wide-form__input">
+                            <timezone-select id="eddbk-timezone-select" v-model="model.timezone"></timezone-select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="wide-form">
@@ -104,6 +112,11 @@
 
     <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn()}">
         <div class="footer-confirm"><!---->
+            <div class="__right" v-if="helpLink">
+                <a class="eddbk-help-link" target="_blank" :href="helpLink.link">
+                    <span class="dashicons dashicons-sos"></span> {{ helpLink.title }}
+                </a>
+            </div>
             <div class="footer-confirm__message __right __alert">
                 <template v-if="errorMessage">{{ errorMessage }}</template>
                 <template v-if="!lastValidationResult.valid">

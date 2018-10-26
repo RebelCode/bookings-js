@@ -76,7 +76,6 @@ $breakpoint-large: 68em; // 960px
   &--condensed {
     max-width: 32rem;
     margin: 0 auto;
-    padding-top: 1rem;
 
     @include breakpoint(mobile) {
       margin: 0 -2%;

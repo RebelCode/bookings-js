@@ -136,7 +136,7 @@
 
 .inline-editor {
   &__body {
-    padding: 1.5rem 1rem;
+    padding: 0 1rem;
     max-width: 28rem;
     margin: 0 auto;
 
@@ -238,4 +238,19 @@
 .eddbk-help {
   color: $primary-color;
   vertical-align: middle;
+}
+
+.eddbk-help-link {
+  display: block;
+  text-decoration: none;
+  color: $gray;
+  span {
+    opacity: .75;
+  }
+  &:hover {
+    color: $medium-gray;
+  }
+  &:focus {
+    color: $medium-gray;
+  }
 }
