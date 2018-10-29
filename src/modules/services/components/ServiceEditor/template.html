@@ -33,15 +33,15 @@
               :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionLengths.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
         >
             <tab title="Information">
-                <div class="row row--condensed">
-                    <div class="col-3 columns">
+                <div class="row">
+                    <div class="col-2 columns">
                         <div class="form-row form-row--vertical">
                             <div class="form-row__input">
                                 <v-image-selector v-model="serviceImage"></v-image-selector>
                             </div>
                         </div>
                     </div>
-                    <div class="col-9 columns">
+                    <div class="col-10 columns">
                         <div class="row">
                             <div class="col-8 columns">
                                 <div class="form-row form-row--vertical" :class="lastValidationResult.hasErrors('name') ? 'form-row--with-error' : ''">

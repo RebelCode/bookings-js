@@ -136,9 +136,9 @@
 
 .inline-editor {
   &__body {
-    padding: 0 1rem;
+    //padding: 0 1rem;
     max-width: 28rem;
-    margin: 0 auto;
+    //margin: 0 auto;
 
     @include breakpoint(mobile) {
       padding: .25rem 0;
@@ -148,16 +148,16 @@
     padding-bottom: 1rem;
   }
   &__content {
-    padding: 0 .5rem;
+    //padding: 0 .5rem;
   }
   &__footer {
-    padding: 1rem;
+    padding: 1rem 0;
     border-radius: 4px;
     margin-top: 1rem;
-    background: #f7f7f7;
+    //border-top: #f7f7f7;
     .disabled {
       &:after {
-        background-color: rgba(247, 247, 247, 0.5);
+        //background-color: rgba(247, 247, 247, 0.5);
       }
     }
   }
