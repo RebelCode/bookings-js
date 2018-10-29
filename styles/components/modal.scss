@@ -136,9 +136,9 @@
 
 .inline-editor {
   &__body {
-    //padding: 0 1rem;
+    padding: 0 1rem;
     max-width: 28rem;
-    //margin: 0 auto;
+    margin: 0 auto;
 
     @include breakpoint(mobile) {
       padding: .25rem 0;

@@ -113,6 +113,10 @@
     flex-shrink: 0;
     width: 120px;
 
+    &--padding-top {
+      padding-top: 4px;
+    }
+
     &--no-top {
       padding-top: 0;
     }
