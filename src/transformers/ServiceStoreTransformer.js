@@ -32,6 +32,11 @@ export default class ServiceStoreTransformer extends Transformer {
     sessionLengthsStored: (model) => {
       delete model['sessionLengthsStored']
       return model
-    }
+    },
+
+    imageSrc: (model) => {
+      delete model['imageSrc']
+      return model
+    },
   }
 }

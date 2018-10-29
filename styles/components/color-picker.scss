@@ -2,6 +2,11 @@
   position: relative;
   z-index: 1;
   display: inline-block;
+  min-width: 48px;
+
+  &--full-width {
+    width: 100%;
+  }
 
   &--opened {
     z-index: 2;
@@ -17,12 +22,38 @@
     background-color: white;
     padding: 1px 2px 3px 5px;
 
+    &__placeholder {
+      white-space: nowrap;
+      max-width: calc(100% - 20px);
+      overflow: hidden;
+      padding: 2px 0 0;
+      opacity: .8;
+    }
+
     &__square {
       display: inline-block;
       width: 1rem;
       height: 1rem;
       vertical-align: middle;
       margin-right: -2px;
+    }
+
+    &__dismiss {
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: -1px;
+      margin-left: 3px;
+
+      opacity: .5;
+      &:hover {
+        opacity: .85;
+      }
+    }
+
+    .dashicons-arrow-down {
+      position: absolute;
+      right: 4px;
+      top: 3px
     }
   }
 

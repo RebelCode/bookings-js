@@ -44,6 +44,25 @@ export default class ServicesApi extends Api {
   }
 
   /**
+   * Create a service.
+   *
+   * @since [*next-version*]
+   *
+   * @param {Object} model Service object for creating.
+   *
+   * @return {Promise<any>}
+   */
+  create (model) {
+    model = this.serviceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.timezone})
+    const createConfig = this.config['create']
+    return this.http.request({
+      method: createConfig.method,
+      url: createConfig.endpoint,
+      data: this.prepareParams(model)
+    })
+  }
+
+  /**
    * Update the service.
    *
    * @since [*next-version*]
