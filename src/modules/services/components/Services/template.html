@@ -1,11 +1,24 @@
 <div class="rich-rows" :class="{'loading-container': isLoadingList}">
+    <div class="empty-state" v-if="!list.length && !isLoadingList">
+        <div class="empty-state__title">
+            {{ isInitialFetchResults ? 'No services yet!' : 'No services found' }}
+        </div>
+        <div class="empty-state__text" v-if="isInitialFetchResults">
+            {{ _('Create your first service to start accepting bookings') }}
+        </div>
+        <div class="empty-state__cta" v-if="isInitialFetchResults">
+            <div class="button button-primary" @click="$emit('create')">
+                {{ _('Create Service') }}
+            </div>
+        </div>
+    </div>
     <div class="rich-row" :class="{'loading-container': service.isSaving}" v-for="service of list">
         <div class="rich-row__column mobile-collapsed">
             <v-switch :id="'' + service.id" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>
         </div>
         <div class="rich-row__column rich-row__wide-anchor">
             <div class="rich-row__title">
-                <span class="service-item-color" style="background-color: #bbbbbb"></span>
+                <span class="service-item-color" :style="{'background-color': service.color || '#bbb'}"></span>
                 {{ service.name }}
             </div>
         </div>
@@ -13,7 +26,7 @@
             <div class="rich-row__header">
                 Sessions
             </div>
-            {{ getSessionsPreview(service) }}
+            {{ getDurationPreview(service.sessionLengthsStored) }} ({{ getPricePreview(service.sessionLengthsStored) }})
         </div>
         <div class="rich-row__column rich-row__actions">
             <v-switch :id="'' + service.id" class="mobile-only" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>

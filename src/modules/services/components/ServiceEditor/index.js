@@ -1,4 +1,5 @@
 import template from './template.html'
+import ValidationResult from '../../../../libs/validation/ValidationResult'
 
 /**
  * The service modal editor.
@@ -45,29 +46,42 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
        */
       'availabilityHelpers': 'availabilityHelpers',
 
+      'availabilities': 'availabilities',
+
+      'validatorFactory': 'validatorFactory',
+
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
+
+      /**
+       * API Errors Handler factory function.
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function}
+       */
+      'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
 
       'repeater': 'repeater',
       'tabs': 'tabs',
       'tab': 'tab',
       'modal': 'modal',
+      'config': 'config',
       'session-length': 'session-length',
       'v-image-selector': 'v-image-selector',
       'color-picker': 'color-picker',
-      'service-availability-editor': 'service-availability-editor',
       'switcher': 'switcher',
       'bool-switcher': 'bool-switcher',
-      'selection-list': 'selection-list',
       'timezone-select': 'timezone-select',
-      'availability-calendar': 'availability-calendar',
+      'selection-list': 'selection-list',
     },
     data () {
       return {
+        errorMessage: null,
+
         isCreateConfirming: false,
 
-        isSaving: false,
-
-        overlappingAvailabilities: false,
+        isSavingDraft: false,
+        isSavingPublished: false,
 
         activeTab: 0,
 
@@ -78,6 +92,33 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           tabsClass: 'tabs-content'
         },
 
+        helpTabsMap: {
+          // availability tab
+          2: {
+            link: 'https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained',
+            title: 'Learn more about availability rules'
+          }
+        },
+
+        rules: {
+          draft: [{
+            field: 'name',
+            rule: 'required'
+          }],
+          publish: [{
+            field: 'name',
+            rule: 'required'
+          }, {
+            field: 'availability.rules.length',
+            rule: 'min_value',
+            value: 1
+          }, {
+            field: 'sessionLengths.length',
+            rule: 'min_value',
+            value: 1
+          }]
+        },
+
         /**
          * @since [*next-version*]
          *
@@ -85,11 +126,14 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
          */
         lastComplexSetupValidationResult: null,
 
+        lastValidationResult: new ValidationResult(),
+
         model: {
           id: null,
           name: null,
+          status: 'draft',
           description: null,
-          timezone: 'UTC+0',
+          timezone: this.config.timezone,
           imageId: null,
           imageSrc: null,
           color: null,
@@ -100,7 +144,17 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           displayOptions: {
             allowCustomerChangeTimezone: false
           }
-        }
+        },
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} servicesApiErrorHandler Handles error responses for the services API.
+         */
+        servicesApiErrorHandler: this.apiErrorHandlerFactory((error) => {
+          this.setSaving(false)
+          this.errorMessage = error
+        }),
       }
     },
     computed: {
@@ -108,6 +162,20 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         entityModel: 'one',
         entitiesCollection: 'list'
       }),
+
+      /**
+       * Link to the docs.
+       *
+       * @since [*next-version*]
+       *
+       * @return {object}
+       */
+      helpLink () {
+        if (this.errorMessage || !this.lastValidationResult.valid || !this.helpTabsMap[this.activeTab]) {
+          return false
+        }
+        return this.helpTabsMap[this.activeTab]
+      },
 
       /**
        * Service's image model.
@@ -146,10 +214,35 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       model: {
         deep: true,
         handler () {
+          this.errorMessage = null
           this.complexSetupValidator.validate(this).then(validationResult => {
             this.lastComplexSetupValidationResult = validationResult
           })
         }
+      },
+
+      /**
+       * Watch for changes of 'model.sessionLengths' field and remove errors if the field is changed.
+       *
+       * @since [*next-version*]
+       */
+      'model.sessionLengths': {
+        deep: true,
+        handler () {
+          this.lastValidationResult.removeErrors('sessionLengths.length')
+        },
+      },
+
+      /**
+       * Watch for changes of 'model.availability.rules' field and remove errors if the field is changed.
+       *
+       * @since [*next-version*]
+       */
+      'model.availability.rules': {
+        deep: true,
+        handler () {
+          this.lastValidationResult.removeErrors('availability.rules.length')
+        },
       }
     },
     mounted () {
@@ -161,25 +254,15 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       })
     },
     methods: {
-      ...mapMutations('bookingOptions', [
-        'setAvailabilityEditorState'
-      ]),
-
       ...mapActions('services', {
         dispatchCreate: 'create',
         dispatchUpdate: 'update'
       }),
 
-      /**
-       * Open the availability editor with given availability.
-       *
-       * @since [*next-version*]
-       *
-       * @param {object} availability
-       */
-      openAvailabilityEditor (availability = {}) {
-        this.setAvailabilityEditorState(availability)
-        this.availabilityEditorStateToggleable.setState(true)
+      saveDraft () {
+        return this.save({
+          status: 'draft'
+        })
       },
 
       /**
@@ -189,14 +272,52 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
        *
        * @return {Promise<T>} The promise that holds server's response data.
        */
-      save () {
-        const dispatchSaveMethod = this.model.id ? 'dispatchUpdate' : 'dispatchCreate'
-        this.isSaving = true
-        return this[dispatchSaveMethod]({api: this.api, model: this.model}).then(() => {
-          this.isSaving = false
-          this.$emit('saved')
-          this.forceCloseModal()
-        })
+      save (statusInfo = {status: 'publish'}) {
+        const validator = this.validatorFactory.make(this.rules[statusInfo.status])
+        return validator.validate(this.model).then(result => {
+          this.lastValidationResult = result
+          if (this.lastValidationResult.valid) {
+            return true
+          }
+        }).then(isValid => {
+          if (!isValid) {
+            return
+          }
+          const dispatchSaveMethod = this.model.id ? 'dispatchUpdate' : 'dispatchCreate'
+
+          this.setSaving(statusInfo.status, true)
+          const model = Object.assign({}, this.model, statusInfo)
+
+          return this[dispatchSaveMethod]({api: this.api, model}).then(() => {
+            this.setSaving(false)
+            this.$emit('saved')
+            this.forceCloseModal()
+          })
+        }).catch(error => this.servicesApiErrorHandler.handle(error))
+      },
+
+      /**
+       * Set saving indicator.
+       *
+       * @since [*next-version*]
+       *
+       * @param {string|boolean} status Status name or `false` to set all indicators to false.
+       * @param {boolean} value Saving indicator for status.
+       */
+      setSaving (status, value = true) {
+        if (!status) {
+          this.isSavingDraft = false
+          this.isSavingPublished = false
+
+          return
+        }
+
+        const statusMap = {
+          draft: 'isSavingDraft',
+          publish: 'isSavingPublished',
+        }
+
+        this[statusMap[status]] = value
       }
     },
     components: {
@@ -205,12 +326,11 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       tab: 'tab',
       modal: 'modal',
       switcher: 'switcher',
-      'availability-calendar': 'availability-calendar',
+      'availabilities': 'availabilities',
       'session-length': 'session-length',
       'bool-switcher': 'bool-switcher',
-      'selection-list': 'selection-list',
-      'service-availability-editor': 'service-availability-editor',
       'timezone-select': 'timezone-select',
+      'selection-list': 'selection-list',
       'v-image-selector': 'v-image-selector',
       'color-picker': 'color-picker'
     }

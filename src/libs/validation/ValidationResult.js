@@ -12,12 +12,21 @@ export default class ValidationResult {
    *
    * @since [*next-version*]
    *
-   * @param {boolean} valid Is validation successful.
    * @param {Object.<string, string[]>} errorsBag Map of field names to lists of corresponding errors (if there are some).
    */
-  constructor (valid, errorsBag) {
-    this.valid = valid
+  constructor (errorsBag = {}) {
     this.errorsBag = errorsBag
+  }
+
+  /**
+   * Whether result of validation is successful.
+   *
+   * @since [*next-version*]
+   *
+   * @return {boolean}
+   */
+  get valid () {
+    return Object.keys(this.errorsBag).length === 0
   }
 
   /**
@@ -31,6 +40,19 @@ export default class ValidationResult {
    */
   hasErrors (field) {
     return !!this.errorsBag[field]
+  }
+
+  /**
+   * Remove field errors is that field has some validation errors.
+   *
+   * @since [*next-version*]
+   *
+   * @param {string} field Field to clean.
+   */
+  removeErrors (field) {
+    if (this.hasErrors(field)) {
+      delete this.errorsBag[field]
+    }
   }
 
   /**

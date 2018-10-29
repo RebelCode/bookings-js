@@ -79,6 +79,9 @@ export default function (FullCalendar, moment) {
         default () {
           let self = this
           return {
+            contentHeight: 350,
+            slotDuration: '02:00:00',
+            slotLabelInterval: '04:00:00',
             firstDay: this.weekStartsOnIndex,
             viewRender (view) {
               /*
@@ -580,23 +583,9 @@ export default function (FullCalendar, moment) {
     },
 
     render (h) {
-      let self = this
       return h('div', {
         ref: 'calendar'
-      }, [
-        h('div', {
-          class: 'button-floating',
-          on: {
-            click () {
-              self.eventCreated({
-                start: moment().add(1, 'day').startOf('day'),
-                end: moment().add(2, 'day').endOf('day'),
-                allDay: true,
-              })
-            }
-          }
-        }, ['+'])
-      ])
+      })
     }
   })
 }

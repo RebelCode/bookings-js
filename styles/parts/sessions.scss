@@ -1,6 +1,4 @@
 .session-length {
-  padding: 16px 0;
-
   &__input {
     width: 75px;
 
@@ -111,4 +109,10 @@
     font-weight: 600;
     padding-bottom: 12px;
   }
+}
+
+.dot-divider {
+  opacity: .35;
+  display: inline-block;
+  margin: 0 10px;
 }

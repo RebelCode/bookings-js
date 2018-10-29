@@ -36,7 +36,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
         from: 'translate'
       },
 
-      modal: 'modal',
+      'inline-editor': 'inline-editor',
       repeater: 'repeater',
       datepicker: 'datepicker',
       'datetime-picker': 'datetime-picker',
@@ -160,7 +160,14 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       },
     },
     props: {
-      collection: {}
+      /**
+       * Collection of availabilities.
+       *
+       * @since [next-version]
+       *
+       * @var {FunctionalCollection} entitiesCollection
+       */
+      entitiesCollection: {}
     },
     computed: {
       ...mapState({
@@ -171,22 +178,6 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
       ...mapState('bookingOptions', {
         entityModel: state => state.serviceAvailabilityModel
       }),
-
-      /**
-       * Editing entity items collection. Used to remove editing
-       * items from it when user confirm deletion.
-       *
-       * @var {FunctionalArrayCollection}
-       */
-      entitiesCollection () {
-        return new FunctionalArrayCollection(() => {
-          return this.collection
-        }, (newValue) => {
-          this.$emit('update:collection', newValue)
-        }, (item) => {
-          return item.id
-        })
-      },
 
       /**
        * Formatted model's end datetime for UI. It will display day before
@@ -439,7 +430,7 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
     },
     components: {
       repeater: 'repeater',
-      modal: 'modal',
+      'inline-editor': 'inline-editor',
       datepicker: 'datepicker',
       'datetime-picker': 'datetime-picker',
       'time-picker': 'time-picker',

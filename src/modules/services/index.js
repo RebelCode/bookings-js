@@ -32,6 +32,24 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
         from: 'serviceEditorState'
       },
 
+      /**
+       * API Errors Handler factory function.
+       *
+       * @since [*next-version*]
+       *
+       * @var {Function}
+       */
+        'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
+
+      /**
+       * Notifications center for displaying notifications in UI.
+       *
+       * @since [*next-version*]
+       *
+       * @var {NotificationsCenter}
+       */
+      'notificationsCenter': 'notificationsCenter',
+
       'service-editor': 'service-editor',
 
       'service-availability-editor': 'service-availability-editor',
@@ -43,7 +61,19 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
     },
     data () {
       return {
-        search: ''
+        search: '',
+
+        isInitialFetchResults: false,
+
+        /**
+         * @since [*next-version*]
+         *
+         * @property {ApiErrorHandler} servicesApiErrorHandler Handles error responses for the services API.
+         */
+        servicesApiErrorHandler: this.apiErrorHandlerFactory((error) => {
+          this.isLoadingList = false
+          this.notificationsCenter.error(error)
+        }),
       }
     },
     computed: {
@@ -82,7 +112,7 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
        *
        */
       deleteService (model) {
-        if (!confirm(this._('Are you sure you want to delete this service?'))) {
+        if (!confirm(this._('Are you sure you want to delete this service? There is no undo option.'))) {
           return
         }
         this.$set(model, 'isSaving', true)
@@ -105,7 +135,8 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
           transformOptions: { timezone: this.config.timezone }
         }).then(() => {
           this.isLoadingList = false
-        })
+          this.isInitialFetchResults = !this.search
+        }).catch(error => this.servicesApiErrorHandler.handle(error))
       },
 
       /**

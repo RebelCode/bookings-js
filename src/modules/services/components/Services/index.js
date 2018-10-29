@@ -14,7 +14,10 @@ export default function (mapStore) {
     ...template,
     inject: {
       'v-switch': 'v-switch',
-      'humanizeDuration': 'humanizeDuration'
+      'humanizeDuration': 'humanizeDuration',
+      '_': {
+        from: 'translate'
+      }
     },
     computed: {
       ...mapStore('services', [
@@ -30,20 +33,12 @@ export default function (mapStore) {
         }
       }
     },
-    methods: {
-      /**
-       * Get the preview of available session lengths of the service.
-       *
-       * @since [*next-version*]
-       *
-       * @param {Service} service The service to retrieve the preview for.
-       *
-       * @return {string}
-       */
-      getSessionsPreview (service) {
-        return this.getDurationPreview(service.sessionLengthsStored) + ' · ' + this.getPricePreview(service.sessionLengthsStored)
+    props: {
+      isInitialFetchResults: {
+        default: false
       },
-
+    },
+    methods: {
       /**
        * Get sessions duration preview.
        *
@@ -56,7 +51,33 @@ export default function (mapStore) {
           return this.humanizeDuration(sessions[0].sessionLength * 1000)
         }
         const last = sessions.length - 1
+        if (this.isSessionLengthUnitsAreSame(sessions[0].sessionLength, sessions[last].sessionLength)) {
+          return this.humanizeDuration(sessions[0].sessionLength * 1000).split(' ')[0] + '-' + this.humanizeDuration(sessions[last].sessionLength * 1000)
+        }
         return this.humanizeDuration(sessions[0].sessionLength * 1000) + ' - ' + this.humanizeDuration(sessions[last].sessionLength * 1000)
+      },
+
+      isSessionLengthUnitsAreSame (a, b) {
+        const units = [
+          60 * 60 * 24 * 30, // month
+          60 * 60 * 24 * 7, // week
+          60 * 60 * 24, // day
+          60 * 60, // hour
+          60, // minute
+        ]
+        const getUnit = sessionLength => {
+          let result = false
+          for (let i = 0; i < units.length; i++) {
+            if (Math.floor(sessionLength / units[i]) > 0) {
+              result = i
+              break
+            }
+          }
+          return result
+        }
+        const aUnit = getUnit(a)
+        const bUnit = getUnit(b)
+        return aUnit !== false && bUnit !== false && aUnit === bUnit
       },
 
       /**

@@ -162,10 +162,11 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
        * @return {Object}
        */
       bookingColor (booking, colorScheme) {
-        const color = colorScheme === 'status' ?
-          this.bookingStatusesColors[booking.status] : booking.service.color
-
+        const serviceColor = '#bbb'
         const textColor = '#000'
+
+        const color = colorScheme === 'status' ?
+          this.bookingStatusesColors[booking.status] : (booking.service ? (booking.service.color || serviceColor) : serviceColor)
 
         return {
           color,

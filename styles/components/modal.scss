@@ -83,14 +83,18 @@
 
   &__footer {
     padding: 1rem;
-    text-align: right;
     border-top: 1px solid #eee;
+  }
+}
+
+.inline-editor, .modal {
+  &__footer {
+    text-align: right;
 
     .button {
       display: inline-block !important;
       margin-left: 4px !important;
     }
-
     .footer-confirm {
       margin: 0;
       padding: 0;
@@ -126,6 +130,49 @@
           text-align: right;
         }
       }
+    }
+  }
+}
+
+.inline-editor {
+  &__body {
+    padding: 0 1rem;
+    max-width: 28rem;
+    margin: 0 auto;
+
+    @include breakpoint(mobile) {
+      padding: .25rem 0;
+    }
+  }
+  &__header {
+    padding-bottom: 1rem;
+  }
+  &__content {
+    //padding: 0 .5rem;
+  }
+  &__footer {
+    padding: 1rem 0;
+    border-radius: 4px;
+    margin-top: 1rem;
+    //border-top: #f7f7f7;
+    .disabled {
+      &:after {
+        //background-color: rgba(247, 247, 247, 0.5);
+      }
+    }
+  }
+  &__back {
+    padding: 3px 12px 3px 5px;
+    display: inline-block;
+    border-radius: 3px;
+    border: 1px solid #e8e8e8;
+    transition: border-color .2s ease;
+    &.disabled {
+      pointer-events: none;
+    }
+    &:hover {
+      cursor: pointer;
+      border-color: $primary-color;
     }
   }
 }
@@ -191,4 +238,19 @@
 .eddbk-help {
   color: $primary-color;
   vertical-align: middle;
+}
+
+.eddbk-help-link {
+  display: block;
+  text-decoration: none;
+  color: $gray;
+  span {
+    opacity: .75;
+  }
+  &:hover {
+    color: $medium-gray;
+  }
+  &:focus {
+    color: $medium-gray;
+  }
 }

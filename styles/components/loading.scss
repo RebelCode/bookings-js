@@ -82,6 +82,11 @@
   }
 }
 
+.button-default {
+  &.loading-button:before {
+    box-shadow: inset 0 -4px 0 6px #6f6f6f;
+  }
+}
 
 .loading-inline {
   display: inline-block;

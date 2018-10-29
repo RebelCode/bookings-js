@@ -70,6 +70,9 @@ export default function CfSessionLength ({ mapState, mapMutations }, FunctionalA
     },
     props: {
       value: {},
+
+      isValidationError: {},
+
       /**
        * @since [*next-version*]
        *
