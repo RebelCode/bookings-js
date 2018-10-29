@@ -26,7 +26,7 @@
             <div class="rich-row__header">
                 Sessions
             </div>
-            {{ getDurationPreview(service.sessionLengthsStored) }}<span class="dot-divider">•</span>{{ getPricePreview(service.sessionLengthsStored) }}
+            {{ getDurationPreview(service.sessionLengthsStored) }} ({{ getPricePreview(service.sessionLengthsStored) }})
         </div>
         <div class="rich-row__column rich-row__actions">
             <v-switch :id="'' + service.id" class="mobile-only" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>

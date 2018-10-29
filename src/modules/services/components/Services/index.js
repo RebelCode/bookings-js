@@ -67,12 +67,12 @@ export default function (mapStore) {
         ]
         const getUnit = sessionLength => {
           let result = false
-          units.forEach((unit, i) => {
-            if (Math.floor(sessionLength / unit) > 0) {
+          for (let i = 0; i < units.length; i++) {
+            if (Math.floor(sessionLength / units[i]) > 0) {
               result = i
-              return
+              break
             }
-          })
+          }
           return result
         }
         const aUnit = getUnit(a)
