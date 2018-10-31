@@ -14,7 +14,8 @@
                        @keydown.enter="addNewSession"
                 >
                 <select v-model="sessionTimeUnit">
-                    <option :value="unit.seconds" v-for="unit in timeUnits" :disabled="unit.disabled">{{ unit.title }}</option>
+                    <option :value="unit.seconds" v-for="unit in timeUnits" :disabled="unit.disabled">{{ unit.title }}
+                    </option>
                 </select>
             </fieldset>
             <fieldset class="session-length__options">
@@ -47,32 +48,31 @@
     </div>
     <hr/>
     <div class="session-bookable">
-        <div class="session-bookable__title">
-            {{ _('Bookable session lengths and prices.') }}
-        </div>
-
+        <!--<div class="session-item-cta">-->
+            <!--<div class="rich-row rich-row&#45;&#45;cta" @click="addSession">-->
+                <!--Create new session-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="session-items" v-if="sessions.getItems().length">
-            <div class="session-items__header">
-                <div class="session-head">
-                    <div class="session-item__length">
-                        {{ _('Session length') }}
-                    </div>
-                    <div class="session-item__price">
-                        {{ _('Price') }}
-                    </div>
-                    <div class="session-item__action"></div>
-                </div>
-            </div>
-            <repeater :collection="sessions" class="session-items__holder">
-                <div class="session-item" slot-scope="r">
-                    <div class="session-item__length">
+            <repeater :collection="sessions" class="rich-rows">
+                <div class="rich-row rich-row--smaller" slot-scope="r">
+                    <div class="rich-row__column rich-row__column--4" >
+                        <div class="rich-row__info">
+                            <!--{{ _('Beginners up to 14') }}-->
+                        </div>
                         {{ humanize(r.item.sessionLength) }}
                     </div>
-                    <div class="session-item__price">
+                    <div class="rich-row__column rich-row__column--4">
+                        <div class="rich-row__header">
+                            {{ _('Price') }}
+                        </div>
                         <span v-html="config.currency.symbol"></span> {{ r.item.price }}
                     </div>
-                    <div class="session-item__action">
-                        <span class="dashicons dashicons-trash" @click="r.remove(r.item)"></span>
+                    <div class="rich-row__column rich-row__actions">
+                        <div class="button-group-todo">
+                            <!--<div class="button">Edit</div>-->
+                            <div class="button button-icon" @click="r.remove(r.item)"><span class="dashicons dashicons-trash"></span></div>
+                        </div>
                     </div>
                 </div>
             </repeater>

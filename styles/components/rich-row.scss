@@ -169,7 +169,13 @@
   &__header {
     opacity: .6;
     font-size: .8em;
+    @include breakpoint(mobile) {
+      font-size: 14px;
+    }
+  }
 
+  &__info {
+    font-size: .8em;
     @include breakpoint(mobile) {
       font-size: 14px;
     }
