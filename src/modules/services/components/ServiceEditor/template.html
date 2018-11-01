@@ -70,7 +70,7 @@
                 </div>
             </tab>
             <tab title="Sessions">
-                <session-length v-model="model.sessionLengths" :is-validation-error="lastValidationResult.hasErrors('sessionLengths.length')"/>
+                <sessions v-model="model.sessionLengths" :is-validation-error="lastValidationResult.hasErrors('sessionLengths.length')"/>
             </tab>
             <tab title="Availability">
                 <availabilities v-model="model.availability.rules"

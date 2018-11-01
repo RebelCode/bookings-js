@@ -45,5 +45,23 @@ export default {
     displayOptions: {
       allowCustomerChangeTimezone: false
     }
-  }
+  },
+
+  /**
+   * The session that is being edited.
+   *
+   * @since [*next-version*]
+   *
+   * @property {object} oneSession
+   */
+  oneSession: {},
+
+  /**
+   * Whether the session's editor is visible.
+   *
+   * @since [*next-version*]
+   *
+   * @property {boolean} isSessionEditorState
+   */
+  isSessionEditorState: false
 }

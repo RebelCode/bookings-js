@@ -1,5 +1,6 @@
 .session-length {
   &__input {
+    vertical-align: middle;
     width: 75px;
 
     &--wide {
@@ -108,8 +109,7 @@
 }
 
 .session-bookable {
-  padding-top: 6px;
-
+  width: 100%;
   &__title {
     font-weight: 600;
     padding-bottom: 12px;
