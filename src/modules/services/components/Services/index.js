@@ -1,4 +1,5 @@
 import template from './template.html'
+import { guessUnit } from '../../libs/sessionHelpers'
 
 /**
  * The services list component.
@@ -58,25 +59,8 @@ export default function (mapStore) {
       },
 
       isSessionLengthUnitsAreSame (a, b) {
-        const units = [
-          60 * 60 * 24 * 30, // month
-          60 * 60 * 24 * 7, // week
-          60 * 60 * 24, // day
-          60 * 60, // hour
-          60, // minute
-        ]
-        const getUnit = sessionLength => {
-          let result = false
-          for (let i = 0; i < units.length; i++) {
-            if (Math.floor(sessionLength / units[i]) > 0) {
-              result = i
-              break
-            }
-          }
-          return result
-        }
-        const aUnit = getUnit(a)
-        const bUnit = getUnit(b)
+        const aUnit = guessUnit(a)
+        const bUnit = guessUnit(b)
         return aUnit !== false && bUnit !== false && aUnit === bUnit
       },
 

@@ -28,7 +28,7 @@
                        step="1"
                        min="1"
                        placeholder="15"
-                       v-model="model.sessionLength"
+                       v-model="duration"
                        class="session-length__input"
                        :data-validation-error="_('Please enter a session length greater than 0.')"
                        :data-uniqness-error="_('This session length already exists for this service.')"
@@ -51,7 +51,7 @@
                            class="session-length__input session-length__input--wide"
                            ref="price"
                            :data-validation-error="_('Please enter a session price. If this session duration is free, enter 0.')"
-                           @keydown.enter="addNewSession"
+                           @keydown.enter="saveSession"
                     >
                 </div>
             </div>

@@ -152,6 +152,10 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
         this.openSessionEditor()
       },
 
+      editSession (session) {
+        this.openSessionEditor(session)
+      },
+
       /**
        * Client side validation. Session default fields must be greater
        * than 0 to pass this validation.
