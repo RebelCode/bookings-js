@@ -41,7 +41,7 @@ export default {
     availability: {
       rules: []
     },
-    sessionsTypes: [],
+    sessionTypes: [],
     displayOptions: {
       allowCustomerChangeTimezone: false
     }

@@ -22,11 +22,11 @@
                 {{ service.name }}
             </div>
         </div>
-        <div class="rich-row__column" v-if="service.sessionsTypes.length">
+        <div class="rich-row__column" v-if="service.sessionTypes.length">
             <div class="rich-row__header">
                 Sessions
             </div>
-            {{ getDurationPreview(service.sessionsTypesStored) }} ({{ getPricePreview(service.sessionsTypesStored) }})
+            {{ getDurationPreview(service.sessionTypesStored) }} ({{ getPricePreview(service.sessionTypesStored) }})
         </div>
         <div class="rich-row__column rich-row__actions">
             <v-switch :id="'' + service.id" class="mobile-only" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>

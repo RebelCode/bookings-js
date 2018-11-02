@@ -31,9 +31,9 @@ export default class ServiceReadTransformer extends Transformer {
       return model
     },
 
-    sessionsTypes: (model) => {
-      model['sessionsTypesStored'] = model.sessionsTypes
-      model['sessionsTypes'] = model.sessionsTypes.map(sessionType => {
+    sessionTypes: (model) => {
+      model['sessionTypesStored'] = model.sessionTypes
+      model['sessionTypes'] = model.sessionTypes.map(sessionType => {
         return this.sessionTypeReadTransformer.transform(sessionType)
       })
       return model

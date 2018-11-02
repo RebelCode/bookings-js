@@ -29,8 +29,8 @@ export default class ServiceStoreTransformer extends Transformer {
       return model
     },
 
-    sessionsTypesStored: (model) => {
-      delete model['sessionsTypesStored']
+    sessionTypesStored: (model) => {
+      delete model['sessionTypesStored']
       return model
     },
 

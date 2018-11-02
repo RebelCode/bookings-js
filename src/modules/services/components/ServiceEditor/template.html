@@ -16,7 +16,7 @@
         <div class="alert alert-warning" style="margin: 1rem"
              v-if="lastComplexSetupValidationResult
                     && !lastComplexSetupValidationResult.valid
-                    && (lastComplexSetupValidationResult.hasErrors('model.sessionsTypes') || lastComplexSetupValidationResult.hasErrors('maxAvailabilitiesDuration'))"
+                    && (lastComplexSetupValidationResult.hasErrors('model.sessionTypes') || lastComplexSetupValidationResult.hasErrors('maxAvailabilitiesDuration'))"
         >
             <span class="dashicons dashicons-info"></span>
             <div class="pl-4 pr-4">
@@ -30,7 +30,7 @@
         <tabs :options="tabsConfig"
               v-model="activeTab"
               :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()"
-              :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionsTypes.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
+              :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionTypes.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
         >
             <tab title="Information">
                 <div class="row">
@@ -70,7 +70,7 @@
                 </div>
             </tab>
             <tab title="Sessions">
-                <sessions v-model="model.sessionsTypes" :is-validation-error="lastValidationResult.hasErrors('sessionsTypes.length')"/>
+                <sessions v-model="model.sessionTypes" :is-validation-error="lastValidationResult.hasErrors('sessionTypes.length')"/>
             </tab>
             <tab title="Availability">
                 <availabilities v-model="model.availability.rules"
