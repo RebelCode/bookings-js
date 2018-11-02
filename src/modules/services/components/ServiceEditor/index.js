@@ -52,6 +52,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
 
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
 
+      'sessionEditorState': 'sessionEditorState',
+
       /**
        * API Errors Handler factory function.
        *

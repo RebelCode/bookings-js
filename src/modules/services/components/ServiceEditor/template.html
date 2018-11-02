@@ -2,7 +2,7 @@
        modal-body-class="modal__body--wide  modal__body--no-content-padding"
        :active="modalState.isOn()"
 >
-    <div slot="header" :class="{disabled: availabilityEditorStateToggleable.isOn()}">
+    <div slot="header" :class="{disabled: availabilityEditorStateToggleable.isOn() || sessionEditorState.isOn()}">
         <!--New Service-->
         {{ model.id ? 'Edit Service | ID. ' + model.id  : 'New Service' }}
         <div :class="['modal__close modal--right', isDoubleConfirming ? 'disabled' : '']" v-if="!closeConfirming" @click="closeModal()">&times;</div>
@@ -29,7 +29,7 @@
         </div>
         <tabs :options="tabsConfig"
               v-model="activeTab"
-              :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn()"
+              :is-tabs-navigation-disabled="availabilityEditorStateToggleable.isOn() || sessionEditorState.isOn()"
               :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('sessionTypes.length'), 2: lastValidationResult.hasErrors('availability.rules.length')}"
         >
             <tab title="Information">
@@ -110,7 +110,7 @@
         </tabs>
     </div>
 
-    <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn()}">
+    <div slot="footer" :class="{disabled: isDoubleConfirming || availabilityEditorStateToggleable.isOn() || sessionEditorState.isOn()}">
         <div class="footer-confirm"><!---->
             <div class="__right" v-if="helpLink">
                 <a class="eddbk-help-link" target="_blank" :href="helpLink.link">
