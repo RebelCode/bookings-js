@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="session-items" v-if="sessions.getItems().length">
-                <repeater :collection="sessions" class="rich-rows">
+                <orderable-repeater :collection="sessions" class="rich-rows" :order="(a,b) => a.data.duration - b.data.duration">
                     <div class="rich-row rich-row--smaller" slot-scope="r">
                         <div class="rich-row__column rich-row__column--4" >
                             <div class="rich-row__info">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                </repeater>
+                </orderable-repeater>
             </div>
             <p class="description" v-else>
                 {{ _('Please add a session length and corresponding price above. You can add as many as you need, or just one.') }}

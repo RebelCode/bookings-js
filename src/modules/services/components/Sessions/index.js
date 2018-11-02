@@ -15,7 +15,7 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
        */
       'config': 'config',
 
-      'repeater': 'repeater',
+      'orderable-repeater': 'orderable-repeater',
       'humanizeDuration': 'humanizeDuration',
       'session-editor': 'session-editor',
 
@@ -40,13 +40,11 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
          * @var {FunctionalArrayCollection}
          */
         sessions: new FunctionalArrayCollection(() => {
-          return JSON.parse(JSON.stringify(this.value)).sort((a, b) => {
-            return a.data.duration - b.data.duration
-          })
+          return this.value
         }, (sessions) => {
           this.$emit('input', sessions)
         }, (item) => {
-          return Number(item.data.duration)
+          return item.id
         })
       }
     },
@@ -181,7 +179,7 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
     },
 
     components: {
-      repeater: 'repeater',
+      'orderable-repeater': 'orderable-repeater',
       'session-editor': 'session-editor'
     }
   }
