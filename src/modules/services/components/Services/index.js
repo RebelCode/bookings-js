@@ -49,13 +49,13 @@ export default function (mapStore) {
        */
       getDurationPreview (sessions) {
         if (sessions.length === 1) {
-          return this.humanizeDuration(sessions[0].sessionLength * 1000)
+          return this.humanizeDuration(sessions[0].data.duration * 1000)
         }
         const last = sessions.length - 1
-        if (this.isSessionLengthUnitsAreSame(sessions[0].sessionLength, sessions[last].sessionLength)) {
-          return this.humanizeDuration(sessions[0].sessionLength * 1000).split(' ')[0] + '-' + this.humanizeDuration(sessions[last].sessionLength * 1000)
+        if (this.isSessionLengthUnitsAreSame(sessions[0].data.duration, sessions[last].data.duration)) {
+          return this.humanizeDuration(sessions[0].data.duration * 1000).split(' ')[0] + '-' + this.humanizeDuration(sessions[last].data.duration * 1000)
         }
-        return this.humanizeDuration(sessions[0].sessionLength * 1000) + ' - ' + this.humanizeDuration(sessions[last].sessionLength * 1000)
+        return this.humanizeDuration(sessions[0].data.duration * 1000) + ' - ' + this.humanizeDuration(sessions[last].data.duration * 1000)
       },
 
       isSessionLengthUnitsAreSame (a, b) {

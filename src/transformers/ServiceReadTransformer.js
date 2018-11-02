@@ -3,19 +3,19 @@ import { Transformer } from '@rebelcode/std-lib'
 /**
  * Transformer that applied to the service before any interactions in the UI.
  *
- * @class SessionLengthReadTransformer
+ * @class ServiceReadTransformer
  */
 export default class ServiceReadTransformer extends Transformer {
   /**
    * ServiceReadTransformer constructor.
    *
    * @param {AvailabilityReadTransformer} availabilityReadTransformer Transformer for changing availability to using in UI.
-   * @param {SessionLengthReadTransformer} sessionLengthReadTransformer Transforms session length data to use it in the UI.
+   * @param {sessionTypeReadTransformer} sessionTypeReadTransformer Transforms session length data to use it in the UI.
    */
-  constructor (availabilityReadTransformer, sessionLengthReadTransformer) {
+  constructor (availabilityReadTransformer, sessionTypeReadTransformer) {
     super()
     this.availabilityReadTransformer = availabilityReadTransformer
-    this.sessionLengthReadTransformer = sessionLengthReadTransformer
+    this.sessionTypeReadTransformer = sessionTypeReadTransformer
   }
 
   /**
@@ -31,10 +31,10 @@ export default class ServiceReadTransformer extends Transformer {
       return model
     },
 
-    sessionLengths: (model) => {
-      model['sessionLengthsStored'] = model.sessionLengths
-      model['sessionLengths'] = model.sessionLengths.map(sessionLength => {
-        return this.sessionLengthReadTransformer.transform(sessionLength)
+    sessionsTypes: (model) => {
+      model['sessionsTypesStored'] = model.sessionsTypes
+      model['sessionsTypes'] = model.sessionsTypes.map(sessionType => {
+        return this.sessionTypeReadTransformer.transform(sessionType)
       })
       return model
     }

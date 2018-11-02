@@ -41,12 +41,12 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
          */
         sessions: new FunctionalArrayCollection(() => {
           return JSON.parse(JSON.stringify(this.value)).sort((a, b) => {
-            return a.sessionLength - b.sessionLength
+            return a.data.duration - b.data.duration
           })
         }, (sessions) => {
           this.$emit('input', sessions)
         }, (item) => {
-          return Number(item.sessionLength)
+          return Number(item.data.duration)
         })
       }
     },
@@ -98,10 +98,6 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
       }
     },
     methods: {
-      ...mapMutations([
-        'setSessionLengths'
-      ]),
-
       ...mapMutations('services', [
         'setSessionEditorState'
       ]),

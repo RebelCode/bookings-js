@@ -25,7 +25,9 @@ export default function (AbstractEntityModalEditor, { mapState }) {
          */
         model: {
           id: null,
-          sessionLength: null,
+          data: {
+            duration: null
+          },
           price: null
         },
 
@@ -65,9 +67,9 @@ export default function (AbstractEntityModalEditor, { mapState }) {
     },
     mounted () {
       this.$on('seed', () => {
-        const guessedUnit = guessUnit(this.model.sessionLength) || 0
+        const guessedUnit = guessUnit(this.model.data.duration) || 0
         this.sessionTimeUnit = this.timeUnits[guessedUnit].seconds
-        this.duration = Number(this.model.sessionLength) / this.sessionTimeUnit || null
+        this.duration = Number(this.model.data.duration) / this.sessionTimeUnit || null
       })
     },
     methods: {
@@ -75,14 +77,23 @@ export default function (AbstractEntityModalEditor, { mapState }) {
        * Validate current session and if everything is fine, save it.
        */
       saveSession () {
-        this.model.sessionLength = this.duration * this.sessionTimeUnit
+        this.model.data.duration = this.duration * this.sessionTimeUnit
         this.saveItem()
         // this.$validator.validateAll().then((result) => {
         //   if (!result) {
         //     return
         //   }
         // })
-      }
+      },
+
+      /**
+       * Is entity can be updated or deleted.
+       *
+       * @return {bool}
+       */
+      entityCanBeModified () {
+        return true
+      },
     },
     components: {
       'inline-editor': 'inline-editor'
