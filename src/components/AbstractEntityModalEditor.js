@@ -284,9 +284,7 @@ export default function CfAbstractEntityModalEditor (Vue) {
          * Update model
          */
         if (this.entitiesCollection.hasItem(model)) {
-          console.info(JSON.stringify(this.entitiesCollection.getItems()))
           this.entitiesCollection.removeItem(model)
-          console.info(JSON.stringify(this.entitiesCollection.getItems()))
           this.entitiesCollection.addItem(model)
         }
 
