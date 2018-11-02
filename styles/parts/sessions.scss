@@ -66,10 +66,15 @@
   display: flex;
   color: #7a7a7a;
 
-  &s {
-    max-width: 230px;
+  &-cta, &s {
+    max-width: 30rem;
     width: 100%;
+  }
 
+  &s {
+    .rich-rows {
+      padding: 0;
+    }
     &__holder {
       max-height: 260px;
       overflow-y: auto;
