@@ -27,7 +27,8 @@ import CfTabs from './Tabs'
 import { page as ServicesPage } from './../modules/services'
 import Services from './../modules/services/components/Services'
 import ServicesEditor from './../modules/services/components/ServiceEditor'
-import CfSessionLength from './../modules/services/components/SessionLength'
+import CfSessions from '../modules/services/components/Sessions'
+import CfSessionEditor from '../modules/services/components/SessionEditor'
 import CfAvailabilities from './../modules/services/components/Availabilities'
 
 import VSwitch from './ui/VSwitch.vue'
@@ -85,8 +86,12 @@ export default function (dependencies) {
       return new ServicesEditor(container['abstract-entity-modal-editor'], container.vuex)
     },
 
-    'session-length' (container) {
-      return new CfSessionLength(container.vuex, dependencies.stdLib.FunctionalArrayCollection)
+    'sessions' (container) {
+      return new CfSessions(container.vuex, dependencies.stdLib.FunctionalArrayCollection)
+    },
+
+    'session-editor' (container) {
+      return new CfSessionEditor(container['abstract-entity-modal-editor'], container.vuex)
     },
 
     'availabilities' (container) {

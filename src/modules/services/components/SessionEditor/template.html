@@ -1,0 +1,88 @@
+<inline-editor @close="closeModal"
+               class="eddbk-inputs"
+               :active="modalState.isOn()"
+>
+    <div slot="header">
+        <div class="inline-editor__back" @click="closeModal()" :class="{disabled: closeConfirming}">
+            <span class="dashicons dashicons-arrow-left-alt2"></span>
+            {{ _('Go Back') }}
+        </div>
+
+        <span style="font-weight: 600; padding-left: .5rem;" v-if="!closeConfirming">
+                {{ _('Session') }}
+            </span>
+
+        <div class="modal__header-buttons modal--right" v-if="closeConfirming">
+            <input type="button" class="button button-dark-solid" :value="_('Close')" @click="forceCloseModal">
+            <input type="button" class="button" :value="_('Continue Editing')" @click="continueEditing">
+        </div>
+    </div>
+
+    <div slot="body" :class="{'disabled': isDoubleConfirming}">
+        <div class="form-row">
+            <div class="form-row__label form-row__label--padding-top">
+                {{ _('Duration') }}
+            </div>
+            <div class="form-row__input">
+                <input type="number"
+                       step="1"
+                       min="1"
+                       placeholder="15"
+                       v-model="duration"
+                       class="session-length__input"
+                       :data-validation-error="_('Please enter a session length greater than 0.')"
+                       :data-uniqness-error="_('This session length already exists for this service.')"
+                       @keydown.enter="addNewSession"
+                >
+                <select v-model="sessionTimeUnit">
+                    <option :value="unit.seconds" v-for="unit in timeUnits" :disabled="unit.disabled">{{ unit.title }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-row__label form-row__label--padding-top">
+                {{ _('Price') }}
+            </div>
+            <div class="form-row__input">
+                <div class="input-with-placeholder">
+                    <span v-html="config.currency.symbol"></span>
+                    <input type="number" step="1" min="1" placeholder="20.00" v-model="model.price"
+                           class="session-length__input session-length__input--wide"
+                           ref="price"
+                           :data-validation-error="_('Please enter a session price. If this session duration is free, enter 0.')"
+                           @keydown.enter="saveSession"
+                    >
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div slot="footer">
+        <div v-if="!removeConfirming" :class="isDoubleConfirming ? 'disabled' : ''">
+            <template v-if="model.id && entityCanBeModified()">
+                <input type="button" class="button button-alert" :value="_('Delete')" style="float: left"
+                       @click="removeConfirming = true">
+            </template>
+            <input type="button" class="button button-primary" v-if="!model.id || entityCanBeModified()"
+                   :value="_('Save')" @click="saveSession()">
+        </div>
+        <div class="footer-confirm" v-else-if="removeConfirming">
+            <div class="footer-confirm__message __alert __right">
+                {{ _('Are you sure you want to delete this availability? There is no undo option.') }}
+            </div>
+            <div class="footer-confirm__buttons">
+                <input type="button" class="button button-alert-solid" :value="_('Yes, delete')" @click="deleteItem">
+                <input type="button" class="button" :value="_('Cancel')" @click="removeConfirming = false">
+            </div>
+        </div>
+        <div class="footer-confirm" v-else>
+            <div class="footer-confirm__message __right"></div>
+            <div class="footer-confirm__buttons">
+                <input type="button" class="button button-dark-solid" :value="_('Close')" @click="forceCloseModal">
+                <input type="button" class="button" :value="_('Continue Editing')" @click="cancelConfirming = false">
+            </div>
+        </div>
+    </div>
+</inline-editor>

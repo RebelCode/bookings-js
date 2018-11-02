@@ -1,6 +1,6 @@
 import template from './template.html'
 
-export default function CfSessionLength ({ mapState, mapMutations }, FunctionalArrayCollection) {
+export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayCollection) {
   return {
     ...template,
     inject: {
@@ -16,34 +16,16 @@ export default function CfSessionLength ({ mapState, mapMutations }, FunctionalA
       'config': 'config',
 
       'repeater': 'repeater',
-      'humanizeDuration': 'humanizeDuration'
+      'humanizeDuration': 'humanizeDuration',
+      'session-editor': 'session-editor',
+
+      modalState: {
+        from: 'sessionEditorState'
+      },
     },
     data () {
       return {
-        timeUnits: [{
-          title: this._('mins'),
-          seconds: 60,
-        },{
-          title: this._('hours'),
-          seconds: 60 * 60,
-        }, {
-          title: this._('days'),
-          seconds: 60 * 60 * 24
-        }, {
-          title: this._('weeks'),
-          seconds: 60 * 60 * 24 * 7
-        }],
-
-        sessionTimeUnit: 60,
-
-        /**
-         * Default session model. Used as form data
-         * for the new session form.
-         */
-        sessionDefault: {
-          sessionLength: null,
-          price: null
-        },
+        isTransitioning: false,
 
         /**
          * Validation error that shown to user
@@ -120,6 +102,26 @@ export default function CfSessionLength ({ mapState, mapMutations }, FunctionalA
         'setSessionLengths'
       ]),
 
+      ...mapMutations('services', [
+        'setSessionEditorState'
+      ]),
+
+      setTransitioning (isTransitioning) {
+        this.isTransitioning = isTransitioning
+      },
+
+      /**
+       * Open the session editor with the given session.
+       *
+       * @since [*next-version*]
+       *
+       * @param {object} session
+       */
+      openSessionEditor (session = {}) {
+        this.setSessionEditorState(session)
+        this.modalState.setState(true)
+      },
+
       humanize (seconds) {
         return this.humanizeDuration(seconds * 1000, {
           units: ['w', 'd', 'h', 'm'],
@@ -146,35 +148,12 @@ export default function CfSessionLength ({ mapState, mapMutations }, FunctionalA
        * and when session added clear session default, so user
        * can keep adding new sessions.
        */
-      addNewSession () {
-        const normalizedSession = this.normalizeSessionLength(this.sessionDefault)
-
-        if (!this.validate(normalizedSession)) return
-
-        this.sessions.addItem(Object.assign({}, {
-          id: this.sessions.getItems().length
-        }, normalizedSession))
-
-        this.sessionDefault = {
-          sessionLength: null,
-          price: null
-        }
+      addSession () {
+        this.openSessionEditor()
       },
 
-      /**
-       * Normalize session length information by transforming session duration
-       * in selected time units to duration in seconds.
-       *
-       * @param {SessionLength} sessionLength Session length to normalize.
-       *
-       * @return {SessionLength} Normalized session length.
-       */
-      normalizeSessionLength (sessionLength) {
-        const sessionDuration = this.sessionTimeUnit * sessionLength.sessionLength
-        return {
-          sessionLength: sessionDuration,
-          price: sessionLength.price
-        }
+      editSession (session) {
+        this.openSessionEditor(session)
       },
 
       /**
@@ -206,7 +185,8 @@ export default function CfSessionLength ({ mapState, mapMutations }, FunctionalA
     },
 
     components: {
-      repeater: 'repeater'
+      repeater: 'repeater',
+      'session-editor': 'session-editor'
     }
   }
 }
