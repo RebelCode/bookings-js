@@ -1,5 +1,6 @@
 import template from './template.html'
 import { guessUnit } from '../../libs/sessionHelpers'
+import ValidationResult from '../../../../libs/validation/ValidationResult'
 
 export default function (AbstractEntityModalEditor, { mapState }) {
   return AbstractEntityModalEditor.extend({
@@ -15,7 +16,9 @@ export default function (AbstractEntityModalEditor, { mapState }) {
         from: 'sessionEditorState'
       },
 
-      'config': 'config'
+      'config': 'config',
+
+      'validatorFactory': 'validatorFactory'
     },
     data () {
       return {
@@ -25,6 +28,8 @@ export default function (AbstractEntityModalEditor, { mapState }) {
          */
         model: {
           id: null,
+          type: "fixed_duration",
+          label: "",
           data: {
             duration: null
           },
@@ -48,6 +53,18 @@ export default function (AbstractEntityModalEditor, { mapState }) {
         }],
 
         sessionTimeUnit: 60,
+
+        rule: [{
+          field: 'price',
+          rule: 'min_value',
+          value: 1
+        }, {
+          field: 'data.duration',
+          rule: 'min_value',
+          value: 1
+        }],
+
+        lastValidationResult: new ValidationResult(),
       }
     },
     props: {
@@ -70,6 +87,8 @@ export default function (AbstractEntityModalEditor, { mapState }) {
         const guessedUnit = guessUnit(this.model.data.duration) || 0
         this.sessionTimeUnit = this.timeUnits[guessedUnit].seconds
         this.duration = Number(this.model.data.duration) / this.sessionTimeUnit || null
+
+        this.lastValidationResult = new ValidationResult()
       })
     },
     methods: {
@@ -78,12 +97,13 @@ export default function (AbstractEntityModalEditor, { mapState }) {
        */
       saveSession () {
         this.model.data.duration = this.duration * this.sessionTimeUnit
-        this.saveItem()
-        // this.$validator.validateAll().then((result) => {
-        //   if (!result) {
-        //     return
-        //   }
-        // })
+        this.validatorFactory.make(this.rule).validate(this.model).then(result => {
+          this.lastValidationResult = result
+          if (!this.lastValidationResult.valid) {
+            return
+          }
+          this.saveItem()
+        })
       },
 
       /**

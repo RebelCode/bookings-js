@@ -15,8 +15,8 @@
                 <orderable-repeater :collection="sessions" class="rich-rows" :order="(a,b) => a.data.duration - b.data.duration">
                     <div class="rich-row rich-row--smaller" slot-scope="r">
                         <div class="rich-row__column rich-row__column--4" >
-                            <div class="rich-row__info">
-                                <!--{{ _('Beginners up to 14') }}-->
+                            <div class="rich-row__info" v-if="r.item.label">
+                                {{ r.item.label }}
                             </div>
                             {{ humanize(r.item.data.duration) }}
                         </div>
@@ -29,7 +29,7 @@
                         <div class="rich-row__column rich-row__actions">
                             <div class="button-group">
                                 <div class="button" @click="editSession(r.item)">Edit</div>
-                                <div class="button button-icon" @click="r.remove(r.item)"><span class="dashicons dashicons-trash"></span></div>
+                                <div class="button button-icon" @click="removeSession(r.remove, r.item)"><span class="dashicons dashicons-trash"></span></div>
                             </div>
                         </div>
                     </div>

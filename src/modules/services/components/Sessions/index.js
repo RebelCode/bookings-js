@@ -150,6 +150,13 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
         this.openSessionEditor(session)
       },
 
+      removeSession (removeFunction, session) {
+        if (!confirm(this._('Are you sure you want to delete this session? There is no undo option.'))) {
+          return
+        }
+        removeFunction(session)
+      },
+
       /**
        * Client side validation. Session default fields must be greater
        * than 0 to pass this validation.
