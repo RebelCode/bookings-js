@@ -17,7 +17,7 @@
                         {{ _('Please add a session length and corresponding price above. You can add as many as you need, or just one.') }}
                     </div>
                 </div>
-                <orderable-repeater :collection="sessions" class="rich-rows" :order="(a,b) => a.data.duration - b.data.duration" v-if="sessions.getItems().length">
+                <orderable-repeater :collection="sessions" class="rich-rows" :order="sessionsOrder" v-if="sessions.getItems().length">
                     <div class="rich-row rich-row--smaller" slot-scope="r">
                         <div class="rich-row__column rich-row__column--4" >
                             <div class="rich-row__info" v-if="r.item.label">

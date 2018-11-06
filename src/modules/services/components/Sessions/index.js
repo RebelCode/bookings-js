@@ -100,6 +100,10 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
         'setSessionEditorState'
       ]),
 
+      sessionsOrder (a,b) {
+        return a.data.duration - b.data.duration
+      },
+
       setTransitioning (isTransitioning) {
         this.isTransitioning = isTransitioning
       },
