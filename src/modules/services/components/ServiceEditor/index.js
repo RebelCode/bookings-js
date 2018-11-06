@@ -52,6 +52,8 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
 
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
 
+      'sessionEditorState': 'sessionEditorState',
+
       /**
        * API Errors Handler factory function.
        *
@@ -113,7 +115,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
             rule: 'min_value',
             value: 1
           }, {
-            field: 'sessionLengths.length',
+            field: 'sessionTypes.length',
             rule: 'min_value',
             value: 1
           }]
@@ -140,7 +142,7 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           availability: {
             rules: []
           },
-          sessionLengths: [],
+          sessionTypes: [],
           displayOptions: {
             allowCustomerChangeTimezone: false
           }
@@ -226,10 +228,10 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
        *
        * @since [*next-version*]
        */
-      'model.sessionLengths': {
+      'model.sessionTypes': {
         deep: true,
         handler () {
-          this.lastValidationResult.removeErrors('sessionLengths.length')
+          this.lastValidationResult.removeErrors('sessionTypes.length')
         },
       },
 

@@ -1,5 +1,6 @@
 import template from './template.html'
 import { guessUnit } from '../../libs/sessionHelpers'
+import ValidationResult from '../../../../libs/validation/ValidationResult'
 
 export default function (AbstractEntityModalEditor, { mapState }) {
   return AbstractEntityModalEditor.extend({
@@ -15,7 +16,9 @@ export default function (AbstractEntityModalEditor, { mapState }) {
         from: 'sessionEditorState'
       },
 
-      'config': 'config'
+      'config': 'config',
+
+      'validatorFactory': 'validatorFactory'
     },
     data () {
       return {
@@ -25,7 +28,11 @@ export default function (AbstractEntityModalEditor, { mapState }) {
          */
         model: {
           id: null,
-          sessionLength: null,
+          type: "fixed_duration",
+          label: "",
+          data: {
+            duration: null
+          },
           price: null
         },
 
@@ -46,6 +53,18 @@ export default function (AbstractEntityModalEditor, { mapState }) {
         }],
 
         sessionTimeUnit: 60,
+
+        rule: [{
+          field: 'price',
+          rule: 'min_value',
+          value: 1
+        }, {
+          field: 'data.duration',
+          rule: 'min_value',
+          value: 1
+        }],
+
+        lastValidationResult: new ValidationResult(),
       }
     },
     props: {
@@ -65,9 +84,11 @@ export default function (AbstractEntityModalEditor, { mapState }) {
     },
     mounted () {
       this.$on('seed', () => {
-        const guessedUnit = guessUnit(this.model.sessionLength) || 0
+        const guessedUnit = guessUnit(this.model.data.duration) || 0
         this.sessionTimeUnit = this.timeUnits[guessedUnit].seconds
-        this.duration = Number(this.model.sessionLength) / this.sessionTimeUnit || null
+        this.duration = Number(this.model.data.duration) / this.sessionTimeUnit || null
+
+        this.lastValidationResult = new ValidationResult()
       })
     },
     methods: {
@@ -75,14 +96,24 @@ export default function (AbstractEntityModalEditor, { mapState }) {
        * Validate current session and if everything is fine, save it.
        */
       saveSession () {
-        this.model.sessionLength = this.duration * this.sessionTimeUnit
-        this.saveItem()
-        // this.$validator.validateAll().then((result) => {
-        //   if (!result) {
-        //     return
-        //   }
-        // })
-      }
+        this.model.data.duration = this.duration * this.sessionTimeUnit
+        this.validatorFactory.make(this.rule).validate(this.model).then(result => {
+          this.lastValidationResult = result
+          if (!this.lastValidationResult.valid) {
+            return
+          }
+          this.saveItem()
+        })
+      },
+
+      /**
+       * Is entity can be updated or deleted.
+       *
+       * @return {bool}
+       */
+      entityCanBeModified () {
+        return true
+      },
     },
     components: {
       'inline-editor': 'inline-editor'

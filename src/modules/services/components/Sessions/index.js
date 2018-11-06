@@ -15,7 +15,7 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
        */
       'config': 'config',
 
-      'repeater': 'repeater',
+      'orderable-repeater': 'orderable-repeater',
       'humanizeDuration': 'humanizeDuration',
       'session-editor': 'session-editor',
 
@@ -40,13 +40,11 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
          * @var {FunctionalArrayCollection}
          */
         sessions: new FunctionalArrayCollection(() => {
-          return JSON.parse(JSON.stringify(this.value)).sort((a, b) => {
-            return a.sessionLength - b.sessionLength
-          })
+          return this.value
         }, (sessions) => {
           this.$emit('input', sessions)
         }, (item) => {
-          return Number(item.sessionLength)
+          return item.id
         })
       }
     },
@@ -98,13 +96,13 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
       }
     },
     methods: {
-      ...mapMutations([
-        'setSessionLengths'
-      ]),
-
       ...mapMutations('services', [
         'setSessionEditorState'
       ]),
+
+      sessionsOrder (a,b) {
+        return a.data.duration - b.data.duration
+      },
 
       setTransitioning (isTransitioning) {
         this.isTransitioning = isTransitioning
@@ -156,6 +154,13 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
         this.openSessionEditor(session)
       },
 
+      removeSession (removeFunction, session) {
+        if (!confirm(this._('Are you sure you want to delete this session? There is no undo option.'))) {
+          return
+        }
+        removeFunction(session)
+      },
+
       /**
        * Client side validation. Session default fields must be greater
        * than 0 to pass this validation.
@@ -185,7 +190,7 @@ export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayC
     },
 
     components: {
-      repeater: 'repeater',
+      'orderable-repeater': 'orderable-repeater',
       'session-editor': 'session-editor'
     }
   }

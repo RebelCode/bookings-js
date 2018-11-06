@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
 ### Added
+- Added a new view for sessions management.
+- Added the session editor with labels.
+
+### Changed
+- Using new session types.
+
+## [0.2.4] - 2018-10-29
+### Added
 - Added a new page for managing services, similar to the bookings page.
 - Added service editor in the modal.
 - Added image selection component.

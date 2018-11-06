@@ -2,7 +2,7 @@ import BookingStoreTransformer from './BookingStoreTransformer'
 import AvailabilityStoreTransformer from './AvilabilityStoreTransformer'
 import AvailabilityReadTransformer from './AvilabilityReadTransformer'
 import ServiceReadTransformer from './ServiceReadTransformer'
-import SessionLengthReadTransformer from './SessionLengthReadTransformer'
+import SessionTypeReadTransformer from './SessionTypeReadTransformer'
 import BookingReadTransformer from './BookingReadTransformer'
 import ServiceStoreTransformer from './ServiceStoreTransformer'
 
@@ -20,14 +20,14 @@ export default function (dependencies) {
     availabilityReadTransformer (container) {
       return new AvailabilityReadTransformer(container.moment, container.transformDatetimeForUi)
     },
-    sessionLengthReadTransformer () {
-      return new SessionLengthReadTransformer()
+    sessionTypeReadTransformer () {
+      return new SessionTypeReadTransformer()
     },
     sessionReadTransformer (container) {
       return new dependencies.bookingWizardComponents.SessionReadTransformer(container.moment)
     },
     serviceReadTransformer (container) {
-      return new ServiceReadTransformer(container.availabilityReadTransformer, container.sessionLengthReadTransformer)
+      return new ServiceReadTransformer(container.availabilityReadTransformer, container.sessionTypeReadTransformer)
     },
     serviceStoreTransformer (container) {
       return new ServiceStoreTransformer(container.availabilityStoreTransformer)

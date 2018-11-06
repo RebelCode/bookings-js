@@ -24,6 +24,8 @@ import WizardEditor from './settings/WizardEditor.vue'
 import EditableInput from './settings/EditableInput.vue'
 import CfTabs from './Tabs'
 
+import CfOrderableRepeater from './OrderableRepeater'
+
 import { page as ServicesPage } from './../modules/services'
 import Services from './../modules/services/components/Services'
 import ServicesEditor from './../modules/services/components/ServiceEditor'
@@ -130,6 +132,9 @@ export default function (dependencies) {
     },
     repeater: function (container) {
       return new dependencies.repeater.CfRepeater(container.vue)
+    },
+    'orderable-repeater' (container) {
+      return CfOrderableRepeater(container.repeater)
     },
     'selection-list': function (container) {
       return new dependencies.selectionList.CfSelectionList(container.repeater)
