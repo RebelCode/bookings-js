@@ -9,6 +9,8 @@ import pipesServiceDefinition from './uiActions/pipesServiceDefinition'
 import actionFactoriesDefinitions from './uiActions/actionFactoriesDefinitions'
 import validationServiceDefinition from './validation/services'
 import { makeDeepObjectDifference } from './makeDeepObjectDifference'
+import { MfItemsPage } from '../modules/base/mixins/ItemsPage'
+import { MfItemsList } from '../modules/base/mixins/ItemsList'
 
 export default function (dependencies, applicationState) {
   return {
@@ -165,6 +167,14 @@ export default function (dependencies, applicationState) {
       return function (value) {
         return container.momentHelpers.createInTimezone(value, this.timezone)
       }
+    },
+
+    MfItemsPage () {
+      return MfItemsPage
+    },
+
+    MfItemsList () {
+      return MfItemsList
     },
 
     deepObjectDifference (container) {

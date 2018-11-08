@@ -3,6 +3,7 @@ import bookingOptions from './booking-options'
 import ui from './ui'
 import settings from './settings'
 import { store as services } from './../modules/services'
+import { store as staffMembers } from './../modules/staffMembers'
 
 const state = {
   app: {
@@ -44,7 +45,8 @@ export default function ({deepHas, deepSet}) {
       bookingOptions,
       ui,
       settings,
-      services
+      services,
+      staffMembers,
     },
     state,
     mutations: Object.assign({}, mutations, {
