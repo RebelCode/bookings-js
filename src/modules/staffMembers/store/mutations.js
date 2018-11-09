@@ -1,13 +1,13 @@
 export default {
   /**
-   * Seed service editor by passed model.
+   * Seed staff member editor by passed model.
    *
    * @since [*next-version*]
    *
    * @param state
    * @param model
    */
-  setServiceEditorState (state, model) {
+  setStaffMemberEditorState (state, model) {
     state.one = model
   },
 }

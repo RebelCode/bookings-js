@@ -19,7 +19,7 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
        * @since [*next-version]
        */
       'api': {
-        from: 'servicesApi'
+        from: 'staffMembersApi'
       },
 
       /**
@@ -28,7 +28,7 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
        * @since [*next-version]
        */
       // modalState: {
-      //   from: 'serviceEditorState'
+      //   from: 'staffMemberEditorState'
       // },
 
       /**
@@ -52,8 +52,8 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
        *
        * @since [*next-version*]
        */
-      ...mapMutations('services', [
-        'setServiceEditorState'
+      ...mapMutations('staffMembers', [
+        'setStaffMemberEditorState'
       ]),
 
       /**
@@ -65,7 +65,7 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
        */
       openEditor (staffMember = {}) {
         // this.modalState.setState(true)
-        // this.setServiceEditorState(service)
+        // this.setStaffMemberEditorState(service)
       },
     },
 

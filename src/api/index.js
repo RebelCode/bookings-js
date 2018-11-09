@@ -3,6 +3,7 @@ import ClientsApi from './ClientsApi'
 import GeneralApiErrorHandler from './GeneralApiErrorHandler'
 import SettingsApi from './SettingsApi'
 import ServicesApi from './ServicesApi'
+import StaffMembersApi from './StaffMembersApi'
 
 /*
  * Exports instances to main container config.
@@ -39,6 +40,13 @@ export default function (dependencies) {
         container.requestCache,
         container.serviceReadTransformer,
         container.serviceStoreTransformer,
+      )
+    },
+    staffMembersApi (container) {
+      return new StaffMembersApi(
+        container.authorizedHttpClient,
+        container.state.endpointsConfig['staff_members'],
+        container.requestCache,
       )
     },
     clientsApi (container) {

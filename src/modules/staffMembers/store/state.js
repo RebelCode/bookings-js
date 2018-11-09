@@ -1,6 +1,6 @@
 export default {
   /**
-   * Whether the list of services is loading.
+   * Whether the list of staff members is loading.
    *
    * @since [*next-version*]
    *
@@ -9,7 +9,7 @@ export default {
   isLoadingList: false,
 
   /**
-   * The list of services on the screen.
+   * The list of staff members on the screen.
    *
    * @since [*next-version*]
    *
@@ -18,7 +18,7 @@ export default {
   list: [],
 
   /**
-   * Whether the service's editor is visible.
+   * Whether the staff member's editor is visible.
    *
    * @since [*next-version*]
    *
@@ -27,11 +27,19 @@ export default {
   isModalVisible: false,
 
   /**
-   * The service that is being edited.
+   * The staff member that is being edited.
    *
    * @since [*next-version*]
    *
    * @property {object} one
    */
-  one: {},
+  one: {
+    id: null,
+    name: '',
+    image_id: null,
+    image_url: null,
+    availability: {
+      rules: []
+    }
+  },
 }

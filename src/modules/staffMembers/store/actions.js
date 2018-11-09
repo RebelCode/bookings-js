@@ -1,6 +1,6 @@
 export default {
   /**
-   * Fetch the list of services.
+   * Fetch the list of staff members.
    *
    * @since [*next-version*]
    *
@@ -23,12 +23,12 @@ export default {
   },
 
   /**
-   * Create the service.
+   * Create the staff member.
    *
    * @since [*next-version*]
    *
    * @param {Function} commit Local's module commit Vuex method.
-   * @param {ServicesApi} api The services API.
+   * @param {ServicesApi} api The staff members API.
    * @param {{id: number,...}} model The model holding new values.
    *
    * @return {Promise<any>} Promise holding the server's response data.
@@ -38,12 +38,12 @@ export default {
   },
 
   /**
-   * Update the service.
+   * Update the staff member.
    *
    * @since [*next-version*]
    *
    * @param {Function} commit Local's module commit Vuex method.
-   * @param {ServicesApi} api The services API.
+   * @param {ServicesApi} api The staff members API.
    * @param {{id: number, timezone: string, ...}} model The model holding new values.
    *
    * @return {Promise<any>} Promise holding the server's response data.
@@ -53,11 +53,11 @@ export default {
   },
 
   /**
-   * Seed service editor by passed model.
+   * Seed staff member editor by passed model.
    *
    * @since [*next-version*]
    *
-   * @param {ServicesApi} api The API for managing services.
+   * @param {ServicesApi} api The API for managing staff members.
    * @param {{id: number}} model
    */
   delete ({}, { api, model }) {
