@@ -36,8 +36,8 @@ export default {
   one: {
     id: null,
     name: '',
-    image_id: null,
-    image_url: null,
+    imageId: null,
+    imageSrc: null,
     availability: {
       rules: []
     }
