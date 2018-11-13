@@ -9,50 +9,66 @@ import ValidationResult from '../../../../libs/validation/ValidationResult'
  * @param mapMutations
  * @param mapActions
  *
- * @return {*}
+ * @return {Component}
  */
 export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapMutations, mapActions }) {
   return AbstractEntityModalEditor.extend({
     ...template,
     inject: {
       /**
-       * Modal state injected from the container.
+       * @var {FunctionalToggleable} modalState Modal state injected from elsewhere.
        *
-       * @var {FunctionalToggleable}
+       * @since [*next-version]
        */
       modalState: {
         from: 'staffMemberEditorState'
       },
 
+      /**
+       * @var {StaffMembersApi} api The staff members API client.
+       *
+       * @since [*next-version]
+       */
       'api': {
         from: 'staffMembersApi'
       },
 
+      /**
+       * @var {Function} _ The translating function.
+       *
+       * @since [*next-version*]
+       */
       '_': {
         from: 'translate'
       },
 
       /**
-       * @since [*next-version*]
+       * @var {object} config Application's configuration.
        *
-       * @property {Validator} complexSetupValidator Complex setup validator.
+       * @since [*next-version*]
        */
-      'complexSetupValidator': 'complexSetupValidator',
+      'config': 'config',
 
       /**
-       * @since [*next-version*]
+       * @var {AvailabilityHelpers} availabilityHelpers Set of helper methods for availabilities.
        *
-       * @property {AvailabilityHelpers} availabilityHelpers Set of helper methods for availabilities.
+       * @since [*next-version*]
        */
       'availabilityHelpers': 'availabilityHelpers',
 
-      'availabilities': 'availabilities',
-
+      /**
+       * @var {ValidatorFactory} validatorFactory Factory for making validators based on array configs.
+       *
+       * @since [*next-version*]
+       */
       'validatorFactory': 'validatorFactory',
 
+      /**
+       * @var {FunctionalToggleable} availabilityEditorStateToggleable Availability editor state.
+       *
+       * @since [*next-version*]
+       */
       'availabilityEditorStateToggleable': 'availabilityEditorStateToggleable',
-
-      'sessionEditorState': 'sessionEditorState',
 
       /**
        * API Errors Handler factory function.
@@ -63,22 +79,64 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
        */
       'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
 
+      /**
+       * @var {Component} availabilities The component for managing availabilities.
+       *
+       * @since [*next-version]
+       */
+      'availabilities': 'availabilities',
+
+      /**
+       * @var {Component} tabs The component for creating switchable tabs.
+       *
+       * @since [*next-version]
+       */
       'tabs': 'tabs',
+
+      /**
+       * @var {Component} tab The tab.
+       *
+       * @since [*next-version]
+       */
       'tab': 'tab',
+
+      /**
+       * @var {Component} modal Modal component.
+       *
+       * @since [*next-version]
+       */
       'modal': 'modal',
-      'config': 'config',
+
+      /**
+       * @var {Component} v-image-selector Component for selecting images from the gallery.
+       *
+       * @since [*next-version]
+       */
       'v-image-selector': 'v-image-selector',
     },
     data () {
       return {
         errorMessage: null,
 
-        isCreateConfirming: false,
-
+        /**
+         * @var {boolean} isSaving Whether the staff member that is being edited is saving.
+         *
+         * @since [*next-version*]
+         */
         isSaving: false,
 
+        /**
+         * @var {number|sting} activeTab ID of the active tab.
+         *
+         * @since [*next-version*]
+         */
         activeTab: 0,
 
+        /**
+         * @var {object} tabsConfig Tabs configuration.
+         *
+         * @since [*next-version*]
+         */
         tabsConfig: {
           switcherClass: 'horizontal-tabs',
           switcherItemClass: 'horizontal-tabs__item',
@@ -86,20 +144,28 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
           tabsClass: 'tabs-content'
         },
 
+        /**
+         * @var {object[]} rules Validation rules for a staff member.
+         *
+         * @since [*next-version*]
+         */
         rules: [{
           field: 'name',
           rule: 'required'
         }],
 
         /**
-         * @since [*next-version*]
+         * @var {ValidationResult} lastValidationResult The last result of the validation.
          *
-         * @property {ValidationResult|null} lastComplexSetupValidationResult The last result of complex setup validation.
+         * @since [*next-version*]
          */
-        lastComplexSetupValidationResult: null,
-
         lastValidationResult: new ValidationResult(),
 
+        /**
+         * @var {object} model A staff member model.
+         *
+         * @since [*next-version*]
+         */
         model: {
           id: null,
           name: '',
@@ -111,9 +177,9 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
         },
 
         /**
-         * @since [*next-version*]
+         * @var {ApiErrorHandler} staffMembersApiErrorHandler Handles error responses for the staff members API.
          *
-         * @property {ApiErrorHandler} staffMembersApiErrorHandler Handles error responses for the staff members API.
+         * @since [*next-version*]
          */
         staffMembersApiErrorHandler: this.apiErrorHandlerFactory((error) => {
           this.setSaving(false)
@@ -146,6 +212,11 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
       },
     },
     watch: {
+      /**
+       * Watch for model changes and remove error message once it is changed.
+       *
+       * @since [*next-version*]
+       */
       model: {
         deep: true,
         handler () {
