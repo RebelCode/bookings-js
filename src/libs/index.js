@@ -11,6 +11,7 @@ import validationServiceDefinition from './validation/services'
 import { makeDeepObjectDifference } from './makeDeepObjectDifference'
 import { MfItemsPage } from '../modules/base/mixins/ItemsPage'
 import { MfItemsList } from '../modules/base/mixins/ItemsList'
+import { makeStringHelpers } from './stringHelpers'
 
 export default function (dependencies, applicationState) {
   return {
@@ -137,6 +138,16 @@ export default function (dependencies, applicationState) {
     lodash: function () {
       return dependencies.lodash
     },
+
+    /**
+     * @var {{capitalize: Function}} stringHelpers Methods for strings manipulation.
+     *
+     * @since [*next-version*]
+     */
+    stringHelpers () {
+      return makeStringHelpers()
+    },
+
     momentHelpers: function (container) {
       return momentHelpers(container.moment, container.config.formats.datetime)
     },

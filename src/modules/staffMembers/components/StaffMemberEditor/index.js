@@ -11,7 +11,7 @@ import ValidationResult from '../../../../libs/validation/ValidationResult'
  *
  * @return {*}
  */
-export default function (AbstractEntityModalEditor, { mapState, mapMutations, mapActions }) {
+export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapMutations, mapActions }) {
   return AbstractEntityModalEditor.extend({
     ...template,
     inject: {
@@ -63,18 +63,11 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
        */
       'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
 
-      'repeater': 'repeater',
       'tabs': 'tabs',
       'tab': 'tab',
       'modal': 'modal',
       'config': 'config',
-      'sessions': 'sessions',
       'v-image-selector': 'v-image-selector',
-      'color-picker': 'color-picker',
-      'switcher': 'switcher',
-      'bool-switcher': 'bool-switcher',
-      'timezone-select': 'timezone-select',
-      'selection-list': 'selection-list',
     },
     data () {
       return {
@@ -96,10 +89,6 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
         rules: [{
           field: 'name',
           rule: 'required'
-        }, {
-          field: 'availability.rules.length',
-          rule: 'min_value',
-          value: 1
         }],
 
         /**
@@ -163,18 +152,6 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           this.errorMessage = null
         }
       },
-
-      /**
-       * Watch for changes of 'model.availability.rules' field and remove errors if the field is changed.
-       *
-       * @since [*next-version*]
-       */
-      'model.availability.rules': {
-        deep: true,
-        handler () {
-          this.lastValidationResult.removeErrors('availability.rules.length')
-        },
-      }
     },
     mounted () {
       /*
@@ -234,16 +211,10 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
       }
     },
     components: {
-      repeater: 'repeater',
       tabs: 'tabs',
       tab: 'tab',
       modal: 'modal',
-      switcher: 'switcher',
       'availabilities': 'availabilities',
-      'sessions': 'sessions',
-      'bool-switcher': 'bool-switcher',
-      'timezone-select': 'timezone-select',
-      'selection-list': 'selection-list',
       'v-image-selector': 'v-image-selector',
     }
   })

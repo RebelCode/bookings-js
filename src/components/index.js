@@ -38,6 +38,7 @@ import StaffMembers from './../modules/StaffMembers/components/StaffMembers'
 
 import VSwitch from './ui/VSwitch.vue'
 import ImageSelector from './ui/ImageSelector.vue'
+import { CfStaffMemberEditor } from '../modules/staffMembers/components/StaffMemberEditor'
 
 /*
  * Exports instances to main container config.
@@ -106,6 +107,17 @@ export default function (dependencies) {
      */
     'staff-members' (container) {
       return StaffMembers(container.MfItemsList, container.mapStore)
+    },
+
+    /**
+     * Component for editing staff member items.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
+    'staff-member-editor' (container) {
+      return CfStaffMemberEditor(container['abstract-entity-modal-editor'], container.vuex)
     },
 
     'service-editor' (container) {

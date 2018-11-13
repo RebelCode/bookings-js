@@ -64,6 +64,16 @@ export function services (dependencies, applicationState, document) {
         return container.store.state.services.isModalVisible
       })
     },
+    staffMemberEditorState: function (container) {
+      return new FunctionalToggleable((newVisibility) => {
+        container.store.commit('set', {
+          key: 'staffMembers.isModalVisible',
+          value: newVisibility
+        })
+      }, () => {
+        return container.store.state.staffMembers.isModalVisible
+      })
+    },
     sessionEditorState (container) {
       return new FunctionalToggleable((newVisibility) => {
         container.store.commit('set', {

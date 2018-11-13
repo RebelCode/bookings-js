@@ -18,11 +18,11 @@
               :tabs-with-errors="{0: lastValidationResult.hasErrors('name'), 1: lastValidationResult.hasErrors('availability.rules.length')}"
         >
             <tab title="Information">
-                <div class="row">
+                <div class="row row--small">
                     <div class="col-12 columns">
                         <div class="form-row form-row--vertical">
                             <div class="form-row__input">
-                                <v-image-selector v-model="staffMemberImage"></v-image-selector>
+                                <v-image-selector v-model="staffMemberImage" class="v-image-selector--round"/>
                             </div>
                         </div>
                         <div class="form-row form-row--vertical" :class="lastValidationResult.hasErrors('name') ? 'form-row--with-error' : ''">
@@ -38,6 +38,7 @@
                 <availabilities v-model="model.availability.rules"
                                 :timezone.sync="model.timezone"
                                 :is-validation-error="lastValidationResult.hasErrors('availability.rules.length')"
+                                :instance-label="_('staff member')"
                 />
             </tab>
         </tabs>
@@ -53,7 +54,7 @@
             </div>
             <div class="footer-confirm__buttons">
                 <button class="button button-primary"
-                        :class="{'loading-button': isSavingPublished}"
+                        :class="{'loading-button': isSaving}"
                         @click="save()"
                 >
                     {{ model.id ? 'Save Changes' : 'Create Staff Member' }}

@@ -81,6 +81,15 @@ $breakpoint-large: 68em; // 960px
       margin: 0 -2%;
     }
   }
+
+  &--small {
+    max-width: 24rem;
+    margin: 0 auto;
+
+    @include breakpoint(mobile) {
+      margin: 0 -2%;
+    }
+  }
 }
 
 .row [class^="col"] {

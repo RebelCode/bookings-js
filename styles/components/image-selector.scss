@@ -31,6 +31,12 @@
     text-decoration: underline;
     text-decoration-color: transparentize($alert-color, .5);
   }
+
+  &--round {
+    .v-image-selector__preview, .v-image-selector__holder {
+      border-radius: 100%;
+    }
+  }
 }
 
 .eddbk-avatar-rounded {
