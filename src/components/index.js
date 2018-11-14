@@ -38,6 +38,8 @@ import StaffMembers from './../modules/StaffMembers/components/StaffMembers'
 
 import VSwitch from './ui/VSwitch.vue'
 import ImageSelector from './ui/ImageSelector.vue'
+import VSortableList from './ui/VSortableList.vue'
+import VSortableItem from './ui/VSortableItem.vue'
 import { CfStaffMemberEditor } from '../modules/staffMembers/components/StaffMemberEditor'
 
 /*
@@ -149,6 +151,14 @@ export default function (dependencies) {
 
     'v-image-selector' () {
       return ImageSelector
+    },
+
+    'v-sortable-list' () {
+      return VSortableList
+    },
+
+    'v-sortable-item' () {
+      return VSortableItem
     },
 
     calendar: function (container) {
