@@ -18,9 +18,6 @@
             <template v-if="screen === 'service'">
                 <div class="form-row form-row--wizard">
                     <div class="form-row__label">
-                        <div class="drag-icon">
-                            <span class="dashicons dashicons-menu"></span>
-                        </div>
                         <editable-input v-model="overrides.fields.service.title" :defaultValue="defaults.fields.service.title"/>
                     </div>
                     <div class="form-row__input">
@@ -240,11 +237,6 @@
           'service', 'session', 'confirmation'
         ],
 
-        wizardFields: [
-          'duration',
-          'staffMember'
-        ],
-
         isSeeding: false,
         overrides: null,
       }
@@ -256,6 +248,11 @@
       color: {
         type: String,
         default: '#0b92da'
+      },
+      fieldsOrder: {
+        default () {
+          return []
+        }
       }
     },
 
@@ -294,6 +291,14 @@
     },
 
     computed: {
+      wizardFields: {
+        get () {
+          return this.fieldsOrder
+        },
+        set (value) {
+          this.$emit('update:fieldsOrder', value)
+        }
+      },
       wizardStyle () {
         return {
           'background-color': this.color
