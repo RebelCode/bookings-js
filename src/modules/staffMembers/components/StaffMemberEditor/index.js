@@ -169,10 +169,13 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
         model: {
           id: null,
           name: '',
-          image_id: null,
-          image_url: null,
+          data: {
+            imageId: null,
+            imageUrl: null,
+          },
           availability: {
-            rules: []
+            rules: [],
+            timezone: this.config.timezone
           }
         },
 
@@ -201,13 +204,13 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
       staffMemberImage: {
         get () {
           return {
-            id: this.model.imageId,
-            url: this.model.imageSrc,
+            id: this.model.data.imageId,
+            url: this.model.data.imageSrc,
           }
         },
         set (value) {
-          this.model.imageId = value.id
-          this.model.imageSrc = value.url
+          this.model.data.imageId = value.id
+          this.model.data.imageSrc = value.url
         }
       },
     },
