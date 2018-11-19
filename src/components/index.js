@@ -200,6 +200,10 @@ export default function (dependencies) {
       return dependencies.bookingWizardComponents.MfCreateDatetimeCapable(container.moment)
     },
 
+    sessionsFilterCapable (container) {
+      return dependencies.bookingWizardComponents.MfSessionsFilterCapable(container.moment)
+    },
+
     /**
      * Component for selecting session for service.
      *
@@ -212,20 +216,10 @@ export default function (dependencies) {
     'service-session-selector' (container) {
       return dependencies.bookingWizardComponents.CfServiceSessionSelector(
         container.createDatetimeCapable,
+        container.sessionsFilterCapable,
         container.sessionsApi,
         container.config.formats.datetime
       )
-    },
-
-    /**
-     * Component for selecting session duration.
-     *
-     * @since [*next-version*]
-     *
-     * @return {object}
-     */
-    'session-duration-picker' () {
-      return dependencies.bookingWizardComponents.CfSessionDurationPicker()
     },
 
     /**
