@@ -23,6 +23,13 @@ export function page (makeItemsPageMixin, store, { mapActions, mapMutations }, m
       },
 
       /**
+       * @var {StaffMembersApi} staffMembersApi The API client for staff members.
+       *
+       * @since [*next-version]
+       */
+      'staffMembersApi': 'staffMembersApi',
+
+      /**
        * @var {FunctionalToggleable} modalState Modal state injected from elsewhere.
        *
        * @since [*next-version]
@@ -51,6 +58,15 @@ export function page (makeItemsPageMixin, store, { mapActions, mapMutations }, m
        * @since [*next-version]
        */
       'services': 'services',
+    },
+
+    /**
+     * Fetch staff members when component is mounted.
+     *
+     * @since [*next-version*]
+     */
+    mounted () {
+      this.$store.dispatch('staffMembers/fetch', { api: this.staffMembersApi })
     },
 
     methods: {

@@ -22,4 +22,16 @@ export default {
   setSessionEditorState (state, model) {
     state.oneSession = model
   },
+
+  /**
+   * Set loading state value.
+   *
+   * @since [*next-version*]
+   *
+   * @param state
+   * @param newLoadingState
+   */
+  setLoadingList (state, newLoadingState) {
+    state.isLoadingList = newLoadingState
+  }
 }

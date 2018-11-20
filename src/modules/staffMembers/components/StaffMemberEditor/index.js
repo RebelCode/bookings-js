@@ -171,7 +171,7 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
           name: '',
           data: {
             imageId: null,
-            imageUrl: null,
+            imageSrc: null,
           },
           availability: {
             rules: [],

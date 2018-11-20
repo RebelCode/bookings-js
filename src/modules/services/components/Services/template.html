@@ -22,11 +22,19 @@
                 {{ service.name }}
             </div>
         </div>
-        <div class="rich-row__column" v-if="service.sessionTypes.length">
+        <div class="rich-row__column rich-row__normal-anchor" v-if="service.sessionTypes.length">
             <div class="rich-row__header">
                 Sessions
             </div>
             {{ getDurationPreview(service.sessionTypesStored) }} ({{ getPricePreview(service.sessionTypesStored) }})
+        </div>
+        <div class="rich-row__column rich-row__normal-anchor" v-if="hasResources('staff', service.sessionTypes)">
+            <div>
+                <div class="service-staff" v-for="resource of getResources('staff', service.sessionTypes)">
+                    <img :src="resource.data.imageSrc || defaultStaffImageSrc" alt="" class="service-staff__image">
+                    <span class="staff-service__name">{{ resource.name }}</span>
+                </div>
+            </div>
         </div>
         <div class="rich-row__column rich-row__actions">
             <v-switch :id="'' + service.id" class="mobile-only" :value="service.status === 'publish'" @input="switchServiceStatus(service)"/>

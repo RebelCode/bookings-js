@@ -135,15 +135,12 @@ export function MfItemsPage (store, { mapActions, mapMutations }, mapStore, item
        * @return {Promise<any>} Promise-based fetch response.
        */
       fetchItems () {
-        this.isLoadingList = true
-
         const params = Object.assign({}, {
           api: this.api,
           params: this.buildParams(),
         }, this.getDispatchFetchParams ? this.getDispatchFetchParams() : {})
 
         return this.dispatchFetch(params).then(() => {
-          this.isLoadingList = false
           this.isInitialFetchResults = !this.search
         }).catch(error => this.apiErrorHandler.handle(error))
       },

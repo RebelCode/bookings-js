@@ -12,6 +12,8 @@ export default function (AbstractEntityModalEditor, { mapState }) {
 
       'inline-editor': 'inline-editor',
 
+      'vueselect': 'vueselect',
+
       modalState: {
         from: 'sessionEditorState'
       },
@@ -31,7 +33,8 @@ export default function (AbstractEntityModalEditor, { mapState }) {
           type: "fixed_duration",
           label: "",
           data: {
-            duration: null
+            duration: null,
+            resources: []
           },
           price: null
         },
@@ -116,7 +119,8 @@ export default function (AbstractEntityModalEditor, { mapState }) {
       },
     },
     components: {
-      'inline-editor': 'inline-editor'
+      'inline-editor': 'inline-editor',
+      'vueselect': 'vueselect',
     }
   })
 }

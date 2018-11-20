@@ -12,6 +12,7 @@ export default {
    * @return {PromiseLike<T> | Promise<T>}
    */
   fetch ({ commit }, { api, params, transformOptions }) {
+    commit('setLoadingList', true)
     return api.fetch(params).then((response) => {
       commit('set', {
         key: 'services.list',
@@ -24,6 +25,9 @@ export default {
       }, {
         root: true
       })
+      commit('setLoadingList', false)
+    }).catch(() => {
+      commit('setLoadingList', false)
     })
   },
 

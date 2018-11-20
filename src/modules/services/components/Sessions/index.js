@@ -1,8 +1,10 @@
 import template from './template.html'
+import GetResourceCapable from './../../mixins/GetResourceCapable'
 
 export default function CfSessions ({ mapState, mapMutations }, FunctionalArrayCollection) {
   return {
     ...template,
+    mixins: [ GetResourceCapable ],
     inject: {
       '_': {
         from: 'translate'

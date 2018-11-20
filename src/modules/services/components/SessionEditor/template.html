@@ -77,6 +77,24 @@
             </div>
         </div>
 
+        <div class="form-row">
+            <div class="form-row__label form-row__label--padding-top">
+                {{ _('Staff Members') }}
+            </div>
+            <div class="form-row__input">
+                <vueselect :options="$store.state.staffMembers.list"
+                           multiple
+                           v-model="model.data.resources"
+                           label="name"
+                           :placeholder="_('Select staff members')"
+                >
+                    <template slot="spinner" slot-scope="options">
+                        <div class="loading-inline" v-if="$store.state.staffMembers.isLoadingList"></div>
+                    </template>
+                </vueselect>
+            </div>
+        </div>
+
     </div>
 
     <div slot="footer">
