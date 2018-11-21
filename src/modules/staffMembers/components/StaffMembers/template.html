@@ -4,7 +4,7 @@
             {{ isInitialFetchResults ? 'No staff members yet!' : 'No staff members found' }}
         </div>
         <div class="empty-state__text" v-if="isInitialFetchResults">
-            {{ _('Create your first staff member to [JOB TO BE DONE]') }}
+            {{ _('Create your first staff member to let them accept bookings') }}
         </div>
         <div class="empty-state__cta" v-if="isInitialFetchResults">
             <div class="button button-primary" @click="$emit('create')">
