@@ -71,8 +71,9 @@
   span {
     position: absolute;
     left: 8px;
-    top: 5px;
-    opacity: .8;
+    top: 0;
+    line-height: 30px;
+    opacity: .6;
 
     pointer-events: none;
     user-select: none;

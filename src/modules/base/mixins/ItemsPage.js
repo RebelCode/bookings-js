@@ -36,6 +36,12 @@ export function MfItemsPage (store, { mapActions, mapMutations }, mapStore, item
        * @since [*next-version*]
        */
       'notificationsCenter': 'notificationsCenter',
+      /**
+       * @var {FunctionalArrayCollection} entitiesCollection Staff members entities.
+       *
+       * @since [*next-version]
+       */
+      'entitiesCollection': { from: `${itemsKey}EntitiesCollection` }
     },
     /**
      * Check object for required properties when it is created.
@@ -66,6 +72,13 @@ export function MfItemsPage (store, { mapActions, mapMutations }, mapStore, item
          * @since [*next-version]
          */
         isInitialFetchResults: false,
+
+        /**
+         * @var {boolean} isPaginated Whether the items list is paginated.
+         *
+         * @since [*next-version]
+         */
+        isPaginated: false,
 
         /**
          * @var {ApiErrorHandler} apiErrorHandler Handles error responses for the services API.
@@ -123,7 +136,10 @@ export function MfItemsPage (store, { mapActions, mapMutations }, mapStore, item
         this.$set(model, 'isSaving', true)
         return this.dispatchDelete({ api: this.api, model }).then(() => {
           this.$set(model, 'isSaving', false)
-          this.fetchItems()
+
+          if (this.entitiesCollection.hasItem(model) && !this.isPaginated) {
+            this.entitiesCollection.removeItem(model)
+          }
         })
       },
 

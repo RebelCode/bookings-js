@@ -113,6 +113,13 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
        * @since [*next-version]
        */
       'v-image-selector': 'v-image-selector',
+
+      /**
+       * @var {FunctionalArrayCollection} entitiesCollection Staff members entities.
+       *
+       * @since [*next-version]
+       */
+      'entitiesCollection': { from: 'staffMembersEntitiesCollection' }
     },
     data () {
       return {
@@ -193,7 +200,6 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
     computed: {
       ...mapState('staffMembers', {
         entityModel: 'one',
-        entitiesCollection: 'list'
       }),
 
       /**
@@ -264,9 +270,15 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
           this.setSaving(true)
           const model = Object.assign({}, this.model)
 
-          return this[dispatchSaveMethod]({api: this.api, model}).then(() => {
+          return this[dispatchSaveMethod]({api: this.api, model}).then(response => {
             this.setSaving(false)
-            this.$emit('saved')
+
+            const storedModel = response.data
+            if (this.entitiesCollection.hasItem(storedModel)) {
+              this.entitiesCollection.removeItem(storedModel)
+            }
+            this.entitiesCollection.addItem(storedModel)
+
             this.forceCloseModal()
           })
         }).catch(error => this.staffMembersApiErrorHandler.handle(error))

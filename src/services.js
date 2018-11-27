@@ -84,6 +84,27 @@ export function services (dependencies, applicationState, document) {
         return container.store.state.services.isSessionEditorState
       })
     },
+
+    staffMembersEntitiesCollection (container) {
+      const store = container.store
+      return new FunctionalArrayCollection(() => store.state.staffMembers.list, (value) => {
+        store.commit('set', {
+          key: 'staffMembers.list',
+          value
+        })
+      }, item => item.id)
+    },
+
+    servicesEntitiesCollection (container) {
+      const store = container.store
+      return new FunctionalArrayCollection(() => store.state.services.list, (value) => {
+        store.commit('set', {
+          key: 'services.list',
+          value
+        })
+      }, item => item.id)
+    },
+
     availabilitiesCollection (container) {
       const store = container.store
 
