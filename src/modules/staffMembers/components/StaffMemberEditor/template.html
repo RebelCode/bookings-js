@@ -36,7 +36,7 @@
             </tab>
             <tab title="Availability">
                 <availabilities v-model="model.availability.rules"
-                                :timezone.sync="model.timezone"
+                                :timezone.sync="model.availability.timezone"
                                 :is-validation-error="lastValidationResult.hasErrors('availability.rules.length')"
                                 :instance-label="_('staff member')"
                 />

@@ -20,7 +20,7 @@ export default {
       console.info({sessionTypes})
       for (let sessionType of sessionTypes) {
         for (let resource of (sessionType.data.resources || [])) {
-          if (resource.type === resourceType) {
+          if (resource && resource.type === resourceType) {
             return true
           }
         }
@@ -42,7 +42,7 @@ export default {
       let resources = []
       for (let sessionType of sessionTypes) {
         for (let resource of (sessionType.data.resources || [])) {
-          if (!resources.find(r => r.id === resource.id)) {
+          if (resource && !resources.find(r => r.id === resource.id)) {
             resources.push(resource)
           }
         }
