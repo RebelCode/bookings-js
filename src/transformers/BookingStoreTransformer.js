@@ -67,7 +67,7 @@ export default class BookingStoreTransformer extends Transformer {
     session: (model) => {
       model['start'] = model.session.start
       model['end'] = model.session.end
-      model['resource'] = model.session.resource
+      model['resources'] = model.session.resources
       delete model['session']
       return model
     },
