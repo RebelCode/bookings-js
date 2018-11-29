@@ -34,18 +34,21 @@ export default {
      * @since [*next-version*]
      *
      * @param {string} resourceType
-     * @param {ServiceSessionType[]} sessionTypes
+     * @param {object[]} resourceHolders
      *
      * @return {boolean}
      */
-    getResources (resourceType, sessionTypes) {
+    getResources (resourceType, resourceHolders) {
       let resources = []
-      for (let sessionType of sessionTypes) {
-        for (let resource of (sessionType.data.resources || [])) {
-          if (resource && !resources.find(r => r.id === resource.id)) {
+      for (let resourceHolder of resourceHolders) {
+        const allResources = resourceHolder.data ? resourceHolder.data.resources : resourceHolder.resources
+        for (let resource of allResources) {
+          if (resource && resource.type === resourceType && !resources.find(r => r.id === resource.id)) {
             resources.push(resource)
           }
         }
+        console.info(resources)
+
       }
       return resources
     },

@@ -1,5 +1,9 @@
+import GetResourceCapable from '../modules/services/mixins/GetResourceCapable'
+
 export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) {
   return AbstractBookingsView.extend({
+    mixins: [ GetResourceCapable ],
+
     inject: {
       'isMobile': 'isMobile',
       'bookingHelpers': 'bookingHelpers',

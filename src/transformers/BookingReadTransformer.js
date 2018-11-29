@@ -24,7 +24,7 @@ export default class BookingReadTransformer extends Transformer {
           start: model.start,
           end: model.end,
           service: model.service.id,
-          resource: model.service.id
+          resources: model.resources.map(resource => resource.id)
         }
       }
       return model
