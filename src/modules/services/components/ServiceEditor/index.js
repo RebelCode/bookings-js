@@ -118,10 +118,6 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
             field: 'name',
             rule: 'required'
           }, {
-            field: 'availability.rules.length',
-            rule: 'min_value',
-            value: 1
-          }, {
             field: 'sessionTypes.length',
             rule: 'min_value',
             value: 1
