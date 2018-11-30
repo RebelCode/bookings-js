@@ -138,12 +138,12 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           name: null,
           status: 'draft',
           description: null,
-          timezone: this.config.timezone,
           imageId: null,
           imageSrc: null,
           color: null,
           availability: {
-            rules: []
+            rules: [],
+            timezone: this.config.timezone,
           },
           sessionTypes: [],
           displayOptions: {

@@ -53,7 +53,7 @@ export default class ServicesApi extends Api {
    * @return {Promise<any>}
    */
   create (model) {
-    model = this.serviceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.timezone})
+    model = this.serviceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.availability.timezone})
     const createConfig = this.config['create']
     return this.http.request({
       method: createConfig.method,
@@ -72,7 +72,7 @@ export default class ServicesApi extends Api {
    * @return {Promise<any>}
    */
   update (model) {
-    model = this.serviceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.timezone})
+    model = this.serviceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.availability.timezone})
     const updateConfig = this.config['update']
     return this.http.request({
       method: updateConfig.method,
