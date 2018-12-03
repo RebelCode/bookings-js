@@ -65,7 +65,9 @@ let config = {
       sourcemap: false,
       compress: {
         warnings: false,
-        drop_console: true
+        pure_funcs: [
+          'console.log', 'console.info', 'console.warn'
+        ]
       },
     }),
     new webpack.LoaderOptionsPlugin({
