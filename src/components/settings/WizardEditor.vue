@@ -107,6 +107,11 @@
                             :values="{service: 'Some Service', duration: '1 hour'}"
                     />
                     <editable-input
+                            v-model="overrides.confirmation.with"
+                            :defaultValue="defaults.confirmation.with"
+                            :values="{name: 'Nick Bell'}"
+                    />
+                    <editable-input
                             v-model="overrides.confirmation.starting"
                             :defaultValue="defaults.confirmation.starting"
                             :values="{start: '1:00 am on Thursday 11th October 2018'}"
