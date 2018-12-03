@@ -145,7 +145,7 @@ export default function (FullCalendar, { mapState, mapMutations }, moment) {
           start: this.createDatetime(model.start, this.timezone),
           end: this.createDatetime(model.end, this.timezone),
 
-          clientName: model.client.name,
+          clientName: model.client ? model.client.name : this._('Client not found.'),
 
           ...this.bookingColor(booking, colorScheme),
 
