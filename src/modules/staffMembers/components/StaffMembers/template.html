@@ -4,7 +4,7 @@
             {{ isInitialFetchResults ? 'No staff members yet!' : 'No staff members found' }}
         </div>
         <div class="empty-state__text" v-if="isInitialFetchResults">
-            {{ _('Create your first staff member to [JOB TO BE DONE]') }}
+            {{ _('Create your first staff member to let them accept bookings') }}
         </div>
         <div class="empty-state__cta" v-if="isInitialFetchResults">
             <div class="button button-primary" @click="$emit('create')">
@@ -12,9 +12,9 @@
             </div>
         </div>
     </div>
-    <div class="rich-row rich-row--condensed" :class="{'loading-container': staffMember.isSaving}" v-for="staffMember of list">
+    <div class="rich-row rich-row--condensed" :class="{'loading-container': staffMember.isSaving}" v-for="staffMember of orderedList">
         <div class="rich-row__column">
-            <img :src="staffMember.image_url || defaultImageUrl" class="eddbk-avatar-rounded">
+            <img :src="staffMember.data.imageSrc || defaultImageSrc" class="eddbk-avatar-rounded">
         </div>
         <div class="rich-row__column rich-row__wide-anchor">
             <div class="rich-row__title">
@@ -24,8 +24,8 @@
         <div class="rich-row__column rich-row__actions">
             <div class="button-group">
                 <div class="button" @click="$emit('edit', staffMember)">Edit</div>
-                <div class="button button-icon">
-                    <span class="dashicons dashicons-trash" @click="$emit('delete', staffMember)"></span>
+                <div class="button button-icon" @click="$emit('delete', staffMember)">
+                    <span class="dashicons dashicons-trash"></span>
                     <!--<span class="dashicons dashicons-arrow-down"></span>-->
                 </div>
             </div>

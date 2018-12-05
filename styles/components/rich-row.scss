@@ -1,6 +1,6 @@
 .eddbk-shrinked-page {
   .wrap {
-    max-width: 750px;
+    max-width: 785px;
     //padding-right: 20px;
     //margin: 1rem auto;
 
@@ -130,6 +130,10 @@
   &__column {
     padding: 0 1rem;
 
+    &--2 {
+      flex-basis: 25%;
+    }
+
     &--4 {
       flex-basis: 40%;
     }
@@ -162,7 +166,16 @@
   }
 
   &__wide-anchor {
-    width: 42%;
+    width: 28.5%;
+    flex-shrink: 0;
+
+    @include breakpoint(mobile) {
+      width: 100%;
+    }
+  }
+
+  &__normal-anchor {
+    width: 18.5%;
     flex-shrink: 0;
 
     @include breakpoint(mobile) {
@@ -241,5 +254,19 @@
     font-size: 14px;
     opacity: .8;
     padding-bottom: 1rem;
+  }
+}
+
+.service-staff {
+  padding: 2px 0;
+  display: flex;
+  &__image {
+    height: 20px;
+    border-radius: 100px;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+  &__name {
+
   }
 }

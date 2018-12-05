@@ -74,7 +74,7 @@
             </tab>
             <tab title="Availability">
                 <availabilities v-model="model.availability.rules"
-                                :timezone.sync="model.timezone"
+                                :timezone.sync="model.availability.timezone"
                                 :is-validation-error="lastValidationResult.hasErrors('availability.rules.length')"
                 />
             </tab>
@@ -96,7 +96,7 @@
                             {{ _("Service timezone") }}
                         </div>
                         <div class="wide-form__input">
-                            <timezone-select id="eddbk-timezone-select" v-model="model.timezone"></timezone-select>
+                            <timezone-select id="eddbk-timezone-select" v-model="model.availability.timezone"></timezone-select>
                         </div>
                     </div>
                 </div>

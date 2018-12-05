@@ -5,11 +5,29 @@ import { Api } from '@rebelcode/std-lib'
  *
  * @since [*next-version*]
  *
- * @class ServicesApi
+ * @class StaffMembersApi
  */
 export default class StaffMembersApi extends Api {
   /**
-   * Fetch the services list using request params.
+   * Api constructor
+   *
+   * @since [*next-version*]
+   *
+   * @param {HttpClient} httpClient Http promise-based client
+   * @param {Object<string, {method: String, endpoint: String}>} config
+   * @param {RequestCache} cache Requests caching implementation.
+   * @param {ResourceReadTransformer} resourceReadTransformer Transformer applied to a resource entity before displaying.
+   * @param {ResourceReadTransformer} resourceReadTransformer Transformer applied to a resource entity before displaying.
+   * @param {ResourceStoreTransformer} resourceStoreTransformer Transformer applied to a resource entity before saving.
+   */
+  constructor (httpClient, config, cache, resourceReadTransformer, resourceStoreTransformer) {
+    super(httpClient, config, cache)
+    this.resourceReadTransformer = resourceReadTransformer
+    this.resourceStoreTransformer = resourceStoreTransformer
+  }
+
+  /**
+   * Fetch the list using request params.
    *
    * @since [*next-version*]
    *
@@ -36,6 +54,7 @@ export default class StaffMembersApi extends Api {
    * @return {Promise<any>}
    */
   create (model) {
+    model = this.resourceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.availability.timezone})
     const createConfig = this.config['create']
     return this.http.request({
       method: createConfig.method,
@@ -54,6 +73,7 @@ export default class StaffMembersApi extends Api {
    * @return {Promise<any>}
    */
   update (model) {
+    model = this.resourceStoreTransformer.transform(JSON.parse(JSON.stringify(model)), {timezone: model.availability.timezone})
     const updateConfig = this.config['update']
     return this.http.request({
       method: updateConfig.method,

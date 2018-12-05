@@ -10,4 +10,16 @@ export default {
   setStaffMemberEditorState (state, model) {
     state.one = model
   },
+
+  /**
+   * Set loading state value.
+   *
+   * @since [*next-version*]
+   *
+   * @param state
+   * @param newLoadingState
+   */
+  setLoadingList (state, newLoadingState) {
+    state.isLoadingList = newLoadingState
+  }
 }

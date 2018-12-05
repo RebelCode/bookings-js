@@ -47,6 +47,8 @@ export default function (dependencies) {
         container.authorizedHttpClient,
         container.state.endpointsConfig['staff_members'],
         container.requestCache,
+        container.resourceReadTransformer,
+        container.resourceStoreTransformer
       )
     },
     clientsApi (container) {

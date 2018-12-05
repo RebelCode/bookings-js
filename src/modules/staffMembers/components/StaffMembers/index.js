@@ -19,7 +19,7 @@ export default function (makeItemsListMixin, mapStore) {
          *
          * @since [*next-version*]
          */
-        defaultImageUrl: 'http://1.gravatar.com/avatar/409c4050b1f39b6d0049c56f9fbb79e5?s=192&d=mm&r=g'
+        defaultImageSrc: 'http://1.gravatar.com/avatar/409c4050b1f39b6d0049c56f9fbb79e5?s=192&d=mm&r=g'
       }
     },
     mixins: [

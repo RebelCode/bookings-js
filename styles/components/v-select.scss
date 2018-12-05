@@ -87,3 +87,20 @@
 .v-select.open .open-indicator:before {
   transform: rotate(133deg) !important;
 }
+
+.form-row {
+  .v-select {
+    .selected-tag {
+      border: none;
+      line-height: 21px;
+      padding: 0 6px;
+      height: 22px;
+      border-radius: 2px;
+      margin: 0 1px;
+
+      button {
+        vertical-align: top;
+      }
+    }
+  }
+}

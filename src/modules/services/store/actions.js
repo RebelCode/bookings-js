@@ -1,3 +1,30 @@
+/**
+ * Transform service for reading with given options.
+ *
+ * @since [*nex-version*]
+ *
+ * @param item
+ * @param api
+ * @param transformOptions
+ *
+ * @return {*}
+ */
+const transformServiceForRead = (item, api, transformOptions) => {
+  const options = Object.assign({}, transformOptions, {
+    timezone: item.timezone
+  })
+  return api.serviceReadTransformer.transform(item, options)
+}
+
+/**
+ * Last applied transform options for fetching.
+ *
+ * @since [*next-version*]
+ *
+ * @type {object|null}
+ */
+let lastTransformOptions = null
+
 export default {
   /**
    * Fetch the list of services.
@@ -12,18 +39,20 @@ export default {
    * @return {PromiseLike<T> | Promise<T>}
    */
   fetch ({ commit }, { api, params, transformOptions }) {
+    commit('setLoadingList', true)
+    lastTransformOptions = transformOptions
     return api.fetch(params).then((response) => {
       commit('set', {
         key: 'services.list',
         value: response.data.items.map(item => {
-          const options = Object.assign({}, transformOptions, {
-            timezone: item.timezone
-          })
-          return api.serviceReadTransformer.transform(item, options)
+          return transformServiceForRead(item, api, transformOptions)
         })
       }, {
         root: true
       })
+      commit('setLoadingList', false)
+    }).catch(() => {
+      commit('setLoadingList', false)
     })
   },
 
@@ -39,7 +68,9 @@ export default {
    * @return {Promise<any>} Promise holding the server's response data.
    */
   create ({ commit }, { api, model }) {
-    return api.create(model)
+    return api.create(model).then(({data}) => {
+      return transformServiceForRead(data, api, lastTransformOptions)
+    })
   },
 
   /**
@@ -54,7 +85,9 @@ export default {
    * @return {Promise<any>} Promise holding the server's response data.
    */
   update ({ commit }, { api, model }) {
-    return api.update(model)
+    return api.update(model).then(({data}) => {
+      return transformServiceForRead(data, api, lastTransformOptions)
+    })
   },
 
   /**

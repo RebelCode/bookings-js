@@ -25,7 +25,16 @@ export function MfItemsList (mapStore, itemsKey) {
       ...mapStore(itemsKey, [
         'list',
         'isLoadingList'
-      ])
+      ]),
+
+      /**
+       * @var {object<id: number>[]} orderedList List of items ordered in desc order.
+       *
+       * @since [*next-version*]
+       */
+      orderedList () {
+        return this.list.slice().sort((a, b) => Number(b.id) - Number(a.id))
+      }
     },
 
     props: {

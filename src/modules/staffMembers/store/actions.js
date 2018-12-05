@@ -12,13 +12,19 @@ export default {
    * @return {PromiseLike<T> | Promise<T>}
    */
   fetch ({ commit }, { api, params, transformOptions }) {
+    commit('setLoadingList', true)
     return api.fetch(params).then((response) => {
       commit('set', {
         key: 'staffMembers.list',
-        value: response.data.items
+        value: response.data.items.map(item => {
+          return api.resourceReadTransformer.transform(item, { timezone: item.availability.timezone })
+        })
       }, {
         root: true
       })
+      commit('setLoadingList', false)
+    }).catch(() => {
+      commit('setLoadingList', false)
     })
   },
 

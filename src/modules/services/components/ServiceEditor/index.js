@@ -63,6 +63,13 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
        */
       'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
 
+      /**
+       * @var {FunctionalArrayCollection} entitiesCollection Services entities.
+       *
+       * @since [*next-version]
+       */
+      'entitiesCollection': { from: 'servicesEntitiesCollection' },
+
       'repeater': 'repeater',
       'tabs': 'tabs',
       'tab': 'tab',
@@ -111,10 +118,6 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
             field: 'name',
             rule: 'required'
           }, {
-            field: 'availability.rules.length',
-            rule: 'min_value',
-            value: 1
-          }, {
             field: 'sessionTypes.length',
             rule: 'min_value',
             value: 1
@@ -135,12 +138,12 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           name: null,
           status: 'draft',
           description: null,
-          timezone: this.config.timezone,
           imageId: null,
           imageSrc: null,
           color: null,
           availability: {
-            rules: []
+            rules: [],
+            timezone: this.config.timezone,
           },
           sessionTypes: [],
           displayOptions: {
@@ -162,7 +165,6 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
     computed: {
       ...mapState('services', {
         entityModel: 'one',
-        entitiesCollection: 'list'
       }),
 
       /**
@@ -290,9 +292,14 @@ export default function (AbstractEntityModalEditor, { mapState, mapMutations, ma
           this.setSaving(statusInfo.status, true)
           const model = Object.assign({}, this.model, statusInfo)
 
-          return this[dispatchSaveMethod]({api: this.api, model}).then(() => {
+          return this[dispatchSaveMethod]({api: this.api, model}).then(storedModel => {
             this.setSaving(false)
-            this.$emit('saved')
+
+            if (this.entitiesCollection.hasItem(storedModel)) {
+              this.entitiesCollection.removeItem(storedModel)
+            }
+            this.entitiesCollection.addItem(storedModel)
+
             this.forceCloseModal()
           })
         }).catch(error => this.servicesApiErrorHandler.handle(error))

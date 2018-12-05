@@ -1,5 +1,6 @@
 import template from './template.html'
 import { guessUnit } from '../../libs/sessionHelpers'
+import GetResourceCapable from './../../mixins/GetResourceCapable'
 
 /**
  * The services list component.
@@ -14,7 +15,8 @@ export default function (makeItemsListMixin, mapStore) {
   return {
     ...template,
     mixins: [
-      makeItemsListMixin(mapStore, 'services')
+      makeItemsListMixin(mapStore, 'services'),
+      GetResourceCapable
     ],
     inject: {
       'v-switch': 'v-switch',
