@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         '#eddbk-bookings-page',
         '#eddbk-service-page',
         '#eddbk-services-page',
+        '#eddbk-staff-members-page',
         '#eddbk-bookings-screen-options',
         '#eddbk-settings-page'
       ]

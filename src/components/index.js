@@ -33,6 +33,9 @@ import CfSessions from '../modules/services/components/Sessions'
 import CfSessionEditor from '../modules/services/components/SessionEditor'
 import CfAvailabilities from './../modules/services/components/Availabilities'
 
+import { page as StaffMembersPage } from './../modules/staffMembers'
+import StaffMembers from './../modules/StaffMembers/components/StaffMembers'
+
 import VSwitch from './ui/VSwitch.vue'
 import ImageSelector from './ui/ImageSelector.vue'
 
@@ -69,7 +72,18 @@ export default function (dependencies) {
      * @return {object|VueComponent}
      */
     'services-page' (container) {
-      return ServicesPage(container.store, container.vuex, container.mapStore)
+      return ServicesPage(container.MfItemsPage, container.store, container.vuex, container.mapStore)
+    },
+
+    /**
+     * The page for managing staff members.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
+    'staff-members-page' (container) {
+      return StaffMembersPage(container.MfItemsPage, container.store, container.vuex, container.mapStore)
     },
 
     /**
@@ -80,8 +94,18 @@ export default function (dependencies) {
      * @return {object|VueComponent}
      */
     'services' (container) {
-      console.info('Services(container.mapStore)', Services(container.mapStore))
-      return Services(container.mapStore)
+      return Services(container.MfItemsList, container.mapStore)
+    },
+
+    /**
+     * Component for displaying staff members list.
+     *
+     * @since [*next-version*]
+     *
+     * @return {object|VueComponent}
+     */
+    'staff-members' (container) {
+      return StaffMembers(container.MfItemsList, container.mapStore)
     },
 
     'service-editor' (container) {

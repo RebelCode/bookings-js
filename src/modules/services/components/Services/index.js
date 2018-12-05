@@ -10,21 +10,15 @@ import { guessUnit } from '../../libs/sessionHelpers'
  *
  * @return {*}
  */
-export default function (mapStore) {
+export default function (makeItemsListMixin, mapStore) {
   return {
     ...template,
+    mixins: [
+      makeItemsListMixin(mapStore, 'services')
+    ],
     inject: {
       'v-switch': 'v-switch',
       'humanizeDuration': 'humanizeDuration',
-      '_': {
-        from: 'translate'
-      }
-    },
-    computed: {
-      ...mapStore('services', [
-        'list',
-        'isLoadingList'
-      ])
     },
     data () {
       return {
@@ -33,11 +27,6 @@ export default function (mapStore) {
           draft: 'publish'
         }
       }
-    },
-    props: {
-      isInitialFetchResults: {
-        default: false
-      },
     },
     methods: {
       /**

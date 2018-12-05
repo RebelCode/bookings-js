@@ -44,6 +44,7 @@ let config = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@rebelcode/std-lib': '@rebelcode/std-lib/dist/std-lib.umd.js',
+      '@rebelcode/booking-wizard-components': './../../../../booking-wizard-components/dist/lib.min.js',
     },
     extensions: ['*', '.js', '.vue', '.json']
   },

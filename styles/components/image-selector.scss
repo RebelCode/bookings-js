@@ -32,3 +32,9 @@
     text-decoration-color: transparentize($alert-color, .5);
   }
 }
+
+.eddbk-avatar-rounded {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 3rem;
+}

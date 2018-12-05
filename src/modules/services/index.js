@@ -7,93 +7,69 @@ export { default as store } from './store'
  *
  * @return {object} Services page component.
  */
-export function page (store, { mapActions, mapMutations }, mapStore) {
+export function page (makeItemsPageMixin, store, { mapActions, mapMutations }, mapStore) {
   return {
-    store,
+    mixins: [
+      makeItemsPageMixin(store, { mapActions, mapMutations }, mapStore, 'services')
+    ],
     inject: {
-      'services': 'services',
-
+      /**
+       * @var {ServicesApi} api The services API client.
+       *
+       * @since [*next-version]
+       */
       'api': {
         from: 'servicesApi'
       },
 
-      '_': {
-        from: 'translate'
-      },
-
-      'config': 'config',
-
       /**
-       * Modal state injected from elsewhere.
+       * @var {FunctionalToggleable} modalState Modal state injected from elsewhere.
        *
-       * @var {FunctionalToggleable}
+       * @since [*next-version]
        */
       modalState: {
         from: 'serviceEditorState'
       },
 
       /**
-       * API Errors Handler factory function.
+       * @var {Component} service-editor The service editor component.
        *
-       * @since [*next-version*]
-       *
-       * @var {Function}
+       * @since [*next-version]
        */
-        'apiErrorHandlerFactory': 'apiErrorHandlerFactory',
+      'service-editor': 'service-editor',
 
       /**
-       * Notifications center for displaying notifications in UI.
+       * @var {Component} service-availability-editor The service availability editor component.
+       *
+       * @since [*next-version]
+       */
+      'service-availability-editor': 'service-availability-editor',
+
+      /**
+       * @var {Component} services The services list component (display the list of services).
+       *
+       * @since [*next-version]
+       */
+      'services': 'services',
+    },
+
+    methods: {
+      /**
+       * Map the service editor visibility mutation from the store.
        *
        * @since [*next-version*]
-       *
-       * @var {NotificationsCenter}
        */
-      'notificationsCenter': 'notificationsCenter',
-
-      'service-editor': 'service-editor',
-
-      'service-availability-editor': 'service-availability-editor',
-    },
-    components: {
-      'services': 'services',
-      'service-editor': 'service-editor',
-      'service-availability-editor': 'service-availability-editor',
-    },
-    data () {
-      return {
-        search: '',
-
-        isInitialFetchResults: false,
-
-        /**
-         * @since [*next-version*]
-         *
-         * @property {ApiErrorHandler} servicesApiErrorHandler Handles error responses for the services API.
-         */
-        servicesApiErrorHandler: this.apiErrorHandlerFactory((error) => {
-          this.isLoadingList = false
-          this.notificationsCenter.error(error)
-        }),
-      }
-    },
-    computed: {
-      ...mapStore('services', [
-        'list',
-        'isLoadingList'
-      ])
-    },
-    created () {
-      this.fetchServices()
-    },
-    methods: {
       ...mapMutations('services', [
         'setServiceEditorState'
       ]),
 
+      /**
+       * Map updating action from the store.
+       *
+       * @since [*next-version*]
+       */
       ...mapActions('services', {
         dispatchUpdate: 'update',
-        dispatchDelete: 'delete',
-        dispatchFetch: 'fetch'
       }),
 
       /**
@@ -103,66 +79,33 @@ export function page (store, { mapActions, mapMutations }, mapStore) {
        *
        * @param {service} service The service that is being edited.
        */
-      openServiceEditor (service = {}) {
+      openEditor (service = {}) {
         this.modalState.setState(true)
         this.setServiceEditorState(service)
       },
 
       /**
-       *
-       */
-      deleteService (model) {
-        if (!confirm(this._('Are you sure you want to delete this service? There is no undo option.'))) {
-          return
-        }
-        this.$set(model, 'isSaving', true)
-        this.dispatchDelete({ api: this.api, model }).then(() => {
-          this.$set(model, 'isSaving', false)
-          this.fetchServices()
-        })
-      },
-
-      /**
-       * Fetch the services list.
+       * Save the service.
        *
        * @since [*next-version*]
        */
-      fetchServices () {
-        this.isLoadingList = true
-        this.dispatchFetch({
-          api: this.api,
-          params: this.buildParams(),
-          transformOptions: { timezone: this.config.timezone }
-        }).then(() => {
-          this.isLoadingList = false
-          this.isInitialFetchResults = !this.search
-        }).catch(error => this.servicesApiErrorHandler.handle(error))
-      },
-
-      /**
-       *
-       */
-      saveService (model) {
+      saveItem (model) {
         this.$set(model, 'isSaving', true)
         this.dispatchUpdate({ api: this.api, model }).then(() => {
           this.$set(model, 'isSaving', false)
         })
       },
+    },
 
-      /**
-       * Get params for fetching the list of services.
-       *
-       * @since [*next-version*]
-       *
-       * @return {object}
-       */
-      buildParams () {
-        const params = {}
-        if (this.search) {
-          params['s'] = this.search
-        }
-        return params
-      }
-    }
+    /**
+     * Components definitions.
+     *
+     * @see `inject` property in this component for each component's description.
+     */
+    components: {
+      'services': 'services',
+      'service-editor': 'service-editor',
+      'service-availability-editor': 'service-availability-editor',
+    },
   }
 }

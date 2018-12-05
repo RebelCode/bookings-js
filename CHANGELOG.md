@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added a new view for sessions management.
 - Added the session editor with labels.
+- Added the staff members module.
+- Added abstract list mixins (List and Page), for managing list views of items. 
 
 ### Changed
 - Using new session types.
