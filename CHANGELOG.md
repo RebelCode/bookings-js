@@ -5,11 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [[*next-version*]] - YYYY-MM-DD
+## [0.2.5] - 2018-12-05
 ### Added
 - Added a new view for sessions management.
 - Added the session editor with labels.
 - Added the staff members module which includes list and editor for staff members.
-- Added abstract list mixins (List and Page), for managing list views of items. 
+- Added abstract list mixins (List and Page), for managing list views of items.
+- Added ability to reorder filters for session selector.
 
 ### Changed
 - Using new session types.
