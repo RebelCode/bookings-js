@@ -16,7 +16,7 @@
         </div>
         <div class="wizard-editor__body">
             <template v-if="screen === 'service'">
-                <div class="form-row">
+                <div class="form-row form-row--wizard">
                     <div class="form-row__label">
                         <editable-input v-model="overrides.fields.service.title" :defaultValue="defaults.fields.service.title"/>
                     </div>
@@ -34,7 +34,7 @@
                     <span class="wizard-editor__word" style="width: 60px"></span>
                     <span class="wizard-editor__word" style="width: 30px"></span>
                     <hr>
-                    <div class="form-row">
+                    <div class="form-row form-row--wizard">
                         <div class="form-row__label">
                             <editable-input v-model="overrides.fields.timezone.title" :defaultValue="defaults.fields.timezone.title"/>
                         </div>
@@ -45,17 +45,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-row__label">
-                        <editable-input v-model="overrides.fields.duration.title" :defaultValue="defaults.fields.duration.title"/>
-                    </div>
-                    <div class="form-row__input">
-                        <div class="wizard-editor__input wizard-editor__input--placeholder">
-                            <div class="wizard-editor__solid"></div>
+                <v-sortable-list v-model="wizardFields"
+                                 :lock-axis="'y'"
+                                 style="margin-bottom: 1.5rem"
+                >
+                    <v-sortable-item class="form-row form-row--wizard" :index="i" :key="i" v-for="(field, i) of wizardFields">
+                        <span class="drag-icon dashicons dashicons-menu"></span>
+                        <div class="form-row__label">
+                            <editable-input v-model="overrides.fields[field].title" :defaultValue="defaults.fields[field].title"/>
                         </div>
-                    </div>
-                </div>
-                <div class="form-row">
+                        <div class="form-row__input">
+                            <div class="wizard-editor__input wizard-editor__input--placeholder">
+                                <div class="wizard-editor__solid"></div>
+                            </div>
+                        </div>
+                    </v-sortable-item>
+                </v-sortable-list>
+                <div class="form-row form-row--wizard">
                     <div class="form-row__label">
                         <editable-input v-model="overrides.fields.date.title" :defaultValue="defaults.fields.date.title"/>
                     </div>
@@ -74,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row form-row--wizard">
                     <div class="form-row__label">
                         <editable-input v-model="overrides.fields.time.title" :defaultValue="defaults.fields.time.title"/>
                     </div>
@@ -111,7 +117,7 @@
                             :values="{price: '$45.00'}"
                     />
                 </div>
-                <div class="form-row">
+                <div class="form-row form-row--wizard">
                     <div class="form-row__label">
                         <editable-input v-model="overrides.fields.notes.title" :defaultValue="defaults.fields.notes.title"/>
                     </div>
@@ -177,6 +183,10 @@
        */
       'editable-input': 'editable-input',
 
+      'v-sortable-item': 'v-sortable-item',
+
+      'v-sortable-list': 'v-sortable-list',
+
       /**
        * Get object that represents deep difference between two given objects.
        *
@@ -238,6 +248,11 @@
       color: {
         type: String,
         default: '#0b92da'
+      },
+      fieldsOrder: {
+        default () {
+          return []
+        }
       }
     },
 
@@ -276,6 +291,14 @@
     },
 
     computed: {
+      wizardFields: {
+        get () {
+          return this.fieldsOrder
+        },
+        set (value) {
+          this.$emit('update:fieldsOrder', value)
+        }
+      },
       wizardStyle () {
         return {
           'background-color': this.color
@@ -284,7 +307,9 @@
     },
 
     components: {
-      'editable-input': 'editable-input'
+      'editable-input': 'editable-input',
+      'v-sortable-item': 'v-sortable-item',
+      'v-sortable-list': 'v-sortable-list',
     }
   }
 </script>

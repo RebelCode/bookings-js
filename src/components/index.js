@@ -38,6 +38,8 @@ import StaffMembers from './../modules/StaffMembers/components/StaffMembers'
 
 import VSwitch from './ui/VSwitch.vue'
 import ImageSelector from './ui/ImageSelector.vue'
+import VSortableList from './ui/VSortableList.vue'
+import VSortableItem from './ui/VSortableItem.vue'
 import { CfStaffMemberEditor } from '../modules/staffMembers/components/StaffMemberEditor'
 
 /*
@@ -151,6 +153,14 @@ export default function (dependencies) {
       return ImageSelector
     },
 
+    'v-sortable-list' () {
+      return VSortableList
+    },
+
+    'v-sortable-item' () {
+      return VSortableItem
+    },
+
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.defaultsDeep, 'generatedEvents')
     },
@@ -190,6 +200,10 @@ export default function (dependencies) {
       return dependencies.bookingWizardComponents.MfCreateDatetimeCapable(container.moment)
     },
 
+    sessionsFilterCapable (container) {
+      return dependencies.bookingWizardComponents.MfSessionsFilterCapable(container.moment)
+    },
+
     /**
      * Component for selecting session for service.
      *
@@ -202,20 +216,10 @@ export default function (dependencies) {
     'service-session-selector' (container) {
       return dependencies.bookingWizardComponents.CfServiceSessionSelector(
         container.createDatetimeCapable,
+        container.sessionsFilterCapable,
         container.sessionsApi,
         container.config.formats.datetime
       )
-    },
-
-    /**
-     * Component for selecting session duration.
-     *
-     * @since [*next-version*]
-     *
-     * @return {object}
-     */
-    'session-duration-picker' () {
-      return dependencies.bookingWizardComponents.CfSessionDurationPicker()
     },
 
     /**

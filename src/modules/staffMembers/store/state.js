@@ -36,10 +36,13 @@ export default {
   one: {
     id: null,
     name: '',
-    imageId: null,
-    imageSrc: null,
+    data: {
+      imageId: null,
+      imageUrl: null,
+    },
     availability: {
-      rules: []
+      rules: [],
+      timezone: null
     }
   },
 }

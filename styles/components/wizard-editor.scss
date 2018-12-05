@@ -18,10 +18,6 @@
   }
   &__body {
     padding: .5rem 1rem;
-    .form-row__label {
-      padding-top: 0;
-      width: 185px !important;
-    }
   }
   &__header {
     padding: .5rem;
@@ -135,5 +131,17 @@
       padding: 1rem;
       margin-bottom: 2rem;
     }
+  }
+}
+
+.form-row--wizard {
+  .form-row__label {
+    padding-top: 0;
+    width: 185px !important;
+  }
+  .drag-icon {
+    padding-top: 4px;
+    opacity: .4;
+    cursor: move;
   }
 }
