@@ -25,6 +25,16 @@ export default function ({ mapMutations }) {
       value: {},
       timezone: {},
       isValidationError: {},
+      /**
+       * @var {string} instanceLabel The label of availability instance.
+       *
+       * @since [*next-version*]
+       */
+      instanceLabel: {
+        default () {
+          return this._('service')
+        }
+      }
     },
     computed: {
       valueProxy: {

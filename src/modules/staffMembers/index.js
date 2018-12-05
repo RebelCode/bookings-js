@@ -27,16 +27,16 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
        *
        * @since [*next-version]
        */
-      // modalState: {
-      //   from: 'staffMemberEditorState'
-      // },
+      modalState: {
+        from: 'staffMemberEditorState'
+      },
 
       /**
        * @var {Component} staff-member-editor The staff member editor component.
        *
        * @since [*next-version]
        */
-      // 'staff-member-editor': 'staff-member-editor',
+      'staff-member-editor': 'staff-member-editor',
 
       /**
        * @var {Component} staff-members The staff members list component (display the list of staff members).
@@ -64,8 +64,8 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
        * @param {service} staffMember The staff member that is being edited.
        */
       openEditor (staffMember = {}) {
-        // this.modalState.setState(true)
-        // this.setStaffMemberEditorState(service)
+        this.modalState.setState(true)
+        this.setStaffMemberEditorState(staffMember)
       },
     },
 
@@ -76,7 +76,7 @@ export function page (makeItemsListManageCapableMixin, store, { mapActions, mapM
      */
     components: {
       'staff-members': 'staff-members',
-      // 'staff-member-editor': 'staff-member-editor',
+      'staff-member-editor': 'staff-member-editor',
     },
   }
 }

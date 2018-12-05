@@ -14,6 +14,8 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
   return AbstractEntityModalEditor.extend({
     template: '#service-availability-editor-template',
     inject: {
+      'stringHelpers': 'stringHelpers',
+
       'momentHelpers': 'momentHelpers',
 
       /**
@@ -167,7 +169,14 @@ export default function CfServiceAvailabilityEditor (AbstractEntityModalEditor, 
        *
        * @var {FunctionalCollection} entitiesCollection
        */
-      entitiesCollection: {}
+      entitiesCollection: {},
+
+      /**
+       * @var {string} instanceLabel The label of availability instance.
+       *
+       * @since [*next-version*]
+       */
+      instanceLabel: {}
     },
     computed: {
       ...mapState({

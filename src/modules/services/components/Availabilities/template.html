@@ -7,13 +7,13 @@
     >
         <div v-show="!availabilityEditorStateToggleable.isOn()">
             <div class="eddbk-tab-error" v-if="isValidationError">
-                {{ _('Create at least one availability rule to publish the service') }}
+                {{ _('Create at least one availability rule to publish the %s', [ instanceLabel ]) }}
             </div>
 
             <div class="alert alert-warning" v-if="overlappingAvailabilities">
                 <span class="dashicons dashicons-info"></span>
                 <span>
-        There are at least two availabilities for this service that overlap. Only one of these availabilities will be available to your clients in the booking wizard. We recommend removing one of them.
+        There are at least two availabilities for this {{ instanceLabel }} that overlap. Only one of these availabilities will be available to your clients in the booking wizard. We recommend removing one of them.
         <a href="https://docs.eddbookings.com/article/345-how-to-add-a-new-service-the-availability-calendar-explained/#overlapping-day-availabilities" target="_blank">Click here to learn more.</a>
     </span>
             </div>
@@ -29,7 +29,7 @@
                         <div class="availabilities-list">
                             <div class="empty-state empty-state--smaller" v-if="!value.length">
                                 <div class="empty-state__text">
-                                    {{ _('Create a rule which describes when this service is available for booking') }}
+                                    {{ _('Create a rule which describes when this %s is available for booking', [ instanceLabel ]) }}
                                 </div>
                             </div>
                             <div class="rich-row rich-row--smaller" v-for="availability of value">
@@ -68,5 +68,5 @@
             </div>
         </div>
     </transition>
-    <service-availability-editor :entities-collection="entitiesCollection"/>
+    <service-availability-editor :entities-collection="entitiesCollection" :instance-label="instanceLabel"/>
 </div>
