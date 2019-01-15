@@ -115,6 +115,13 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
       'v-image-selector': 'v-image-selector',
 
       /**
+       * @var {Component} timezone-select Component for selecting timezones.
+       *
+       * @since [*next-version]
+       */
+      'timezone-select': 'timezone-select',
+
+      /**
        * @var {FunctionalArrayCollection} entitiesCollection Staff members entities.
        *
        * @since [*next-version]
@@ -302,6 +309,7 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
       modal: 'modal',
       'availabilities': 'availabilities',
       'v-image-selector': 'v-image-selector',
+      'timezone-select': 'timezone-select',
     }
   })
 }
