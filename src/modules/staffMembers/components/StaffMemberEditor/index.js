@@ -277,10 +277,9 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
           this.setSaving(true)
           const model = Object.assign({}, this.model)
 
-          return this[dispatchSaveMethod]({api: this.api, model}).then(response => {
+          return this[dispatchSaveMethod]({api: this.api, model}).then(item => {
             this.setSaving(false)
-
-            const storedModel = response.data
+            const storedModel = item
             if (this.entitiesCollection.hasItem(storedModel)) {
               this.entitiesCollection.removeItem(storedModel)
             }

@@ -40,7 +40,10 @@ export default {
    * @return {Promise<any>} Promise holding the server's response data.
    */
   create ({ commit }, { api, model }) {
-    return api.create(model)
+    return api.create(model).then((response) => {
+      let model = response.data
+      return api.resourceReadTransformer.transform(model, {timezone: model.availability.timezone})
+    })
   },
 
   /**
@@ -55,7 +58,10 @@ export default {
    * @return {Promise<any>} Promise holding the server's response data.
    */
   update ({ commit }, { api, model }) {
-    return api.update(model)
+    return api.update(model).then((response) => {
+      let model = response.data
+      return api.resourceReadTransformer.transform(model, {timezone: model.availability.timezone})
+    })
   },
 
   /**
