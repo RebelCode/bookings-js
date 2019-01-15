@@ -164,7 +164,7 @@ export default function (dependencies) {
     calendar: function (container) {
       return dependencies.calendar.CfFullCalendar(container.vue, container.jquery, container.defaultsDeep, 'generatedEvents')
     },
-    wpListTable: function (container) {
+    'list-table' (container) {
       return container.vue.extend(dependencies.wpListTable)
     },
     vueselect: function (container) {
@@ -317,7 +317,7 @@ export default function (dependencies) {
     'bookings-list-view': function (container) {
       return new CfBookingsListView(container['abstract-bookings-view'], container.vuex, container.moment)
     },
-    'bookings-filter': function (container) {
+    'bookings-filter' (container) {
       return new CfBookingsFilter(container.vuex, dependencies.stdLib.FunctionalCollection)
     },
 

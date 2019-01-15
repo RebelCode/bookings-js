@@ -1,3 +1,4 @@
+// @inject
 import BookingStoreTransformer from './BookingStoreTransformer'
 import AvailabilityStoreTransformer from './AvilabilityStoreTransformer'
 import AvailabilityReadTransformer from './AvilabilityReadTransformer'

@@ -36,7 +36,7 @@ export default class ServiceStoreTransformer extends Transformer {
 
     sessionTypes: (model) => {
       model.sessionTypes = model.sessionTypes.map(sessionType => {
-        sessionType.data.resources = sessionType.data.resources.map(resource => Number(resource.id))
+        sessionType.data.resources = (sessionType.data.resources || []).map(resource => Number(resource.id))
         return sessionType
       })
       return model

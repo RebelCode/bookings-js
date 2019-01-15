@@ -3,6 +3,8 @@ import { Api } from '@rebelcode/std-lib'
 /**
  * API for interaction with the services backend.
  *
+ * @inject
+ *
  * @since [*next-version*]
  *
  * @class ServicesApi

@@ -11,7 +11,7 @@
   "dependencies": {
     "@rebelcode/booking-wizard-components": "^0.1.12",
     "@rebelcode/std-lib": "^0.1.5",
-    "@rebelcode/ui-framework": "^0.1.2",
+    "@rebelcode/ui-framework": "^0.2.2",
     "@rebelcode/vc-calendar": "^0.1.2",
     "@rebelcode/vc-datetime-picker": "^0.1.0",
     "@rebelcode/vc-paged": "^0.1.0",
@@ -41,11 +41,13 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@rebelcode/babel-plugin-injectable": "0.0.2",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-amd-to-commonjs": "^1.2.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-polyfill": "^6.26.0",

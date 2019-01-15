@@ -86,11 +86,17 @@ import { services } from './services'
  */
 document.addEventListener('DOMContentLoaded', function () {
   const di = new dependencies.bottle()
-  defineServices(di, dependencies)
+  const servicesList = defineServices(di, dependencies)
 
-  const container = new uiFramework.Container.Container(di)
-  const app = new uiFramework.Core.App(container)
-  app.init()
+  const containerFactory = new uiFramework.Container.ContainerFactory(dependencies.bottle)
+  const app = new uiFramework.Core.App(containerFactory, servicesList)
+  app.use([])
+  app.init({
+    '#eddbk-bookings-page, #eddbk-bookings-screen-options': 'bookings-application',
+    '#eddbk-services-page': 'services-page',
+    '#eddbk-settings-page': 'settings-application',
+    '#eddbk-staff-members-page': 'staff-members-page'
+  })
 
   function defineServices (di, dependencies) {
     const applicationState = window.EDDBK_APP_STATE
@@ -101,20 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
       return applicationState
     }
 
-    serviceList['selectorList'] = function () {
-      return [
-        '#eddbk-bookings-page',
-        '#eddbk-service-page',
-        '#eddbk-services-page',
-        '#eddbk-staff-members-page',
-        '#eddbk-bookings-screen-options',
-        '#eddbk-settings-page'
-      ]
-    }
-
-    for (var i = 0; i < Object.keys(serviceList).length; i++) {
-      const serviceName = Object.keys(serviceList)[i]
-      di.factory(serviceName, serviceList[serviceName])
-    }
+    return serviceList
   }
 })

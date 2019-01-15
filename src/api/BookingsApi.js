@@ -3,6 +3,8 @@ import { Api } from '@rebelcode/std-lib'
 /**
  * API for interaction with bookings information on backend.
  *
+ * @injectable
+ *
  * @since [*next-version*]
  *
  * @class BookingsApi

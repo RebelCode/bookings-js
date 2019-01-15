@@ -5,6 +5,8 @@
     "stage-2"
   ],
   "plugins": [
+    "transform-decorators-legacy",
+    "@rebelcode/babel-plugin-injectable",
     "babel-plugin-transform-class-properties"
   ]
 }

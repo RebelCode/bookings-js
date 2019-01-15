@@ -1,8 +1,5 @@
 import { Transformer } from '@rebelcode/std-lib'
 
-/**
- * Prepare data for booking saving endpoins.
- */
 export default class BookingStoreTransformer extends Transformer {
   /**
    * Rules that will be applied in order for model.

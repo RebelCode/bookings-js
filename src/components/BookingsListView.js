@@ -8,9 +8,6 @@ export function CfBookingsListView (AbstractBookingsView, { mapState }, moment) 
       'isMobile': 'isMobile',
       'bookingHelpers': 'bookingHelpers',
       'config': 'config',
-      'list-table': {
-        from: 'wpListTable'
-      },
       '_': {
         from: 'translate'
       },

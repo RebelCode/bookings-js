@@ -3,6 +3,8 @@ import { Api } from '@rebelcode/std-lib'
 /**
  * API for interaction with clients information on backend.
  *
+ * @inject
+ *
  * @since [*next-version*]
  *
  * @class ClientsApi

@@ -21,9 +21,11 @@ export default function (dependencies, applicationState) {
       Vue.use(Vuex)
       return Vuex
     },
-    vue: function () {
+    vue: function (container) {
       let Vue = dependencies.vue
-      Vue.use(dependencies.uiFramework.Core.InjectedComponents)
+      Vue.use(dependencies.uiFramework.Core.InjectedComponents, {
+        container
+      })
       /*
        * Built timepicker's restriction. It should be installed as a plugin.
        */

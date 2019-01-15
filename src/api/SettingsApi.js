@@ -3,6 +3,8 @@ import { Api } from '@rebelcode/std-lib'
 /**
  * API for updating settings.
  *
+ * @inject
+ *
  * @since [*next-version*]
  *
  * @implements {UpdateCapable}
