@@ -41,6 +41,21 @@
                                 :instance-label="_('staff member')"
                 />
             </tab>
+            <tab title="Display Options">
+                <div class="wide-form">
+                    <div class="wide-form__header">
+                        {{ _('Timezone options') }}
+                    </div>
+                    <div class="wide-form__row">
+                        <div class="wide-form__label" style="width: 100%;max-width: 600px">
+                            {{ _("Staff Member's timezone") }}
+                        </div>
+                        <div class="wide-form__input">
+                            <timezone-select id="eddbk-timezone-select" v-model="model.availability.timezone"></timezone-select>
+                        </div>
+                    </div>
+                </div>
+            </tab>
         </tabs>
     </div>
 

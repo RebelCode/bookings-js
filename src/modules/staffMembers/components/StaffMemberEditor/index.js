@@ -115,6 +115,13 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
       'v-image-selector': 'v-image-selector',
 
       /**
+       * @var {Component} timezone-select Component for selecting timezones.
+       *
+       * @since [*next-version]
+       */
+      'timezone-select': 'timezone-select',
+
+      /**
        * @var {FunctionalArrayCollection} entitiesCollection Staff members entities.
        *
        * @since [*next-version]
@@ -270,10 +277,9 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
           this.setSaving(true)
           const model = Object.assign({}, this.model)
 
-          return this[dispatchSaveMethod]({api: this.api, model}).then(response => {
+          return this[dispatchSaveMethod]({api: this.api, model}).then(item => {
             this.setSaving(false)
-
-            const storedModel = response.data
+            const storedModel = item
             if (this.entitiesCollection.hasItem(storedModel)) {
               this.entitiesCollection.removeItem(storedModel)
             }
@@ -302,6 +308,7 @@ export function CfStaffMemberEditor (AbstractEntityModalEditor, { mapState, mapM
       modal: 'modal',
       'availabilities': 'availabilities',
       'v-image-selector': 'v-image-selector',
+      'timezone-select': 'timezone-select',
     }
   })
 }
